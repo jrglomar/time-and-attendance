@@ -16,7 +16,7 @@ def all(db: Session = Depends(get_db)):
     return {'attendance': attendance}
 
 @router.get('/{id}')
-def read(id: int, db: Session = Depends(get_db)):
+def read(id: str, db: Session = Depends(get_db)):
     attendance = db.query(Attendance).filter(Attendance.id == id).first()
     if not attendance:
         raise HTTPException(404, 'Attendance not found')
@@ -38,7 +38,7 @@ def store(attendance: CreateAttendance, db: Session = Depends(get_db)):
     return {'message': 'Attendance stored successfully.'}
 
 @router.put('/{id}')
-def update(id: int, attendance: CreateAttendance, db: Session = Depends(get_db)): 
+def update(id: str, attendance: CreateAttendance, db: Session = Depends(get_db)): 
     if not db.query(Attendance).filter(Attendance.id == id).update({
         'name': attendance.name,
         'age': attendance.age
@@ -48,7 +48,7 @@ def update(id: int, attendance: CreateAttendance, db: Session = Depends(get_db))
     return {'message': 'Attendance updated successfully.'}
 
 @router.delete('/{id}')
-def remove(id: int, db: Session = Depends(get_db)):
+def remove(id: str, db: Session = Depends(get_db)):
     if not db.query(Attendance).filter(Attendance.id == id).delete():
         raise HTTPException(404, 'User to delete is not found')
     db.commit()

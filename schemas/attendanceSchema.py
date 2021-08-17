@@ -2,11 +2,11 @@ from datetime import datetime as dt
 from pydantic import BaseModel
 
 class AttendanceBase(BaseModel):
-    employee_id: int
-    shift_type_id: int
-    time_in_id: int
-    time_out_id: int
-    hours_worked: int
+    employee_id: str
+    shift_type_id: str
+    time_in_id: str
+    time_out_id: str
+    hours_worked: str
 
 # Schema for request body
 class CreateAttendance(AttendanceBase):

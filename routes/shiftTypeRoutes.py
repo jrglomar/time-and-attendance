@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from schemas.shiftTypeSchema import CreateShiftType
 from models.shiftTypeModel import ShiftType
 from database import get_db
+from datetime import date
 
 
 router = APIRouter(
@@ -12,41 +13,48 @@ router = APIRouter(
 
 @router.get('/')
 def all(db: Session = Depends(get_db)):
-    shifttype = db.query(Employee).all()
+    shifttype = db.query(ShiftType).filter(ShiftType.active_status == 'Active').all()
     return {'shifttype': shifttype}
 
 @router.get('/{id}')
-def read(id: int, db: Session = Depends(get_db)):
-    shifttype = db.query(ShiftType).filter(Employee.id == id).first()
+def read(id: str, db: Session = Depends(get_db)):
+    shifttype = db.query(ShiftType).filter(ShiftType.id == id).first()
     if not shifttype:
-        raise HTTPException(404, 'ShiftType not found')
+        raise HTTPException(404, 'Shift type not found')
     return {'shifttype': shifttype}
 
 @router.post('/')
 def store(shifttype: CreateShiftType, db: Session = Depends(get_db)):
     to_store = ShiftType(
         title = shifttype.title,
+        start_time = shifttype.start_time,
+        end_time = shifttype.end_time,
     )
 
     db.add(to_store)
     db.commit()
     
-    return {'message': 'ShiftType stored successfully.'}
+    return {'message': 'Shift type stored successfully.'}
 
 @router.put('/{id}')
-def update(id: int, shifttype: CreateShiftType, db: Session = Depends(get_db)): 
+def update(id: str, shifttype: CreateShiftType, db: Session = Depends(get_db)): 
     if not db.query(ShiftType).filter(ShiftType.id == id).update({
-        'name': shifttype.name,
-        'age': shifttype.age
+        'title': shifttype.title,
+        'start_time': shifttype.start_time,
+        'end_time': shifttype.end_time,
+        'updated_at': date.today()
     }):
         raise HTTPException(404, 'ShiftType to update is not found')
     db.commit()
-    return {'message': 'ShiftType updated successfully.'}
+    return {'message': 'Shift type updated successfully.'}
 
-@router.delete('/{id}')
-def remove(id: int, db: Session = Depends(get_db)):
-    if not db.query(ShiftType).filter(ShiftType.id == id).delete():
-        raise HTTPException(404, 'User to delete is not found')
+@router.put('/delete/{id}')
+def remove(id: str,  db: Session = Depends(get_db)):
+    if not db.query(ShiftType).filter(ShiftType.id == id).update({
+        'active_status': "Inactive",
+        'updated_at': date.today()
+    }):
+        raise HTTPException(404, 'Shift type to delete is not found')
     db.commit()
-    return {'message': 'ShiftType removed successfully.'}
+    return {'message': 'Shift type removed successfully.'}
 

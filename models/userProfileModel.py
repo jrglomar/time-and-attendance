@@ -6,7 +6,7 @@ from database import Base
 class UserProfile(Base):
     __tablename__ = 'user_profiles'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String(36), primary_key=True, default=text('UUID()'))
     user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     first_name = Column(String(255), nullable=True)
     middle_name = Column(String(255), nullable=True)

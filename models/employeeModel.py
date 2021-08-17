@@ -6,7 +6,7 @@ from database import Base
 class Employee(Base):
     __tablename__ = 'employees'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String(36), primary_key=True, default=text('UUID()'))
     user_type_id = Column(Integer, ForeignKey('user_types.id'), nullable=False)
     user_profile_id = Column(Integer, ForeignKey('user_profiles.id'), nullable=False)
     shift_type_id = Column(Integer, ForeignKey('shift_types.id'), nullable=False)

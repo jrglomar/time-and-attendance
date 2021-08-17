@@ -2,8 +2,8 @@ from datetime import datetime as dt
 from pydantic import BaseModel
 
 class LeaveBase(BaseModel):
-    employee_id: int
-    leave_type_id: int
+    employee_id: str
+    leave_type_id: str
     title: str
     reason: str
     start_date: dt

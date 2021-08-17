@@ -2,7 +2,7 @@ from datetime import datetime as dt
 from pydantic import BaseModel
 
 class TimeOutBase(BaseModel):
-    employee_id: int
+    employee_id: str
 
 # Schema for request body
 class CreateTimeOut(TimeOutBase):

@@ -6,7 +6,7 @@ from database import Base
 class TimeOut(Base):
     __tablename__ = 'time_outs'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String(36), primary_key=True, default=text('UUID()'))
     employee_id = Column(Integer, ForeignKey('employees.id'), nullable=False)
     time_log = Column(Time, nullable=False)
     active_status = Column(String(255), nullable=False, server_default=text("'Active'"))

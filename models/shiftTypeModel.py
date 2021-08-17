@@ -6,7 +6,7 @@ from database import Base
 class ShiftType(Base):
     __tablename__ = 'shift_types'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String(36), primary_key=True, default=text('UUID()'))
     title = Column(String(255), nullable=False)
     start_time = Column(Time, nullable=False)
     end_time = Column(Time, nullable=False)

@@ -2,7 +2,7 @@ from datetime import datetime as dt
 from pydantic import BaseModel
 
 class UserProfileBase(BaseModel):
-    user_id: int
+    user_id: str
     first_name: str
     last_name: str
 

@@ -16,7 +16,7 @@ def all(db: Session = Depends(get_db)):
     return {'leavetype': leavetype}
 
 @router.get('/{id}')
-def read(id: int, db: Session = Depends(get_db)):
+def read(id: str, db: Session = Depends(get_db)):
     leavetype = db.query(LeaveType).filter(LeaveType.id == id).first()
     if not leavetype:
         raise HTTPException(404, 'LeaveType not found')
@@ -34,7 +34,7 @@ def store(leavetype: CreateLeaveType, db: Session = Depends(get_db)):
     return {'message': 'LeaveType stored successfully.'}
 
 @router.put('/{id}')
-def update(id: int, leavetype: CreateLeaveType, db: Session = Depends(get_db)): 
+def update(id: str, leavetype: CreateLeaveType, db: Session = Depends(get_db)): 
     if not db.query(LeaveType).filter(LeaveType.id == id).update({
         'name': leavetype.name,
         'age': leavetype.age
@@ -44,7 +44,7 @@ def update(id: int, leavetype: CreateLeaveType, db: Session = Depends(get_db)):
     return {'message': 'LeaveType updated successfully.'}
 
 @router.delete('/{id}')
-def remove(id: int, db: Session = Depends(get_db)):
+def remove(id: str, db: Session = Depends(get_db)):
     if not db.query(LeaveType).filter(LeaveType.id == id).delete():
         raise HTTPException(404, 'User to delete is not found')
     db.commit()

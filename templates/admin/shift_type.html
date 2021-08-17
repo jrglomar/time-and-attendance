@@ -1,0 +1,422 @@
+<!-- Apply layout from base.html -->
+{%extends 'base.html'%} 
+
+{%block content%}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Shift Type</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Shift Type</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- general form elements -->
+<!-- <section class="content">
+    <div class="container-fluid">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-8">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Create Shift Type</h3>
+                    </div>
+                    <form id="shift_type_form">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="shift_types_title">Title</label>
+                                <input type="text" class="form-control" id="shift_types_title" name="shift_types_title" placeholder="Enter title">
+                            </div>
+                            <div class="form-group">
+                                <label for="shift_types_start_time">Start-Time</label>
+                                <input type="time" class="form-control" id="shift_types_start_time" name="shift_types_start_time" placeholder="Select Start-Time" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label for="shift_types_end_time">End-Time</label>
+                                <input type="time" class="form-control" id="shift_types_end_time" name="shift_types_end_time" placeholder="Select End-Time" value="17:00">
+                            </div>
+                        </div>
+                    <div class="card-footer float-right">
+                        <input type="submit" class="btn btn-info" value='Submit'>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<!-- /.card -->
+
+<section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between">
+                <h3 class="card-title">List of Shift Types</h3>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shift_types_form_modal">
+                  <i class="far fa-plus-square"></i> Add New
+                </button>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="shift_types_datatable" class="table table-bordered table-hover">
+                    <thead>
+                        <th>ID</th>
+                        <th>Date Created</th>
+                        <th>Title</th>
+                        <th>Start-Time</th>
+                        <th>End-Time</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    <!-- ADD FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="shift_types_form_modal">
+        <div class="modal-dialog shift_types_form_modal modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Create Shift Type</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="shift_types_form">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="shift_types_title">Title</label>
+                                <input type="text" class="form-control" id="shift_types_title" name="shift_types_title" placeholder="Enter title">
+                            </div>
+                            <div class="form-group">
+                                <label for="shift_types_start_time">Start-Time</label>
+                                <input type="time" class="form-control" id="shift_types_start_time" name="shift_types_start_time" placeholder="Select Start-Time" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label for="shift_types_end_time">End-Time</label>
+                                <input type="time" class="form-control" id="shift_types_end_time" name="shift_types_end_time" placeholder="Select End-Time" value="17:00">
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" id="shift_types_form_submit" class="btn btn-info">Submit</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+
+    <!-- EDIT FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="shift_types_form_modal_edit">
+        <div class="modal-dialog shift_types_form_modal_edit modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Edit Shift Type</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="shift_types_form_edit">
+                        <div class="card-body">
+                            <div class="form-group" hidden>
+                                <label for="shift_types_id_edit">ID</label>
+                                <input type="text" class="form-control" id="shift_types_id_edit" name="shift_types_id_edit" placeholder="Enter title">
+                            </div>
+                            <div class="form-group">
+                                <label for="shift_types_title_edit">Title</label>
+                                <input type="text" class="form-control" id="shift_types_title_edit" name="shift_types_title_edit" placeholder="Enter title">
+                            </div>
+                            <div class="form-group">
+                                <label for="shift_types_start_time_edit">Start-Time</label>
+                                <input type="time" class="form-control" id="shift_types_start_time_edit" name="shift_types_start_time_edit" placeholder="Select Start-Time">
+                            </div>
+                            <div class="form-group">
+                                <label for="shift_types_end_time_edit">End-Time</label>
+                                <input type="time" class="form-control" id="shift_types_end_time_edit" name="shift_types_end_time_edit" placeholder="Select End-Time">
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" id="shift_types_btn_edit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+
+    <!-- DELETE FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="shift_types_form_modal_delete">
+        <div class="modal-dialog shift_types_form_modal_delete modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Deactivate Shift Type</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="shift_types_form_delete">
+                        <div class="card-body">
+                            <div class="form-group" hidden>
+                                <label for="shift_types_id_delete">ID</label>
+                                <input type="text" class="form-control" id="shift_types_id_delete" name="shift_types_id_delete" placeholder="Enter title">
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" id="shift_types_btn_delete" class="btn btn-danger">Deactivate</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+
+    function loadtable(){
+        shift_types_datatable = $('#shift_types_datatable').DataTable( {
+            "ajax": {url:"/shifttype", dataSrc:"shifttype"},
+            "columns": [
+                { data: "id"},
+                { data: "created_at" },
+                { data: "title"},
+                { data: "start_time", render: function(data, type, row){
+                    date = moment().format('YYYY-MM-DD')
+                    return moment(date + " " + data).format('LT');
+                }},
+                { data: "end_time", render: function(data, type, row){
+                    date = moment().format('YYYY-MM-DD')
+                    return moment(date + " " + data).format('LT');
+                }},
+                { data: "active_status", render: function(data, type, row){
+                        if(data == "Active"){
+                            return `
+                            <button type="button" id=${row.id} class="btn btn-warning btn_edit"><i class="far fa-edit"></i> Update</button>
+                            <button type="button" id=${row.id} class="btn btn-danger btn_delete"><i class="far fa-trash-alt"></i> Deactivate</button>
+                            `
+                        }   
+                        else{
+                            return '<button>Activate</button>';
+                        }
+                    }
+                },
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1] }],
+            "order": [[1, "desc"]]
+        })
+    }
+
+    loadtable();
+
+
+});
+
+
+function refresh(){
+    var url = "/shifttype";
+
+    shift_types_datatable.ajax.url(url).load();
+}
+
+$('#shift_types_form_submit').on('click', function(e){
+    e.preventDefault()
+
+    $('#shift_types_form_submit').prop('disabled', true)
+
+    let formData = {
+        title: $('#shift_types_title').val(),
+        start_time: $('#shift_types_start_time').val(),
+        end_time: $('#shift_types_end_time').val(),
+    }
+
+    $.ajax({
+            url: '/shifttype',
+            type: "POST",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                Swal.fire(
+                    'Success!',
+                    data.message,
+                    'success'
+                )
+
+                $('#shift_types_form').trigger("reset")
+                $('#shift_types_form_submit').prop('disabled', false)
+                $('#shift_types_form_modal').modal('hide')
+                refresh()
+            }
+        // ajax closing tag
+    })
+
+    $('#shift_types_form_submit').prop('disabled', false)
+});
+
+$(document).on('click', '.btn_edit', function(e){
+    e.preventDefault()
+
+    let id = this.id
+
+    $.ajax({
+            url: '/shifttype/'+id,
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                $('#shift_types_id_edit').val(data.shifttype.id);
+                $('#shift_types_title_edit').val(data.shifttype.title);
+                $('#shift_types_start_time_edit').val(data.shifttype.start_time);
+                $('#shift_types_end_time_edit').val(data.shifttype.end_time);
+
+
+                $('#shift_types_form_modal_edit').modal('show');
+            }
+        // ajax closing tag
+    })
+})
+
+$('#shift_types_btn_edit').on('click', function(e){
+    e.preventDefault()
+    $('#shift_types_btn_edit').prop('disabled', true)
+
+    let id = $('#shift_types_id_edit').val()
+
+    let formData = {
+        title: $('#shift_types_title_edit').val(),
+        start_time: $('#shift_types_start_time_edit').val(),
+        end_time: $('#shift_types_end_time_edit').val()
+    }
+
+    $.ajax({
+            url: '/shifttype/'+id,
+            type: "PUT",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                Swal.fire(
+                    'Success!',
+                    data.message,
+                    'success'
+                )
+
+                $('#shift_types_form_edit').trigger("reset")
+                $('#shift_types_btn_edit').prop('disabled', false)
+                $('#shift_types_form_modal_edit').modal('hide')
+                refresh()
+            }
+        // ajax closing tag
+    })
+
+    $('#shift_types_btn_edit').prop('disabled', false)
+})
+
+$(document).on('click', '.btn_delete', function(e){
+    e.preventDefault()
+
+    let id = this.id
+
+    $.ajax({
+            url: '/shifttype/'+id,
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                $('#shift_types_id_delete').val(data.shifttype.id);
+
+                $('#shift_types_form_modal_delete').modal('show');
+            }
+        // ajax closing tag
+    })
+})
+
+$('#shift_types_btn_delete').on('click', function(e){
+    e.preventDefault()
+    $('#shift_types_btn_delete').prop('disabled', true)
+
+    let id = $('#shift_types_id_delete').val()
+
+
+    $.ajax({
+            url: '/shifttype/delete/'+id,
+            type: "PUT",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                Swal.fire(
+                    'Success!',
+                    data.message,
+                    'success'
+                )
+
+                $('#shift_types_form_delete').trigger("reset")
+                $('#shift_types_btn_delete').prop('disabled', false)
+                $('#shift_types_form_modal_delete').modal('hide')
+                refresh()
+            }
+        // ajax closing tag
+    })
+
+    $('#shift_types_btn_delete').prop('disabled', false)
+    
+})
+
+</script>
+{%endblock%}

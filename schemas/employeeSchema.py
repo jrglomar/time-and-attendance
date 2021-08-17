@@ -2,8 +2,8 @@ from datetime import datetime as dt
 from pydantic import BaseModel
 
 class EmployeeBase(BaseModel):
-    user_type_id: int
-    user_profile_id: int
+    user_type_id: str
+    user_profile_id: str
 
 # Schema for request body
 class CreateEmployee(EmployeeBase):

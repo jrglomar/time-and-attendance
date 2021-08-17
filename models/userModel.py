@@ -6,7 +6,7 @@ from database import Base
 class User(Base):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String(36), primary_key=True, default=text('UUID()'))
     user_type_id = Column(Integer, ForeignKey('user_types.id'), nullable=True)
     email = Column(String(255), nullable=False)
     password = Column(String(255), nullable=False)

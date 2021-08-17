@@ -1,8 +1,9 @@
 from datetime import datetime as dt
 from pydantic import BaseModel
+from typing import Optional
 
 class UserBase(BaseModel):
-    user_type_id: int
+    user_type_id: Optional[str] = None
     email: str
     password: str
 
