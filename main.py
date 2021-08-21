@@ -71,3 +71,12 @@ def index(request: Request, db: Session = Depends(get_db)):
     
 # END OF ADMIN SIDE
 
+# HR SIDE
+
+@app.get('/time_and_attendance/hr/employee', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/hr/employee.html', {
+        'request': request,
+})
+
+# END OF HR SIDE

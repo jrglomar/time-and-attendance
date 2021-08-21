@@ -2,11 +2,11 @@
 {%extends '/time_and_attendance/base.html'%} 
 
 {%block navbar%}
-    {%include 'time_and_attendance/includes/admin_navbar.html'%}
+    {%include 'time_and_attendance/includes/hr_navbar.html'%}
 {%endblock%}
 
 {%block sidebar%}
-    {%include 'time_and_attendance/includes/admin_sidebar.html'%}
+    {%include 'time_and_attendance/includes/hr_sidebar.html'%}
 {%endblock%}
 
 {%block content%}
@@ -15,12 +15,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1>User</h1>
+            <h1>Employee</h1>
             </div>
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">User</li>
+                <li class="breadcrumb-item active">Employee</li>
             </ol>
             </div>
         </div>
@@ -34,21 +34,21 @@
             <div class="col-8">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Create User</h3>
+                        <h3 class="card-title">Create Employee</h3>
                     </div>
                     <form id="shift_type_form">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="users_title">Title</label>
-                                <input type="text" class="form-control" id="users_title" name="users_title" placeholder="Enter title">
+                                <label for="employee_title">Title</label>
+                                <input type="text" class="form-control" id="employee_title" name="employee_title" placeholder="Enter title">
                             </div>
                             <div class="form-group">
-                                <label for="users_start_time">Start-Time</label>
-                                <input type="time" class="form-control" id="users_start_time" name="users_start_time" placeholder="Select Start-Time" value="08:00">
+                                <label for="employee_start_time">Start-Time</label>
+                                <input type="time" class="form-control" id="employee_start_time" name="employee_start_time" placeholder="Select Start-Time" value="08:00">
                             </div>
                             <div class="form-group">
-                                <label for="users_end_time">End-Time</label>
-                                <input type="time" class="form-control" id="users_end_time" name="users_end_time" placeholder="Select End-Time" value="17:00">
+                                <label for="employee_end_time">End-Time</label>
+                                <input type="time" class="form-control" id="employee_end_time" name="employee_end_time" placeholder="Select End-Time" value="17:00">
                             </div>
                         </div>
                     <div class="card-footer float-right">
@@ -68,20 +68,19 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header d-flex justify-content-between">
-                <h3 class="card-title">List of Users</h3>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#users_form_modal">
+                <h3 class="card-title">List of Employees</h3>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#employee_form_modal">
                   <i class="far fa-plus-square"></i> Add New
                 </button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="users_datatable" class="table table-bordered table-hover">
+                <table id="employee_datatable" class="table table-bordered table-hover">
                     <thead>
                         <th>ID</th>
                         <th>Date Created</th>
-                        <th width="33%">User Type</th>
-                        <th width="33%">Email</th>
-                        <th width="33%">Actions</th>
+                        <th width="50%">Title</th>
+                        <th width="50%">Actions</th>
                     </thead>
                     <tbody>
                         <tr>
@@ -103,42 +102,28 @@
 
     <!-- ADD FORM -->
     <!-- Extra Large Modal -->
-      <div class="modal fade" id="users_form_modal">
-        <div class="modal-dialog users_form_modal modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal fade" id="employee_form_modal">
+        <div class="modal-dialog employee_form_modal modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Create User</h4>
+              <h4 class="modal-title">Create Employee</h4>
               <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true"><i class="fas fa-times"></i></span>
               </button>
             </div>
             <div class="modal-body">
-              <form id="users_form">
+              <form id="employee_form">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="user_type_id_option">User Type</label>
-                                <select id="user_type_id_option" class="custom-select rounded-0">
-                                    
-                                </select>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="user_email">Email</label>
-                                <input type="text" class="form-control" id="user_email" name="user_email" placeholder="Enter email">
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="user_password">Password</label>
-                                <input type="password" class="form-control" id="user_password" name="user_password" placeholder="Enter password">
+                                <label for="employee_title">Title</label>
+                                <input type="text" class="form-control" id="employee_title" name="employee_title" placeholder="Enter title">
                             </div>
                         </div>
                 </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" id="users_form_submit" class="btn btn-info">Submit</button>
+              <button type="button" id="employee_form_submit" class="btn btn-info">Submit</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -149,48 +134,32 @@
 
     <!-- EDIT FORM -->
     <!-- Extra Large Modal -->
-      <div class="modal fade" id="users_form_modal_edit">
-        <div class="modal-dialog users_form_modal_edit modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal fade" id="employee_form_modal_edit">
+        <div class="modal-dialog employee_form_modal_edit modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Edit User</h4>
+              <h4 class="modal-title">Edit Employee</h4>
               <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true"><i class="fas fa-times"></i></span>
               </button>
             </div>
             <div class="modal-body">
-              <form id="users_form_edit">
-                        <div class="card-body" hidden>
-                            <div class="form-group">
-                                <label for="user_id_edit">ID</label>
-                                <input type="text" class="form-control" id="user_id_edit" name="user_id_edit">
-                            </div>
-                        </div>
+              <form id="employee_form_edit">
                         <div class="card-body">
-                            <div class="form-group">
-                                <label for="user_type_id_option_edit">User Type</label>
-                                <select id="user_type_id_option_edit" class="custom-select rounded-0">
-                                    
-                                </select>
+                            <div class="form-group" hidden>
+                                <label for="employee_id_edit">ID</label>
+                                <input type="text" class="form-control" id="employee_id_edit" name="employee_id_edit" placeholder="Enter title">
                             </div>
-                        </div>
-                        <div class="card-body">
                             <div class="form-group">
-                                <label for="user_email_edit">Email</label>
-                                <input type="text" class="form-control" id="user_email_edit" name="user_email_edit" placeholder="Enter email">
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="user_password_edit">Password</label>
-                                <input type="password" class="form-control" id="user_password_edit" name="user_password_edit" placeholder="Enter password">
+                                <label for="employee_title_edit">Title</label>
+                                <input type="text" class="form-control" id="employee_title_edit" name="employee_title_edit" placeholder="Enter title">
                             </div>
                         </div>
                 </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" id="users_btn_edit" class="btn btn-primary">Save Changes</button>
+              <button type="button" id="employee_btn_edit" class="btn btn-primary">Save Changes</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -201,28 +170,28 @@
 
     <!-- DELETE FORM -->
     <!-- Extra Large Modal -->
-      <div class="modal fade" id="users_form_modal_delete">
-        <div class="modal-dialog users_form_modal_delete modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal fade" id="employee_form_modal_delete">
+        <div class="modal-dialog employee_form_modal_delete modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Deactivate User</h4>
+              <h4 class="modal-title">Deactivate Employee</h4>
               <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true"><i class="fas fa-times"></i></span>
               </button>
             </div>
             <div class="modal-body">
-              <form id="users_form_delete">
+              <form id="employee_form_delete">
                         <div class="card-body">
                             <div class="form-group" hidden>
-                                <label for="user_id_delete">ID</label>
-                                <input type="text" class="form-control" id="user_id_delete" name="user_id_delete" placeholder="Enter title">
+                                <label for="employee_id_delete">ID</label>
+                                <input type="text" class="form-control" id="employee_id_delete" name="employee_id_delete" placeholder="Enter title">
                             </div>
                         </div>
                 </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" id="users_btn_delete" class="btn btn-danger">Deactivate</button>
+              <button type="button" id="employee_btn_delete" class="btn btn-danger">Deactivate</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -238,13 +207,12 @@
 $(document).ready(function(){
 
     function loadtable(){
-        users_datatable = $('#users_datatable').DataTable( {
-            "ajax": {url:"/time_and_attendance/api/users", dataSrc:"user"},
+        employee_datatable = $('#employee_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/employee", dataSrc:"employee"},
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
-                { data: "user_types.title"},
-                { data: "email"},
+                { data: "title"},
                 { data: "active_status", render: function(data, type, row){
                         if(data == "Active"){
                             return `
@@ -278,51 +246,22 @@ $(document).ready(function(){
 
 
 function refresh(){
-    var url = "/time_and_attendance/api/users";
+    var url = "/time_and_attendance/api/employee";
 
-    users_datatable.ajax.url(url).load();
+    employee_datatable.ajax.url(url).load();
 }
 
-function get_user_types(){
-       
-        $.ajax({
-                url: '/time_and_attendance/api/usertype/',
-                type: "GET",
-                contentType: "application/json",
-                dataType: "JSON",
-            
-                success: function(data){
-                    usertype = data.usertype
-                    console.log(usertype)
-                    html = ""
-                    
-                    for(var i=0; i < usertype.length; i++){
-                        html += `<option value="${usertype[i].id}">${usertype[i].title}</option>`
-                    }
-
-                    $('#user_type_id_option').append(html)
-                    $('#user_type_id_option_edit').append(html)
-                }
-            })
-            // ajax closing tag
-}
-
-get_user_types()
-
-
-$('#users_form_submit').on('click', function(e){
+$('#employee_form_submit').on('click', function(e){
     e.preventDefault()
 
-    $('#users_form_submit').prop('disabled', true)
+    $('#employee_form_submit').prop('disabled', true)
 
     let formData = {
-        user_type_id: $('#user_type_id_option').val(),
-        email: $('#user_email').val(),
-        password: $('#user_password').val(),
+        title: $('#employee_title').val(),
     }
 
     $.ajax({
-            url: '/time_and_attendance/api/users',
+            url: '/time_and_attendance/api/employee',
             type: "POST",
             data: JSON.stringify(formData),
             contentType: "application/json",
@@ -335,15 +274,15 @@ $('#users_form_submit').on('click', function(e){
                     'success'
                 )
 
-                $('#users_form').trigger("reset")
-                $('#users_form_submit').prop('disabled', false)
-                $('#users_form_modal').modal('hide')
+                $('#employee_form').trigger("reset")
+                $('#employee_form_submit').prop('disabled', false)
+                $('#employee_form_modal').modal('hide')
                 refresh()
             }
         // ajax closing tag
     })
 
-    $('#users_form_submit').prop('disabled', false)
+    $('#employee_form_submit').prop('disabled', false)
 });
 
 $(document).on('click', '.btn_edit', function(e){
@@ -352,37 +291,37 @@ $(document).on('click', '.btn_edit', function(e){
     let id = this.id
 
     $.ajax({
-            url: '/time_and_attendance/api/users/'+id,
+            url: '/time_and_attendance/api/employee/'+id,
             type: "GET",
             contentType: "application/json",
             dataType: "JSON",
         
             success: function(data){
-                console.log(data.user)
-                $('#user_id_edit').val(data.user.id);
-                $('#user_type_id_option_edit').val(data.user.user_type_id);
-                $('#user_email_edit').val(data.user.email);
+                $('#employee_id_edit').val(data.employee.id);
+                $('#employee_title_edit').val(data.employee.title);
+                $('#employee_start_time_edit').val(data.employee.start_time);
+                $('#employee_end_time_edit').val(data.employee.end_time);
 
-                $('#users_form_modal_edit').modal('show');
+
+                $('#employee_form_modal_edit').modal('show');
             }
         // ajax closing tag
     })
 })
 
-$('#users_btn_edit').on('click', function(e){
+$('#employee_btn_edit').on('click', function(e){
     e.preventDefault()
-    $('#users_btn_edit').prop('disabled', true)
+    $('#employee_btn_edit').prop('disabled', true)
 
-    let id = $('#user_id_edit').val()
+    let id = $('#employee_id_edit').val()
 
     let formData = {
-        user_type_id: $('#user_type_id_option_edit').val(),
-        email: $('#user_email_edit').val(),
-        password: $('#user_password_edit').val(),
+        title: $('#employee_title_edit').val(),
     }
+    console.log(formData)
 
     $.ajax({
-            url: '/time_and_attendance/api/users/'+id,
+            url: '/time_and_attendance/api/employee/'+id,
             type: "PUT",
             data: JSON.stringify(formData),
             contentType: "application/json",
@@ -395,15 +334,15 @@ $('#users_btn_edit').on('click', function(e){
                     'success'
                 )
 
-                $('#users_form_edit').trigger("reset")
-                $('#users_btn_edit').prop('disabled', false)
-                $('#users_form_modal_edit').modal('hide')
+                $('#employee_form_edit').trigger("reset")
+                $('#employee_btn_edit').prop('disabled', false)
+                $('#employee_form_modal_edit').modal('hide')
                 refresh()
             }
         // ajax closing tag
     })
 
-    $('#users_btn_edit').prop('disabled', false)
+    $('#employee_btn_edit').prop('disabled', false)
 })
 
 $(document).on('click', '.btn_delete', function(e){
@@ -412,28 +351,29 @@ $(document).on('click', '.btn_delete', function(e){
     let id = this.id
 
     $.ajax({
-            url: '/time_and_attendance/api/users/'+id,
+            url: '/time_and_attendance/api/employee/'+id,
             type: "GET",
             contentType: "application/json",
             dataType: "JSON",
         
             success: function(data){
-                $('#user_id_delete').val(data.user.id);
+                $('#employee_id_delete').val(data.employee.id);
 
-                $('#users_form_modal_delete').modal('show');
+                $('#employee_form_modal_delete').modal('show');
             }
         // ajax closing tag
     })
 })
 
-$('#users_btn_delete').on('click', function(e){
+$('#employee_btn_delete').on('click', function(e){
     e.preventDefault()
-    $('#users_btn_delete').prop('disabled', true)
+    $('#employee_btn_delete').prop('disabled', true)
 
-    let id = $('#user_id_delete').val()
+    let id = $('#employee_id_delete').val()
+
 
     $.ajax({
-            url: '/time_and_attendance/api/users/delete/'+id,
+            url: '/time_and_attendance/api/employee/delete/'+id,
             type: "PUT",
             contentType: "application/json",
             dataType: "JSON",
@@ -445,15 +385,15 @@ $('#users_btn_delete').on('click', function(e){
                     'success'
                 )
 
-                $('#users_form_delete').trigger("reset")
-                $('#users_btn_delete').prop('disabled', false)
-                $('#users_form_modal_delete').modal('hide')
+                $('#employee_form_delete').trigger("reset")
+                $('#employee_btn_delete').prop('disabled', false)
+                $('#employee_form_modal_delete').modal('hide')
                 refresh()
             }
         // ajax closing tag
     })
 
-    $('#users_btn_delete').prop('disabled', false)
+    $('#employee_btn_delete').prop('disabled', false)
     
 })
 
