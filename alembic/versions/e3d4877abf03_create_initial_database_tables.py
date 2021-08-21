@@ -27,33 +27,20 @@ def upgrade():
     )
     
     op.create_table(
-        'users',
+        'employee_types',
         sa.Column('id', sa.String(36), primary_key=True),
-        sa.Column('user_type_id', sa.String(36), sa.ForeignKey('user_types.id'), nullable=True),
-        sa.Column('email', sa.String(255), nullable=True),
-        sa.Column('password', sa.String(255), nullable=True),
+        sa.Column('title', sa.String(255), nullable=True),
         sa.Column('active_status', sa.String(255), nullable=True, server_default=sa.text("'Active'")),
         sa.Column('created_at', sa.DateTime, server_default=sa.text('NOW()')),
         sa.Column('updated_at', sa.DateTime, server_onupdate=sa.text('NOW()'))
     )
     
     op.create_table(
-        'user_profiles',
+        'users',
         sa.Column('id', sa.String(36), primary_key=True),
-        sa.Column('user_id', sa.String(36), sa.ForeignKey('users.id'), nullable=True),
-        sa.Column('first_name', sa.String(255), nullable=True),
-        sa.Column('middle_name', sa.String(255), nullable=True),
-        sa.Column('last_name', sa.String(255), nullable=True),
-        sa.Column('suffix_name', sa.String(255), nullable=True),
-        sa.Column('full_name', sa.String(255), nullable=True),
-        sa.Column('birth_date', sa.DateTime, nullable=True),
-        sa.Column('gender', sa.String(255), nullable=True),
-        sa.Column('house_number', sa.String(255), nullable=True),
-        sa.Column('street', sa.String(255), nullable=True),
-        sa.Column('barangay', sa.String(255), nullable=True),
-        sa.Column('municipality', sa.String(255), nullable=True),
-        sa.Column('province', sa.String(255), nullable=True),
-        sa.Column('picture', sa.String(255), nullable=True),
+        sa.Column('user_type_id', sa.String(36), sa.ForeignKey('user_types.id'), nullable=True),
+        sa.Column('email', sa.String(255), nullable=True),
+        sa.Column('password', sa.String(255), nullable=True),
         sa.Column('active_status', sa.String(255), nullable=True, server_default=sa.text("'Active'")),
         sa.Column('created_at', sa.DateTime, server_default=sa.text('NOW()')),
         sa.Column('updated_at', sa.DateTime, server_onupdate=sa.text('NOW()'))
@@ -73,9 +60,16 @@ def upgrade():
     op.create_table(
         'employees',
         sa.Column('id', sa.String(36), primary_key=True),
-        sa.Column('user_type_id', sa.String(36), sa.ForeignKey('user_types.id'), nullable=True),
-        sa.Column('user_profile_id', sa.String(36), sa.ForeignKey('user_profiles.id'), nullable=True),
+        sa.Column('employee_type_id', sa.String(36), sa.ForeignKey('employee_types.id'), nullable=True),
+        sa.Column('user_id', sa.String(36), sa.ForeignKey('users.id'), nullable=True),
         sa.Column('shift_type_id', sa.String(36), sa.ForeignKey('shift_types.id'), nullable=True),
+        sa.Column('monday', sa.Boolean, nullable=True),
+        sa.Column('tuesday', sa.Boolean, nullable=True),
+        sa.Column('wednesday', sa.Boolean, nullable=True),
+        sa.Column('thursday', sa.Boolean, nullable=True),
+        sa.Column('friday', sa.Boolean, nullable=True),
+        sa.Column('saturday', sa.Boolean, nullable=True),
+        sa.Column('sunday', sa.Boolean, nullable=True),
         sa.Column('active_status', sa.String(255), nullable=True, server_default=sa.text("'Active'")),
         sa.Column('created_at', sa.DateTime, server_default=sa.text('NOW()')),
         sa.Column('updated_at', sa.DateTime, server_onupdate=sa.text('NOW()'))
@@ -105,7 +99,6 @@ def upgrade():
         'attendances',
         sa.Column('id', sa.String(36), primary_key=True),
         sa.Column('employee_id', sa.String(36), sa.ForeignKey('employees.id'), nullable=True),
-        sa.Column('shift_type_id', sa.String(36), sa.ForeignKey('shift_types.id'), nullable=True),
         sa.Column('time_in_id', sa.String(36), sa.ForeignKey('time_ins.id'), nullable=True),
         sa.Column('time_out_id', sa.String(36), sa.ForeignKey('time_outs.id'), nullable=True),
         sa.Column('hours_worked', sa.Integer, nullable=True),

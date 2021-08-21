@@ -3,16 +3,17 @@ from sqlalchemy.orm import Session
 from schemas.leaveTypeSchema import CreateLeaveType
 from models.leaveTypeModel import LeaveType
 from database import get_db
+from datetime import date
 
 
 router = APIRouter(
-    prefix='/leavetype',
+    prefix='/time_and_attendance/api/leavetype',
     tags=['leavetype']
 )
 
 @router.get('/')
 def all(db: Session = Depends(get_db)):
-    leavetype = db.query(LeaveType).all()
+    leavetype = db.query(LeaveType).filter(LeaveType.active_status == 'Active').all()
     return {'leavetype': leavetype}
 
 @router.get('/{id}')
@@ -36,17 +37,18 @@ def store(leavetype: CreateLeaveType, db: Session = Depends(get_db)):
 @router.put('/{id}')
 def update(id: str, leavetype: CreateLeaveType, db: Session = Depends(get_db)): 
     if not db.query(LeaveType).filter(LeaveType.id == id).update({
-        'name': leavetype.name,
-        'age': leavetype.age
+        'title': leavetype.title,
     }):
-        raise HTTPException(404, 'User to update is not found')
+        raise HTTPException(404, 'Leave Type to update is not found')
     db.commit()
     return {'message': 'LeaveType updated successfully.'}
 
-@router.delete('/{id}')
-def remove(id: str, db: Session = Depends(get_db)):
-    if not db.query(LeaveType).filter(LeaveType.id == id).delete():
-        raise HTTPException(404, 'User to delete is not found')
+@router.put('/delete/{id}')
+def remove(id: str,  db: Session = Depends(get_db)):
+    if not db.query(LeaveType).filter(LeaveType.id == id).update({
+        'active_status': "Inactive",
+    }):
+        raise HTTPException(404, 'Leave type to delete is not found')
     db.commit()
-    return {'message': 'LeaveType removed successfully.'}
+    return {'message': 'Leave type removed successfully.'}
 

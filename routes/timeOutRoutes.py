@@ -6,7 +6,7 @@ from database import get_db
 
 
 router = APIRouter(
-    prefix='/timeout',
+    prefix='/time_and_attendance/api/timeout',
     tags=['timeout']
 )
 

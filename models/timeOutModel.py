@@ -13,5 +13,5 @@ class TimeOut(Base):
     created_at = Column(DateTime, server_default=text('NOW()'))
     updated_at = Column(DateTime, server_onupdate=text('NOW()'))
 
-    employees = relationship('Employee', back_populates='time_outs')
-    attendances = relationship('Attendance', back_populates='time_outs')
+    employees = relationship('Employee', back_populates='time_outs', lazy='joined')
+    attendances = relationship('Attendance', back_populates='time_outs', lazy='joined')

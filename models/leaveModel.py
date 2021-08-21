@@ -17,5 +17,5 @@ class Leave(Base):
     created_at = Column(DateTime, server_default=text('NOW()'))
     updated_at = Column(DateTime, server_onupdate=text('NOW()'))
 
-    leave_types = relationship('LeaveType', back_populates='leaves')
-    employees = relationship('Employee', back_populates='leaves')
+    leave_types = relationship('LeaveType', back_populates='leaves', lazy='joined')
+    employees = relationship('Employee', back_populates='leaves', lazy='joined')

@@ -6,7 +6,7 @@ from database import get_db
 
 
 router = APIRouter(
-    prefix='/timein',
+    prefix='/time_and_attendance/api/timein',
     tags=['timein']
 )
 

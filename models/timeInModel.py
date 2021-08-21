@@ -13,5 +13,5 @@ class TimeIn(Base):
     created_at = Column(DateTime, server_default=text('NOW()'))
     updated_at = Column(DateTime, server_onupdate=text('NOW()'))
 
-    employees = relationship('Employee', back_populates='time_ins')
-    attendances = relationship('Attendance', back_populates='time_ins')
+    employees = relationship('Employee', back_populates='time_ins', lazy='joined')
+    attendances = relationship('Attendance', back_populates='time_ins', lazy='joined')

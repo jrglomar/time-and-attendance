@@ -1,17 +1,15 @@
 from datetime import datetime as dt
 from pydantic import BaseModel
 
-class UserProfileBase(BaseModel):
-    user_id: str
-    first_name: str
-    last_name: str
+class EmployeeTypeBase(BaseModel):
+    title: str
 
 # Schema for request body
-class CreateUserProfile(UserProfileBase):
+class CreateEmployeeType(EmployeeTypeBase):
     pass
 
 # Schema for response body
-class UserProfile(BaseModel):
+class EmployeeType(BaseModel):
     # active_status: str
     created_at: dt
     updated_at: dt

@@ -1,0 +1,88 @@
+{%block sidebar%}
+
+<!-- Main Sidebar Container -->
+  <aside class="main-sidebar main-sidebar-custom sidebar-light-primary">
+    
+    <!-- Brand Logo -->
+    <a href="{{url_for('static', path='/index3.html')}}" class="brand-link">
+      <!-- <img src="{{url_for('static', path='/dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle border" style="opacity: .8"> -->
+      <span class="brand-text font-weight-light">Hospital Management System</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      
+      <!-- Sidebar user (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <!-- <img src="{{url_for('static', path='/dist/img/user2-160x160.jpg')}}" class="img-circle border" alt="User Image"> -->
+        </div>
+        <div class="info mr-1">
+          <a href="#" class="d-block text-truncate">Time And Attendance</a>
+        </div>
+      </div>
+
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-header">CORE</li>
+                <li class="nav-item">
+                    <a href="/time_and_attendance/admin/dashboard" class="nav-link" id="dashboard_sidebar">
+                    <script>if(window.location.pathname == '/'){document.getElementById("dashboard_sidebar").classList.add('active')}</script>
+                    <i class="nav-icon fas fa-chart-line"></i>
+                    <p>Dashboard</p>
+                    </a>
+                </li>
+
+            <li class="nav-header">USER MANAGEMENT</li>
+                <li class="nav-item">
+                    <a href="/time_and_attendance/admin/user" class="nav-link" id="user_sidebar">
+                    <script>if(window.location.pathname == '/time_and_attendance/admin/user'){document.getElementById("user_sidebar").classList.add('active')}</script>
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>User</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/time_and_attendance/admin/user_type" class="nav-link" id="user_type_sidebar">
+                    <script>if(window.location.pathname == '/time_and_attendance/admin/user_type'){document.getElementById("user_type_sidebar").classList.add('active')}</script>
+                    <i class="nav-icon fas fa-users"></i>
+                    <p>User Type</p>
+                    </a>
+                </li>
+
+
+            <li class="nav-header">T&A CONFIGURATION</li>
+                <li class="nav-item">
+                    <a href="/time_and_attendance/admin/employee_type" class="nav-link" id="employee_type_sidebar">
+                        <script>if(window.location.pathname == '/time_and_attendance/admin/employee_type'){document.getElementById("employee_type_sidebar").classList.add('active')}</script>
+                        <i class="nav-icon fas fa-id-card"></i>
+                        <p>Employee Type</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/time_and_attendance/admin/shift_type" class="nav-link" id="shift_type_sidebar">
+                        <script>if(window.location.pathname == '/time_and_attendance/admin/shift_type'){document.getElementById("shift_type_sidebar").classList.add('active')}</script>
+                        <i class="nav-icon fas fa-clock"></i>
+                        <p>Shift Type</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/time_and_attendance/admin/leave_type" class="nav-link" id="leave_type_sidebar">
+                        <script>if(window.location.pathname == '/time_and_attendance/admin/leave_type'){document.getElementById("leave_type_sidebar").classList.add('active')}</script>
+                        <i class="nav-icon fas fa-caret-square-left"></i>
+                        <p>Leave Type</p>
+                    </a>
+                </li>
+
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+
+    </div>
+    <!-- /.sidebar -->
+
+  </aside>
+  <!-- /.main-sidebar -->
+
+{%endblock%}

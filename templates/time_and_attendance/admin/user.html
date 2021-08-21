@@ -1,5 +1,13 @@
 <!-- Apply layout from base.html -->
-{%extends 'base.html'%} 
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/admin_navbar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/admin_sidebar.html'%}
+{%endblock%}
 
 {%block content%}
 <!-- Content Header (Page header) -->
@@ -7,12 +15,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1>Shift Type</h1>
+            <h1>User</h1>
             </div>
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Shift Type</li>
+                <li class="breadcrumb-item active">User</li>
             </ol>
             </div>
         </div>
@@ -26,21 +34,21 @@
             <div class="col-8">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Create Shift Type</h3>
+                        <h3 class="card-title">Create User</h3>
                     </div>
                     <form id="shift_type_form">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="shift_types_title">Title</label>
-                                <input type="text" class="form-control" id="shift_types_title" name="shift_types_title" placeholder="Enter title">
+                                <label for="users_title">Title</label>
+                                <input type="text" class="form-control" id="users_title" name="users_title" placeholder="Enter title">
                             </div>
                             <div class="form-group">
-                                <label for="shift_types_start_time">Start-Time</label>
-                                <input type="time" class="form-control" id="shift_types_start_time" name="shift_types_start_time" placeholder="Select Start-Time" value="08:00">
+                                <label for="users_start_time">Start-Time</label>
+                                <input type="time" class="form-control" id="users_start_time" name="users_start_time" placeholder="Select Start-Time" value="08:00">
                             </div>
                             <div class="form-group">
-                                <label for="shift_types_end_time">End-Time</label>
-                                <input type="time" class="form-control" id="shift_types_end_time" name="shift_types_end_time" placeholder="Select End-Time" value="17:00">
+                                <label for="users_end_time">End-Time</label>
+                                <input type="time" class="form-control" id="users_end_time" name="users_end_time" placeholder="Select End-Time" value="17:00">
                             </div>
                         </div>
                     <div class="card-footer float-right">
@@ -60,21 +68,20 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header d-flex justify-content-between">
-                <h3 class="card-title">List of Shift Types</h3>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shift_types_form_modal">
+                <h3 class="card-title">List of Users</h3>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#users_form_modal">
                   <i class="far fa-plus-square"></i> Add New
                 </button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="shift_types_datatable" class="table table-bordered table-hover">
+                <table id="users_datatable" class="table table-bordered table-hover">
                     <thead>
                         <th>ID</th>
                         <th>Date Created</th>
-                        <th>Title</th>
-                        <th>Start-Time</th>
-                        <th>End-Time</th>
-                        <th>Actions</th>
+                        <th width="33%">User Type</th>
+                        <th width="33%">Email</th>
+                        <th width="33%">Actions</th>
                     </thead>
                     <tbody>
                         <tr>
@@ -96,36 +103,42 @@
 
     <!-- ADD FORM -->
     <!-- Extra Large Modal -->
-      <div class="modal fade" id="shift_types_form_modal">
-        <div class="modal-dialog shift_types_form_modal modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal fade" id="users_form_modal">
+        <div class="modal-dialog users_form_modal modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Create Shift Type</h4>
+              <h4 class="modal-title">Create User</h4>
               <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true"><i class="fas fa-times"></i></span>
               </button>
             </div>
             <div class="modal-body">
-              <form id="shift_types_form">
+              <form id="users_form">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="shift_types_title">Title</label>
-                                <input type="text" class="form-control" id="shift_types_title" name="shift_types_title" placeholder="Enter title">
+                                <label for="user_type_id_option">User Type</label>
+                                <select id="user_type_id_option" class="custom-select rounded-0">
+                                    
+                                </select>
                             </div>
+                        </div>
+                        <div class="card-body">
                             <div class="form-group">
-                                <label for="shift_types_start_time">Start-Time</label>
-                                <input type="time" class="form-control" id="shift_types_start_time" name="shift_types_start_time" placeholder="Select Start-Time" value="08:00">
+                                <label for="user_email">Email</label>
+                                <input type="text" class="form-control" id="user_email" name="user_email" placeholder="Enter email">
                             </div>
+                        </div>
+                        <div class="card-body">
                             <div class="form-group">
-                                <label for="shift_types_end_time">End-Time</label>
-                                <input type="time" class="form-control" id="shift_types_end_time" name="shift_types_end_time" placeholder="Select End-Time" value="17:00">
+                                <label for="user_password">Password</label>
+                                <input type="password" class="form-control" id="user_password" name="user_password" placeholder="Enter password">
                             </div>
                         </div>
                 </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" id="shift_types_form_submit" class="btn btn-info">Submit</button>
+              <button type="button" id="users_form_submit" class="btn btn-info">Submit</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -136,40 +149,48 @@
 
     <!-- EDIT FORM -->
     <!-- Extra Large Modal -->
-      <div class="modal fade" id="shift_types_form_modal_edit">
-        <div class="modal-dialog shift_types_form_modal_edit modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal fade" id="users_form_modal_edit">
+        <div class="modal-dialog users_form_modal_edit modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Edit Shift Type</h4>
+              <h4 class="modal-title">Edit User</h4>
               <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true"><i class="fas fa-times"></i></span>
               </button>
             </div>
             <div class="modal-body">
-              <form id="shift_types_form_edit">
+              <form id="users_form_edit">
+                        <div class="card-body" hidden>
+                            <div class="form-group">
+                                <label for="user_id_edit">ID</label>
+                                <input type="text" class="form-control" id="user_id_edit" name="user_id_edit">
+                            </div>
+                        </div>
                         <div class="card-body">
-                            <div class="form-group" hidden>
-                                <label for="shift_types_id_edit">ID</label>
-                                <input type="text" class="form-control" id="shift_types_id_edit" name="shift_types_id_edit" placeholder="Enter title">
-                            </div>
                             <div class="form-group">
-                                <label for="shift_types_title_edit">Title</label>
-                                <input type="text" class="form-control" id="shift_types_title_edit" name="shift_types_title_edit" placeholder="Enter title">
+                                <label for="user_type_id_option_edit">User Type</label>
+                                <select id="user_type_id_option_edit" class="custom-select rounded-0">
+                                    
+                                </select>
                             </div>
+                        </div>
+                        <div class="card-body">
                             <div class="form-group">
-                                <label for="shift_types_start_time_edit">Start-Time</label>
-                                <input type="time" class="form-control" id="shift_types_start_time_edit" name="shift_types_start_time_edit" placeholder="Select Start-Time">
+                                <label for="user_email_edit">Email</label>
+                                <input type="text" class="form-control" id="user_email_edit" name="user_email_edit" placeholder="Enter email">
                             </div>
+                        </div>
+                        <div class="card-body">
                             <div class="form-group">
-                                <label for="shift_types_end_time_edit">End-Time</label>
-                                <input type="time" class="form-control" id="shift_types_end_time_edit" name="shift_types_end_time_edit" placeholder="Select End-Time">
+                                <label for="user_password_edit">Password</label>
+                                <input type="password" class="form-control" id="user_password_edit" name="user_password_edit" placeholder="Enter password">
                             </div>
                         </div>
                 </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" id="shift_types_btn_edit" class="btn btn-primary">Save Changes</button>
+              <button type="button" id="users_btn_edit" class="btn btn-primary">Save Changes</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -180,28 +201,28 @@
 
     <!-- DELETE FORM -->
     <!-- Extra Large Modal -->
-      <div class="modal fade" id="shift_types_form_modal_delete">
-        <div class="modal-dialog shift_types_form_modal_delete modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal fade" id="users_form_modal_delete">
+        <div class="modal-dialog users_form_modal_delete modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Deactivate Shift Type</h4>
+              <h4 class="modal-title">Deactivate User</h4>
               <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true"><i class="fas fa-times"></i></span>
               </button>
             </div>
             <div class="modal-body">
-              <form id="shift_types_form_delete">
+              <form id="users_form_delete">
                         <div class="card-body">
                             <div class="form-group" hidden>
-                                <label for="shift_types_id_delete">ID</label>
-                                <input type="text" class="form-control" id="shift_types_id_delete" name="shift_types_id_delete" placeholder="Enter title">
+                                <label for="user_id_delete">ID</label>
+                                <input type="text" class="form-control" id="user_id_delete" name="user_id_delete" placeholder="Enter title">
                             </div>
                         </div>
                 </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" id="shift_types_btn_delete" class="btn btn-danger">Deactivate</button>
+              <button type="button" id="users_btn_delete" class="btn btn-danger">Deactivate</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -217,20 +238,13 @@
 $(document).ready(function(){
 
     function loadtable(){
-        shift_types_datatable = $('#shift_types_datatable').DataTable( {
-            "ajax": {url:"/shifttype", dataSrc:"shifttype"},
+        users_datatable = $('#users_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/users", dataSrc:"user"},
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
-                { data: "title"},
-                { data: "start_time", render: function(data, type, row){
-                    date = moment().format('YYYY-MM-DD')
-                    return moment(date + " " + data).format('LT');
-                }},
-                { data: "end_time", render: function(data, type, row){
-                    date = moment().format('YYYY-MM-DD')
-                    return moment(date + " " + data).format('LT');
-                }},
+                { data: "user_types.title"},
+                { data: "email"},
                 { data: "active_status", render: function(data, type, row){
                         if(data == "Active"){
                             return `
@@ -264,24 +278,51 @@ $(document).ready(function(){
 
 
 function refresh(){
-    var url = "/shifttype";
+    var url = "/time_and_attendance/api/users";
 
-    shift_types_datatable.ajax.url(url).load();
+    users_datatable.ajax.url(url).load();
 }
 
-$('#shift_types_form_submit').on('click', function(e){
+function get_user_types(){
+       
+        $.ajax({
+                url: '/time_and_attendance/api/usertype/',
+                type: "GET",
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                    usertype = data.usertype
+                    console.log(usertype)
+                    html = ""
+                    
+                    for(var i=0; i < usertype.length; i++){
+                        html += `<option value="${usertype[i].id}">${usertype[i].title}</option>`
+                    }
+
+                    $('#user_type_id_option').append(html)
+                    $('#user_type_id_option_edit').append(html)
+                }
+            })
+            // ajax closing tag
+}
+
+get_user_types()
+
+
+$('#users_form_submit').on('click', function(e){
     e.preventDefault()
 
-    $('#shift_types_form_submit').prop('disabled', true)
+    $('#users_form_submit').prop('disabled', true)
 
     let formData = {
-        title: $('#shift_types_title').val(),
-        start_time: $('#shift_types_start_time').val(),
-        end_time: $('#shift_types_end_time').val(),
+        user_type_id: $('#user_type_id_option').val(),
+        email: $('#user_email').val(),
+        password: $('#user_password').val(),
     }
 
     $.ajax({
-            url: '/shifttype',
+            url: '/time_and_attendance/api/users',
             type: "POST",
             data: JSON.stringify(formData),
             contentType: "application/json",
@@ -294,15 +335,15 @@ $('#shift_types_form_submit').on('click', function(e){
                     'success'
                 )
 
-                $('#shift_types_form').trigger("reset")
-                $('#shift_types_form_submit').prop('disabled', false)
-                $('#shift_types_form_modal').modal('hide')
+                $('#users_form').trigger("reset")
+                $('#users_form_submit').prop('disabled', false)
+                $('#users_form_modal').modal('hide')
                 refresh()
             }
         // ajax closing tag
     })
 
-    $('#shift_types_form_submit').prop('disabled', false)
+    $('#users_form_submit').prop('disabled', false)
 });
 
 $(document).on('click', '.btn_edit', function(e){
@@ -311,38 +352,37 @@ $(document).on('click', '.btn_edit', function(e){
     let id = this.id
 
     $.ajax({
-            url: '/shifttype/'+id,
+            url: '/time_and_attendance/api/users/'+id,
             type: "GET",
             contentType: "application/json",
             dataType: "JSON",
         
             success: function(data){
-                $('#shift_types_id_edit').val(data.shifttype.id);
-                $('#shift_types_title_edit').val(data.shifttype.title);
-                $('#shift_types_start_time_edit').val(data.shifttype.start_time);
-                $('#shift_types_end_time_edit').val(data.shifttype.end_time);
+                console.log(data.user)
+                $('#user_id_edit').val(data.user.id);
+                $('#user_type_id_option_edit').val(data.user.user_type_id);
+                $('#user_email_edit').val(data.user.email);
 
-
-                $('#shift_types_form_modal_edit').modal('show');
+                $('#users_form_modal_edit').modal('show');
             }
         // ajax closing tag
     })
 })
 
-$('#shift_types_btn_edit').on('click', function(e){
+$('#users_btn_edit').on('click', function(e){
     e.preventDefault()
-    $('#shift_types_btn_edit').prop('disabled', true)
+    $('#users_btn_edit').prop('disabled', true)
 
-    let id = $('#shift_types_id_edit').val()
+    let id = $('#user_id_edit').val()
 
     let formData = {
-        title: $('#shift_types_title_edit').val(),
-        start_time: $('#shift_types_start_time_edit').val(),
-        end_time: $('#shift_types_end_time_edit').val()
+        user_type_id: $('#user_type_id_option_edit').val(),
+        email: $('#user_email_edit').val(),
+        password: $('#user_password_edit').val(),
     }
 
     $.ajax({
-            url: '/shifttype/'+id,
+            url: '/time_and_attendance/api/users/'+id,
             type: "PUT",
             data: JSON.stringify(formData),
             contentType: "application/json",
@@ -355,15 +395,15 @@ $('#shift_types_btn_edit').on('click', function(e){
                     'success'
                 )
 
-                $('#shift_types_form_edit').trigger("reset")
-                $('#shift_types_btn_edit').prop('disabled', false)
-                $('#shift_types_form_modal_edit').modal('hide')
+                $('#users_form_edit').trigger("reset")
+                $('#users_btn_edit').prop('disabled', false)
+                $('#users_form_modal_edit').modal('hide')
                 refresh()
             }
         // ajax closing tag
     })
 
-    $('#shift_types_btn_edit').prop('disabled', false)
+    $('#users_btn_edit').prop('disabled', false)
 })
 
 $(document).on('click', '.btn_delete', function(e){
@@ -372,29 +412,28 @@ $(document).on('click', '.btn_delete', function(e){
     let id = this.id
 
     $.ajax({
-            url: '/shifttype/'+id,
+            url: '/time_and_attendance/api/users/'+id,
             type: "GET",
             contentType: "application/json",
             dataType: "JSON",
         
             success: function(data){
-                $('#shift_types_id_delete').val(data.shifttype.id);
+                $('#user_id_delete').val(data.user.id);
 
-                $('#shift_types_form_modal_delete').modal('show');
+                $('#users_form_modal_delete').modal('show');
             }
         // ajax closing tag
     })
 })
 
-$('#shift_types_btn_delete').on('click', function(e){
+$('#users_btn_delete').on('click', function(e){
     e.preventDefault()
-    $('#shift_types_btn_delete').prop('disabled', true)
+    $('#users_btn_delete').prop('disabled', true)
 
-    let id = $('#shift_types_id_delete').val()
-
+    let id = $('#user_id_delete').val()
 
     $.ajax({
-            url: '/shifttype/delete/'+id,
+            url: '/time_and_attendance/api/users/delete/'+id,
             type: "PUT",
             contentType: "application/json",
             dataType: "JSON",
@@ -406,15 +445,15 @@ $('#shift_types_btn_delete').on('click', function(e){
                     'success'
                 )
 
-                $('#shift_types_form_delete').trigger("reset")
-                $('#shift_types_btn_delete').prop('disabled', false)
-                $('#shift_types_form_modal_delete').modal('hide')
+                $('#users_form_delete').trigger("reset")
+                $('#users_btn_delete').prop('disabled', false)
+                $('#users_form_modal_delete').modal('hide')
                 refresh()
             }
         // ajax closing tag
     })
 
-    $('#shift_types_btn_delete').prop('disabled', false)
+    $('#users_btn_delete').prop('disabled', false)
     
 })
 

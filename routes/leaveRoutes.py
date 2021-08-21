@@ -6,7 +6,7 @@ from database import get_db
 
 
 router = APIRouter(
-    prefix='/leave',
+    prefix='/time_and_attendance/api/leave',
     tags=['leave']
 )
 

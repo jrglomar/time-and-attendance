@@ -16,14 +16,14 @@ def password_hash(password):
     return pwd_context.hash(password)
 
 router = APIRouter(
-    prefix='/users',
+    prefix='/time_and_attendance/api/users',
     tags=['users']
 )
 
 @router.get('/')
 def all(db: Session = Depends(get_db)):
-    users = db.query(User).all()
-    return {'users': users}
+    user = db.query(User).all()
+    return {'user': user}
 
 @router.get('/{id}')
 def read(id: str, db: Session = Depends(get_db)):
@@ -55,9 +55,11 @@ def store(request: CreateUser, db: Session = Depends(get_db)):
 
 @router.put('/{id}')
 def update(id: str, user: CreateUser, db: Session = Depends(get_db)): 
+    user.password = password_hash(user.password)
     if not db.query(User).filter(User.id == id).update({
-        'name': user.name,
-        'age': user.age
+        'user_type_id': user.user_type_id,
+        'email': user.email,
+        'password': user.password
     }):
         raise HTTPException(404, 'User to update is not found')
     db.commit()

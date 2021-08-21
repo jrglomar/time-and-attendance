@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
-from routes import userRoutes, userTypeRoutes, userProfileRoutes, employeeRoutes, shiftTypeRoutes, timeInRoutes, timeOutRoutes, attendanceRoutes, leaveTypeRoutes, leaveRoutes, authRoutes
+from routes import userRoutes, userTypeRoutes, employeeTypeRoutes, employeeRoutes, shiftTypeRoutes, timeInRoutes, timeOutRoutes, attendanceRoutes, leaveTypeRoutes, leaveRoutes, authRoutes
 from database import get_db
 # from models.postModel import Post
 
@@ -18,7 +18,7 @@ app.mount('/static', StaticFiles(directory='static'), name='static')
 app.include_router(authRoutes.router)
 app.include_router(userRoutes.router)
 app.include_router(userTypeRoutes.router)
-app.include_router(userProfileRoutes.router)
+app.include_router(employeeTypeRoutes.router)
 app.include_router(employeeRoutes.router)
 app.include_router(shiftTypeRoutes.router)
 app.include_router(timeInRoutes.router)
@@ -29,16 +29,45 @@ app.include_router(leaveRoutes.router)
 # app.include_router(postRoutes.router)
 
 
-@app.get('/', response_class=HTMLResponse)
+@app.get('/time_and_attendance', response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
-    return template.TemplateResponse('index.html', {
+    return template.TemplateResponse('time_and_attendance/index.html', {
         'request': request,
     })
 
+# ADMIN SIDE
 
-@app.get('/shift_type', response_class=HTMLResponse)
+# USER MANAGEMENT
+@app.get('/time_and_attendance/admin/user', response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
-    return template.TemplateResponse('admin/shift_type.html', {
+    return template.TemplateResponse('time_and_attendance/admin/user.html', {
         'request': request,
-    })
+})
+    
+@app.get('/time_and_attendance/admin/user_type', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/admin/user_type.html', {
+        'request': request,
+})
+
+# SYSTEM CONFIG
+@app.get('/time_and_attendance/admin/employee_type', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/admin/employee_type.html', {
+        'request': request,
+})
+    
+@app.get('/time_and_attendance/admin/shift_type', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/admin/shift_type.html', {
+        'request': request,
+})
+
+@app.get('/time_and_attendance/admin/leave_type', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/admin/leave_type.html', {
+        'request': request,
+})
+    
+# END OF ADMIN SIDE
 

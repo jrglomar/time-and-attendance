@@ -1,6 +1,8 @@
+
 from datetime import datetime as dt
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
+from schemas.userTypeSchema import UserType
 
 class UserBase(BaseModel):
     user_type_id: Optional[str] = None
@@ -13,6 +15,6 @@ class CreateUser(UserBase):
 
 # Schema for response body
 class User(BaseModel):
-    # active_status: str
     created_at: dt
     updated_at: dt
+    

@@ -14,5 +14,5 @@ class ShiftType(Base):
     created_at = Column(DateTime, server_default=text('NOW()'))
     updated_at = Column(DateTime, server_onupdate=text('NOW()'))
 
-    employees = relationship('Employee', back_populates='shift_types')
-    attendances = relationship('Attendance', back_populates='shift_types')
+    employees = relationship('Employee', back_populates='shift_types', lazy='joined')
+

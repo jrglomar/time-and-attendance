@@ -7,7 +7,7 @@ from datetime import date
 
 
 router = APIRouter(
-    prefix='/shifttype',
+    prefix='/time_and_attendance/api/shifttype',
     tags=['shifttype']
 )
 
@@ -42,7 +42,6 @@ def update(id: str, shifttype: CreateShiftType, db: Session = Depends(get_db)):
         'title': shifttype.title,
         'start_time': shifttype.start_time,
         'end_time': shifttype.end_time,
-        'updated_at': date.today()
     }):
         raise HTTPException(404, 'ShiftType to update is not found')
     db.commit()
@@ -52,7 +51,6 @@ def update(id: str, shifttype: CreateShiftType, db: Session = Depends(get_db)):
 def remove(id: str,  db: Session = Depends(get_db)):
     if not db.query(ShiftType).filter(ShiftType.id == id).update({
         'active_status': "Inactive",
-        'updated_at': date.today()
     }):
         raise HTTPException(404, 'Shift type to delete is not found')
     db.commit()
