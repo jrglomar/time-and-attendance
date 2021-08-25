@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class TimeInBase(BaseModel):
     employee_id: str
-    time_log: time
+    time_log: str
 
 # Schema for request body
 class CreateTimeIn(TimeInBase):

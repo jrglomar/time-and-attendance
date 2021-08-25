@@ -17,7 +17,7 @@ def all(db: Session = Depends(get_db)):
 
 @router.get('/{id}')
 def read(id: str, db: Session = Depends(get_db)):
-    employee = db.query(Employee).filter(Employee.id == id).first()
+    employee = db.query(Employee).filter(Employee.id == id).filter(Employee.active_status == 'Active').first()
     if not employee:
         raise HTTPException(404, 'Employee not found')
     return {'employee': employee}

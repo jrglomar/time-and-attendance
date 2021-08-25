@@ -2,11 +2,11 @@
 {%extends '/time_and_attendance/base.html'%} 
 
 {%block navbar%}
-    {%include 'time_and_attendance/includes/employee_navbar.html'%}
+    {%include 'time_and_attendance/includes/hr_navbar.html'%}
 {%endblock%}
 
 {%block sidebar%}
-    {%include 'time_and_attendance/includes/employee_sidebar.html'%}
+    {%include 'time_and_attendance/includes/hr_sidebar.html'%}
 {%endblock%}
 
 {%block content%}
@@ -92,6 +92,74 @@
       <!-- /.container-fluid -->
     </section>
 
+     <!-- ADD FORM -->
+      <!-- Extra Large Modal -->
+        <div class="modal fade" id="employee_time_in_form_modal">
+          <div class="modal-dialog employee_time_in_form_modal modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Time In</h4>
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="employee_form">
+                      <div class="card-body">
+                          <div class="form-group">
+                              <label for="user_id_option_time_in">User Email</label>
+                              <select id="user_id_option_time_in" class="custom-select rounded-0" style="width:100%">
+                                  
+                              </select>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="employee_time_in_form_submit" class="btn btn-info">Submit</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+      <!-- /.modal -->
+
+     <!-- ADD FORM -->
+      <!-- Extra Large Modal -->
+        <div class="modal fade" id="employee_time_out_form_modal">
+          <div class="modal-dialog employee_time_out_form_modal modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Time Out</h4>
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="employee_time_out_form">
+                      <div class="card-body">
+                          <div class="form-group">
+                              <label for="user_id_option_time_out">User Email</label>
+                              <select id="user_id_option_time_out" class="custom-select rounded-0" style="width:100%">
+                                  
+                              </select>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="employee_time_out_form_submit" class="btn btn-info">Submit</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+      <!-- /.modal -->
+
     
 {%endblock%}
 
@@ -99,12 +167,47 @@
 <script>
 $(document).ready(function(){
 
-  function check_employee_time_logs(){
+    
+  function get_user_email(){
+        
+          $.ajax({
+                  url: '/time_and_attendance/api/employee/',
+                  type: "GET",
+                  contentType: "application/json",
+                  dataType: "JSON",
+              
+                  success: function(data){
+                      employee = data.employee
+                      console.log(employee)
+                      html = "<option disabled selected>-- Please Select --</option>"
+                      
+                      for(var i=0; i < employee.length; i++){
+                          html += `<option value="${employee[i].id}">${employee[i].users.email}</option>`
+                      }
 
+                      $('#user_id_option_time_in').html(html)
+                      $('#user_id_option_time_out').html(html)
+                  }
+              })
+              // ajax closing tag
+
+              
   }
 
+  get_user_email()
+  
+
   $('#btn_time_in').on('click', function(e){
-    let id = '242717df-0314-11ec-b0aa-4ccc6ad9280e'
+    $('#employee_time_in_form_modal').modal('show')
+  })
+  $('#btn_time_out').on('click', function(e){
+    $('#employee_time_out_form_modal').modal('show')
+  })
+
+  $('#employee_time_in_form_submit').on('click', function(e){
+    e.preventDefault()
+
+    let id = $('#user_id_option_time_in').val()
 
     $.ajax({
             url: '/time_and_attendance/api/employee/'+id,
@@ -113,15 +216,16 @@ $(document).ready(function(){
             dataType: "JSON",
         
             success: function(data){
-                let time_log = new Date().toLocaleTimeString('en-US', { hour12: false, 
-                                             hour: "numeric", 
-                                             minute: "numeric"})
-                                            
+                d = new Date();
+                datetext = d.toTimeString();
+                datetext = datetext.split(' ')[0];
+                time_log = datetext.slice(0, -3)             
 
                 let formData = {
                   "employee_id": id,
                   "time_log": time_log
                 }
+
                 
 
                 $.ajax({
@@ -138,7 +242,8 @@ $(document).ready(function(){
                                 'success'
                             )
 
-                            $('#btn_time_in').prop('disabled', true)
+                            $('#employee_time_in_form_modal').modal('hide')
+
                         }
                     // ajax closing tag
                 })
@@ -148,8 +253,10 @@ $(document).ready(function(){
     })
   })
 
-  $('#btn_time_out').on('click', function(e){
-    let id = '242717df-0314-11ec-b0aa-4ccc6ad9280e'
+  $('#employee_time_out_form_submit').on('click', function(e){
+    e.preventDefault()
+
+    let id = $('#user_id_option_time_out').val()
 
     $.ajax({
             url: '/time_and_attendance/api/employee/'+id,
@@ -158,9 +265,11 @@ $(document).ready(function(){
             dataType: "JSON",
         
             success: function(data){
-                let time_log = new Date().toLocaleTimeString('en-US', { hour12: false, 
-                                             hour: "numeric", 
-                                             minute: "numeric"})
+                d = new Date();
+                datetext = d.toTimeString();
+                datetext = datetext.split(' ')[0];
+                time_log = datetext.slice(0, -3)
+
                                             
 
                 let formData = {
@@ -183,7 +292,8 @@ $(document).ready(function(){
                                 'success'
                             )
 
-                            $('#btn_time_out').prop('disabled', true)
+                            $('#employee_time_out_form_modal').modal('hide')
+
                         }
                     // ajax closing tag
                 })
@@ -192,6 +302,10 @@ $(document).ready(function(){
     })
   })
     
+
+  $('select').select2({
+    width: 'resolve'
+  })
   
 })
 </script>

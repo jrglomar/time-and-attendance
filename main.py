@@ -100,6 +100,13 @@ def index(request: Request, db: Session = Depends(get_db)):
         'request': request,
 })
     
+    
+@app.get('/time_and_attendance/hr/time_logging', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/hr/time_logging.html', {
+        'request': request,
+})
+    
 # END OF HR SIDE
 
 # EMPLOYEE SIDE
@@ -110,11 +117,6 @@ def index(request: Request, db: Session = Depends(get_db)):
         'request': request,
 })
 
-@app.get('/time_and_attendance/employee/time_in_time_out', response_class=HTMLResponse)
-def index(request: Request, db: Session = Depends(get_db)):
-    return template.TemplateResponse('time_and_attendance/employee/time_in_time_out.html', {
-        'request': request,
-})
 
 @app.get('/time_and_attendance/employee/leave_application', response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
