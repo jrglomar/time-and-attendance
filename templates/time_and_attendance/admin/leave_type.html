@@ -206,6 +206,7 @@
 <script>
 $(document).ready(function(){
 
+
     function loadtable(){
         leave_types_datatable = $('#leave_types_datatable').DataTable( {
             "ajax": {url:"/time_and_attendance/api/leavetype", dataSrc:"leavetype"},
@@ -395,6 +396,12 @@ $('#leave_types_btn_delete').on('click', function(e){
 
     $('#leave_types_btn_delete').prop('disabled', false)
     
+})
+
+
+
+$('select').select2({
+  width: 'resolve'
 })
 
 </script>

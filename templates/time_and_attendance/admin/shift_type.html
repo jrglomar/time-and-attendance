@@ -288,6 +288,7 @@ $('#shift_types_form_submit').on('click', function(e){
         end_time: $('#shift_types_end_time').val(),
     }
 
+
     $.ajax({
             url: '/time_and_attendance/api/shifttype',
             type: "POST",
@@ -424,6 +425,11 @@ $('#shift_types_btn_delete').on('click', function(e){
 
     $('#shift_types_btn_delete').prop('disabled', false)
     
+})
+
+
+$('select').select2({
+  width: 'resolve'
 })
 
 </script>

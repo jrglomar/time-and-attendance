@@ -1,0 +1,129 @@
+<!-- Apply layout from base.html -->
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/hr_navbar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/hr_sidebar.html'%}
+{%endblock%}
+
+{%block content%}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Leave Approved</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Leave Approved</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+              <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h3 class="card-title">List of Leaves</h3>
+                <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#leave_form_modal">
+                  <i class="far fa-plus-square"></i> Add New
+                </button> -->
+                </div>
+              <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="leave_datatable" class="table table-bordered table-hover">
+                        <thead>
+                            <th style="color:red">Sunday</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th style="color:red">Saturday</th>
+                        </thead>
+                        <tbody>
+                            <tr id="0"></tr>
+                            <tr id="1"></tr>
+                            <tr id="2"></tr>
+                            <tr id="3"></tr>
+                            <tr id="4"></tr>
+                            <tr id="5"></tr>
+                            <tr id="6"></tr>
+                        </tbody>
+                    </table>
+                </div>
+              <!-- /.card-body -->
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+
+    <div id="calendar"></div>
+
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+
+    let startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+    let endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
+    let startDate   = moment().startOf('month').format('DD');
+    let endDate   = moment().endOf('month').format('DD');
+    let startDay = moment(startOfMonth).day()
+    let endDay = moment(endOfMonth).day()
+
+    let dayDiff = (endDate - startDate) + 1
+
+    let trcount = 0
+    let tdcount = 0
+
+
+    for(i = 1; i <= dayDiff; i++){
+
+
+        if(parseInt(tdcount) < parseInt(startDay) && trcount == 0){
+            $('#'+trcount).append(`<td></td>`)
+            i--
+        }
+        else if(startDay <= 6){
+            $('#'+trcount).append(`<td><button type="button" class="btn btn-block btn-outline-warning btn-lg">${i}</button></td>`)
+            startDay ++
+        }
+        else if(startDay == 7){
+            trcount ++
+            startDay = 0
+            $('#'+trcount).append(`<td><button type="button" class="btn btn-block btn-outline-info btn-lg">${i}</button></td>`)
+            startDay ++
+        }
+        else{
+            $('#'+trcount).append(`<td></td>`)
+            startDay++
+        }
+
+        tdcount++
+
+    }
+
+
+})
+</script>
+{%endblock%}

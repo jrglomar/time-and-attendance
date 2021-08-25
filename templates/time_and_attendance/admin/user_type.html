@@ -135,7 +135,7 @@
     <!-- EDIT FORM -->
     <!-- Extra Large Modal -->
       <div class="modal fade" id="usertype_form_modal_edit">
-        <div class="modal-dialog usertype_form_modal_edit modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog usertype_form_modal_edit modal-xl modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Edit User Type</h4>
@@ -171,7 +171,7 @@
     <!-- DELETE FORM -->
     <!-- Extra Large Modal -->
       <div class="modal fade" id="usertype_form_modal_delete">
-        <div class="modal-dialog usertype_form_modal_delete modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog usertype_form_modal_delete modal-xl modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Deactivate User Type</h4>
@@ -205,6 +205,7 @@
 {%block scripts%}
 <script>
 $(document).ready(function(){
+
 
     function loadtable(){
         usertype_datatable = $('#usertype_datatable').DataTable( {
@@ -395,6 +396,11 @@ $('#usertype_btn_delete').on('click', function(e){
 
     $('#usertype_btn_delete').prop('disabled', false)
     
+})
+
+
+$('select').select2({
+  width: 'resolve'
 })
 
 </script>

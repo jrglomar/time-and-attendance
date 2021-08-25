@@ -1,0 +1,198 @@
+<!-- Apply layout from base.html -->
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/employee_navbar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/employee_sidebar.html'%}
+{%endblock%}
+
+{%block content%}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Time In/Out</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Time In/Out</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- general form elements -->
+<!-- <section class="content">
+    <div class="container-fluid">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-8">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Create Employee</h3>
+                    </div>
+                    <form id="shift_type_form">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="employee_title">Title</label>
+                                <input type="text" class="form-control" id="employee_title" name="employee_title" placeholder="Enter title">
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_start_time">Start-Time</label>
+                                <input type="time" class="form-control" id="employee_start_time" name="employee_start_time" placeholder="Select Start-Time" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_end_time">End-Time</label>
+                                <input type="time" class="form-control" id="employee_end_time" name="employee_end_time" placeholder="Select End-Time" value="17:00">
+                            </div>
+                        </div>
+                    <div class="card-footer float-right">
+                        <input type="submit" class="btn btn-info" value='Submit'>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<!-- /.card -->
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+            <br><br><br>
+              <div class="card">
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <div class="d-flex justify-content-center">
+                    <button id="btn_time_in" type="button" class="btn btn-info btn-lg btn-block" style="width:75%"><i class="fas fa-clock"></i> Time In</button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="d-flex justify-content-center">
+                    <button id="btn_time_out" type="button" class="btn btn-warning btn-lg btn-block" style="width:75%"><i class="fas fa-clock"></i> Time Out</button>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+
+  function check_employee_time_logs(){
+
+  }
+
+  $('#btn_time_in').on('click', function(e){
+    let id = '242717df-0314-11ec-b0aa-4ccc6ad9280e'
+
+    $.ajax({
+            url: '/time_and_attendance/api/employee/'+id,
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                let time_log = new Date().toLocaleTimeString('en-US', { hour12: false, 
+                                             hour: "numeric", 
+                                             minute: "numeric"})
+                                            
+
+                let formData = {
+                  "employee_id": id,
+                  "time_log": time_log
+                }
+                
+
+                $.ajax({
+                        url: '/time_and_attendance/api/timein',
+                        type: "POST",
+                        data: JSON.stringify(formData),
+                        contentType: "application/json",
+                        dataType: "JSON",
+                    
+                        success: function(data){
+                            Swal.fire(
+                                'Success!',
+                                data.message,
+                                'success'
+                            )
+
+                            $('#btn_time_in').prop('disabled', true)
+                        }
+                    // ajax closing tag
+                })
+
+            }
+        // ajax closing tag
+    })
+  })
+
+  $('#btn_time_out').on('click', function(e){
+    let id = '242717df-0314-11ec-b0aa-4ccc6ad9280e'
+
+    $.ajax({
+            url: '/time_and_attendance/api/employee/'+id,
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                let time_log = new Date().toLocaleTimeString('en-US', { hour12: false, 
+                                             hour: "numeric", 
+                                             minute: "numeric"})
+                                            
+
+                let formData = {
+                  "employee_id": id,
+                  "time_log": time_log
+                }
+                
+
+                $.ajax({
+                        url: '/time_and_attendance/api/timeout',
+                        type: "POST",
+                        data: JSON.stringify(formData),
+                        contentType: "application/json",
+                        dataType: "JSON",
+                    
+                        success: function(data){
+                            Swal.fire(
+                                'Success!',
+                                data.message,
+                                'success'
+                            )
+
+                            $('#btn_time_out').prop('disabled', true)
+                        }
+                    // ajax closing tag
+                })
+            }
+        // ajax closing tag
+    })
+  })
+    
+  
+})
+</script>
+{%endblock%}

@@ -12,21 +12,29 @@ router = APIRouter(
 
 @router.get('/')
 def all(db: Session = Depends(get_db)):
-    users = db.query(Employee).all()
-    return {'users': users}
+    employee = db.query(Employee).filter(Employee.active_status == 'Active').all()
+    return {'employee': employee}
 
 @router.get('/{id}')
 def read(id: str, db: Session = Depends(get_db)):
-    user = db.query(Employee).filter(Employee.id == id).first()
-    if not user:
+    employee = db.query(Employee).filter(Employee.id == id).first()
+    if not employee:
         raise HTTPException(404, 'Employee not found')
-    return {'user': user}
+    return {'employee': employee}
 
 @router.post('/')
 def store(employee: CreateEmployee, db: Session = Depends(get_db)):
     to_store = Employee(
-        user_type_id = employee.user_type_id,
-        user_profile_id = employee.user_profile_id,
+        user_id = employee.user_id,
+        shift_type_id = employee.shift_type_id,
+        employee_type_id = employee.employee_type_id,
+        monday = employee.monday,
+        tuesday = employee.tuesday,
+        wednesday = employee.wednesday,
+        thursday = employee.thursday,
+        friday = employee.friday,
+        saturday = employee.saturday,
+        sunday = employee.sunday,
     )
 
     db.add(to_store)
@@ -37,17 +45,27 @@ def store(employee: CreateEmployee, db: Session = Depends(get_db)):
 @router.put('/{id}')
 def update(id: str, employee: CreateEmployee, db: Session = Depends(get_db)): 
     if not db.query(Employee).filter(Employee.id == id).update({
-        'name': employee.name,
-        'age': employee.age
+        'user_id': employee.user_id,
+        'shift_type_id': employee.shift_type_id,
+        'employee_type_id': employee.employee_type_id,
+        'monday': employee.monday,
+        'tuesday': employee.tuesday,
+        'wednesday': employee.wednesday,
+        'thursday': employee.thursday,
+        'friday': employee.friday,
+        'saturday': employee.saturday,
+        'sunday': employee.sunday,
     }):
         raise HTTPException(404, 'User to update is not found')
     db.commit()
     return {'message': 'Employee updated successfully.'}
 
-@router.delete('/{id}')
-def remove(id: str, db: Session = Depends(get_db)):
-    if not db.query(Employee).filter(Employee.id == id).delete():
-        raise HTTPException(404, 'User to delete is not found')
+@router.put('/delete/{id}')
+def remove(id: str,  db: Session = Depends(get_db)):
+    if not db.query(Employee).filter(Employee.id == id).update({
+        'active_status': "Inactive",
+    }):
+        raise HTTPException(404, 'Employee to delete is not found')
     db.commit()
     return {'message': 'Employee removed successfully.'}
 

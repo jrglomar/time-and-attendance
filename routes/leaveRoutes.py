@@ -27,6 +27,7 @@ def store(leave: CreateLeave, db: Session = Depends(get_db)):
     to_store = Leave(
         employee_id = leave.employee_id,
         leave_type_id = leave.leave_type_id,
+        leave_sub_type_id = leave.leave_sub_type_id,
         title = leave.title,
         reason = leave.reason,
         start_date = leave.start_date,
@@ -41,8 +42,14 @@ def store(leave: CreateLeave, db: Session = Depends(get_db)):
 @router.put('/{id}')
 def update(id: str, leave: CreateLeave, db: Session = Depends(get_db)): 
     if not db.query(Leave).filter(Leave.id == id).update({
-        'name': leave.name,
-        'age': leave.age
+        "employee_id" : leave.employee_id,
+        "leave_type_id" : leave.leave_type_id,
+        "leave_sub_type_id" : leave.leave_sub_type_id,
+        "title" : leave.title,
+        "reason" : leave.reason,
+        "start_date" : leave.start_date,
+        "end_date" : leave.end_date,
+        'status': leave.status
     }):
         raise HTTPException(404, 'User to update is not found')
     db.commit()

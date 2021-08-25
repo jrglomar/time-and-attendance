@@ -2,11 +2,11 @@
 {%extends '/time_and_attendance/base.html'%} 
 
 {%block navbar%}
-    {%include 'time_and_attendance/includes/hr_navbar.html'%}
+    {%include 'time_and_attendance/includes/employee_navbar.html'%}
 {%endblock%}
 
 {%block sidebar%}
-    {%include 'time_and_attendance/includes/hr_sidebar.html'%}
+    {%include 'time_and_attendance/includes/employee_sidebar.html'%}
 {%endblock%}
 
 {%block content%}
@@ -20,7 +20,7 @@
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Employee</li>
+                <li class="breadcrumb-item active">Employee Information</li>
             </ol>
             </div>
         </div>
@@ -67,12 +67,7 @@
         <div class="row row align-items-center justify-content-center">
           <div class="col-12">
             <div class="card">
-              <div class="card-header d-flex justify-content-between">
-                <h3 class="card-title">List of Employees</h3>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#employee_form_modal">
-                  <i class="far fa-plus-square"></i> Add New
-                </button>
-              </div>
+              
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="employee_datatable" class="table table-bordered table-hover">
@@ -208,7 +203,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="user_id_option_edit">User Email</label>
-                                <select id="user_id_option_edit" class="custom-select rounded-0" style="width:100%">
+                                <select id="user_id_option_edit" class="custom-select rounded-0" style="width:100%" disabled>
                                     
                                 </select>
                             </div>
@@ -216,7 +211,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="employee_type_id_option_edit">Employee Type</label>
-                                <select id="employee_type_id_option_edit" class="custom-select rounded-0" style="width:100%">
+                                <select id="employee_type_id_option_edit" class="custom-select rounded-0" style="width:100%" disabled>
                                     
                                 </select>
                             </div>
@@ -224,7 +219,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="shift_type_id_option_edit">Shift Type</label>
-                                <select id="shift_type_id_option_edit" class="custom-select rounded-0" style="width:100%">
+                                <select id="shift_type_id_option_edit" class="custom-select rounded-0" style="width:100%" >
                                     
                                 </select>
                             </div>
@@ -267,7 +262,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" id="employee_btn_edit" class="btn btn-primary">Save Changes</button>
+              <button type="button" id="employee_btn_edit" class="btn btn-primary">Request Changes</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -339,8 +334,7 @@ $(document).ready(function(){
                 { data: "active_status", render: function(data, type, row){
                         if(data == "Active"){
                             return `
-                            <button type="button" id=${row.id} class="btn btn-warning btn_edit"><i class="far fa-edit"></i> Update</button>
-                            <button type="button" id=${row.id} class="btn btn-danger btn_delete"><i class="far fa-trash-alt"></i> Deactivate</button>
+                            <button type="button" id=${row.id} class="btn btn-warning btn_edit"><i class="far fa-edit"></i> Request Update</button>
                             `
                         }   
                         else{

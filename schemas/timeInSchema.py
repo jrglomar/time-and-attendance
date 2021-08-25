@@ -1,8 +1,9 @@
-from datetime import datetime as dt
+from datetime import datetime, time
 from pydantic import BaseModel
 
 class TimeInBase(BaseModel):
     employee_id: str
+    time_log: time
 
 # Schema for request body
 class CreateTimeIn(TimeInBase):
@@ -11,5 +12,5 @@ class CreateTimeIn(TimeInBase):
 # Schema for response body
 class TimeIn(BaseModel):
     # active_status: str
-    created_at: dt
-    updated_at: dt
+    created_at: datetime
+    updated_at: datetime

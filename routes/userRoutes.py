@@ -16,8 +16,8 @@ def password_hash(password):
     return pwd_context.hash(password)
 
 router = APIRouter(
-    prefix='/time_and_attendance/api/users',
-    tags=['users']
+    prefix='/time_and_attendance/api/user',
+    tags=['user']
 )
 
 @router.get('/')

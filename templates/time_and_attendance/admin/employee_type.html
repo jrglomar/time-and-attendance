@@ -206,6 +206,7 @@
 <script>
 $(document).ready(function(){
 
+
     function loadtable(){
         employee_types_datatable = $('#employee_types_datatable').DataTable( {
             "ajax": {url:"/time_and_attendance/api/employeetype", dataSrc:"employeetype"},
@@ -395,6 +396,11 @@ $('#employee_types_btn_delete').on('click', function(e){
 
     $('#employee_types_btn_delete').prop('disabled', false)
     
+})
+
+
+$('select').select2({
+  width: 'resolve'
 })
 
 </script>

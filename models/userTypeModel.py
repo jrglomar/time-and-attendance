@@ -12,5 +12,5 @@ class UserType(Base):
     created_at = Column(DateTime, server_default=text('NOW()'))
     updated_at = Column(DateTime, server_onupdate=text('NOW()'))
 
-    users = relationship('User', back_populates='user_types', lazy='joined')
+    users = relationship('User', back_populates='user_types')
     

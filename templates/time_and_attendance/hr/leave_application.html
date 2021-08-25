@@ -1,0 +1,619 @@
+<!-- Apply layout from base.html -->
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/hr_navbar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/hr_sidebar.html'%}
+{%endblock%}
+
+{%block content%}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Leave</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Leave</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- general form elements -->
+<!-- <section class="content">
+    <div class="container-fluid">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-8">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Create Leave</h3>
+                    </div>
+                    <form id="shift_type_form">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_title">Title</label>
+                                <input type="text" class="form-control" id="leave_title" name="leave_title" placeholder="Enter title">
+                            </div>
+                            <div class="form-group">
+                                <label for="leave_start_time">Start-Time</label>
+                                <input type="time" class="form-control" id="leave_start_time" name="leave_start_time" placeholder="Select Start-Time" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label for="leave_end_time">End-Time</label>
+                                <input type="time" class="form-control" id="leave_end_time" name="leave_end_time" placeholder="Select End-Time" value="17:00">
+                            </div>
+                        </div>
+                    <div class="card-footer float-right">
+                        <input type="submit" class="btn btn-info" value='Submit'>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<!-- /.card -->
+
+<section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between">
+                <h3 class="card-title">List of Leaves</h3>
+                <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#leave_form_modal">
+                  <i class="far fa-plus-square"></i> Add New
+                </button> -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="leave_datatable" class="table table-bordered table-hover">
+                    <thead>
+                        <th>ID</th>
+                        <th>Date Created</th>
+                        <th width="10%">Title</th>
+                        <th width="10%">Leave Type</th>
+                        <th width="10%">Leave Sub Type</th>
+                        <th width="10%">Reason</th>
+                        <th width="10%">Start Date</th>
+                        <th width="10%">End Date</th>
+                        <th width="10%">Status</th>
+                        <th width="20%">Actions</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    <!-- ADD FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="leave_form_modal">
+        <div class="modal-dialog leave_form_modal modal-xl modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Create Leave</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="leave_form">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_title">Title</label>
+                                <input type="text" class="form-control" id="leave_title" name="leave_title" placeholder="Enter title">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_type">Leave Type</label>
+                                <select id="leave_type" class="custom-select rounded-0" style="width:100%">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_sub_type">Leave Sub Type</label>
+                                <select id="leave_sub_type" class="custom-select rounded-0" style="width:100%">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_reason">Reason</label>
+                                <textarea class="form-control" id="leave_reason" name="leave_reason" rows="5" placeholder="Enter reason"></textarea>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_start_date">Start Date</label>
+                                <input type="date" class="form-control" id="leave_start_date" name="leave_start_date">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_end_date">End Date</label>
+                                <input type="date" class="form-control" id="leave_end_date" name="leave_end_date">
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" id="leave_form_submit" class="btn btn-info">Submit</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+
+    <!-- EDIT FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="leave_form_modal_edit">
+        <div class="modal-dialog leave_form_modal_edit modal-xl modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Edit Leave</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="leave_form_edit">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_status_edit" style="color:red">Status</label>
+                                <select id="leave_status_edit" class="custom-select rounded-0" style="width:100%">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Declined">Declined</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body" hidden>
+                            <div class="form-group">
+                                <label for="leave_id_edit">ID</label>
+                                <input id="leave_id_edit"  type="text" class="custom-select rounded-0" readonly>
+                            </div>
+                        </div>
+                        <div class="card-body" hidden>
+                            <div class="form-group">
+                                <label for="leave_employee_id_edit">ID</label>
+                                <input id="leave_employee_id_edit"  type="text" class="custom-select rounded-0" readonly>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_title_edit">Title</label>
+                                <input type="text" class="form-control" id="leave_title_edit" name="leave_title_edit" placeholder="Enter title" readonly>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_type_edit">Leave Type</label>
+                                <input type="text" class="form-control" id="leave_type_edit" name="leave_type_edit" placeholder="" readonly>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_sub_type_edit">Leave Sub Type</label>
+                                <input type="text" class="form-control" id="leave_sub_type_edit" name="leave_sub_type_edit" placeholder="" readonly>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_reason_edit">Reason</label>
+                                <textarea class="form-control" id="leave_reason_edit" name="leave_reason_edit" rows="5" placeholder="Enter reason" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_start_date_edit">Start Date</label>
+                                <input type="date" class="form-control" id="leave_start_date_edit" name="leave_start_date_edit" readonly>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="leave_end_date_edit">End Date</label>
+                                <input type="date" class="form-control" id="leave_end_date_edit" name="leave_end_date_edit" readonly>
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" id="leave_btn_edit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+
+    <!-- DELETE FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="leave_form_modal_delete">
+        <div class="modal-dialog leave_form_modal_delete modal-xl modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Deactivate Leave</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="leave_form_delete">
+                        <div class="card-body">
+                            <div class="form-group" hidden>
+                                <label for="leave_id_delete">ID</label>
+                                <input type="text" class="form-control" id="leave_id_delete" name="leave_id_delete" placeholder="Enter title">
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" id="leave_btn_delete" class="btn btn-danger">Deactivate</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+
+
+    function loadtable(){
+        leave_datatable = $('#leave_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/leave", dataSrc:"leave"},
+            "columns": [
+                { data: "id"},
+                { data: "created_at" },
+                { data: "title"},
+                { data: "leave_types.title"},
+                { data: "leave_sub_types.title"},
+                { data: "reason"},
+                { data: "start_date", render: function(data, type, row){
+                    return moment(data).format('LL'); 
+                }},
+                { data: "end_date", render: function(data, type, row){
+                    return moment(data).format('LL'); 
+                }},
+                { data: "status", render: function(data, type, row){
+                    if(data == "Pending"){
+                        return `<h5 ><span style="padding:5px" class="badge badge-secondary">Pending</span></h5>`
+                    }
+                    else if(data == "Approved"){
+                        return `<h5><span style="padding:5px" class="badge badge-primary">Approved</span></h5>`
+                    }
+                    else if(data == "Declined"){
+                        return `<h5><span style="padding:5px" class="badge badge-danger">Declined</span></h5>`
+                    }
+                }},
+                { data: "active_status", render: function(data, type, row){
+                        if(row.status == "Pending"){
+                            return `
+                            <button type="button" id=${row.id} class="btn btn-warning btn_edit"><i class="far fa-edit"></i> Response</button>
+                            `
+                        }   
+                        else{
+                            return `<button type="button" id=${row.id} class="btn btn-secondary"><i class="far fa-edit"></i> Responded</button>`;
+                        }
+                    }
+                },
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1] }],
+            "order": [[1, "desc"]]
+        })
+    }
+
+    loadtable();
+
+
+});
+
+
+function refresh(){
+    var url = "/time_and_attendance/api/leave";
+
+    leave_datatable.ajax.url(url).load();
+}
+
+
+function get_leave_type(){
+       
+        $.ajax({
+                url: '/time_and_attendance/api/leavetype/',
+                type: "GET",
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                    leavetype = data.leavetype
+                    html = "<option disabled selected>-- Please Select --</option>"
+                    
+                    for(var i=0; i < leavetype.length; i++){
+                        html += `<option value="${leavetype[i].id}">${leavetype[i].title}</option>`
+                    }
+
+                    $('#leave_type').append(html)
+                    $('#leave_type_edit').append(html)
+                }
+            })
+            // ajax closing tag
+
+}
+
+get_leave_type()
+
+$('#leave_type').on('change', function(e){
+    let leave_type_id = this.value
+
+    $.ajax({
+                url: '/time_and_attendance/api/leavesubtype/leave_type/'+leave_type_id,
+                type: "GET",
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                    leavesubtype = data.leavesubtype
+                    html = "<option disabled selected>-- Please Select --</option>"
+                    
+                    for(var i=0; i < leavesubtype.length; i++){
+                        html += `<option value="${leavesubtype[i].id}">${leavesubtype[i].title}</option>`
+                    }
+
+                    $('#leave_sub_type').append(html)
+                    $('#leave_sub_type_edit').append(html)
+                    
+                }
+            })
+            // ajax closing tag
+})
+
+$('#leave_type_edit').on('change', function(e){
+    let leave_type_id = this.value
+
+    $.ajax({
+                url: '/time_and_attendance/api/leavesubtype/leave_type/'+leave_type_id,
+                type: "GET",
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                    leavesubtype = data.leavesubtype
+                    html = "<option disabled selected>-- Please Select --</option>"
+                    
+                    for(var i=0; i < leavesubtype.length; i++){
+                        html += `<option value="${leavesubtype[i].id}">${leavesubtype[i].title}</option>`
+                    }
+
+                    $('#leave_sub_type').append(html)
+                    $('#leave_sub_type_edit').append(html)
+                    
+                }
+            })
+            // ajax closing tag
+})
+
+
+$('#leave_form_submit').on('click', function(e){
+    e.preventDefault()
+
+    $('#leave_form_submit').prop('disabled', true)
+
+    let employee_id = '5ef5f4c4-04cf-11ec-bdbf-4ccc6ad9280e'
+
+    let formData = {
+        title: $('#leave_title').val(),
+        leave_type_id: $('#leave_type').val(),
+        leave_sub_type_id: $('#leave_sub_type').val(),
+        reason: $('#leave_reason').val(),
+        start_date: $('#leave_start_date').val(),
+        end_date: $('#leave_end_date').val(),
+        employee_id: employee_id
+    }
+
+    console.log(formData);
+
+    $.ajax({
+            url: '/time_and_attendance/api/leave',
+            type: "POST",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                Swal.fire(
+                    'Success!',
+                    data.message,
+                    'success'
+                )
+
+                $('#leave_form').trigger("reset")
+                $('#leave_form_submit').prop('disabled', false)
+                $('#leave_form_modal').modal('hide')
+                refresh()
+            }
+        // ajax closing tag
+    })
+
+    $('#leave_form_submit').prop('disabled', false)
+});
+
+$(document).on('click', '.btn_edit', function(e){
+    e.preventDefault()
+    
+    let id = this.id
+
+    $.ajax({
+            url: '/time_and_attendance/api/leave/'+id,
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",   
+        
+            success: function(data){
+                $('#leave_id_edit').val(data.leave.id);
+                $('#leave_employee_id_edit').val(data.leave.employee_id);
+                $('#leave_title_edit').val(data.leave.title);
+
+                $('#leave_type_edit').val(data.leave.leave_types.title);
+                $("#leave_type_edit").attr("name", data.leave.leave_types.id);
+
+                $('#leave_sub_type_edit').val(data.leave.leave_sub_types.title);
+                $("#leave_sub_type_edit").attr("name", data.leave.leave_sub_types.id);
+
+                $('#leave_reason_edit').val(data.leave.reason);
+                $('#leave_start_date_edit').val(data.leave.start_date);
+                $('#leave_end_date_edit').val(data.leave.end_date);
+                $('#leave_status_edit').val(data.leave.status);
+
+                $('#leave_form_modal_edit').modal('show');
+            }
+        // ajax closing tag
+    })
+})
+
+$('#leave_btn_edit').on('click', function(e){
+    e.preventDefault()
+    $('#leave_btn_edit').prop('disabled', true)
+
+    let id = $('#leave_id_edit').val()
+
+    let formData = {
+        title: $('#leave_title_edit').val(),
+        reason: $('#leave_reason_edit').val(),
+        leave_type_id: $('#leave_type_edit').attr("name"),
+        leave_sub_type_id: $('#leave_sub_type_edit').attr("name"),
+        start_date: $('#leave_start_date_edit').val(),
+        end_date: $('#leave_end_date_edit').val(),
+        status: $('#leave_status_edit').val(),
+        employee_id: $('#leave_employee_id_edit').val()
+    }
+    console.log(formData)
+
+    $.ajax({
+            url: '/time_and_attendance/api/leave/'+id,
+            type: "PUT",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                Swal.fire(
+                    'Success!',
+                    data.message,
+                    'success'
+                )
+
+                $('#leave_form_edit').trigger("reset")
+                $('#leave_btn_edit').prop('disabled', false)
+                $('#leave_form_modal_edit').modal('hide')
+                refresh()
+            }
+        // ajax closing tag
+    })
+
+    $('#leave_btn_edit').prop('disabled', false)
+})
+
+$(document).on('click', '.btn_delete', function(e){
+    e.preventDefault()
+
+    let id = this.id
+
+    $.ajax({
+            url: '/time_and_attendance/api/leave/'+id,
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                $('#leave_id_delete').val(data.leave.id);
+
+                $('#leave_form_modal_delete').modal('show');
+            }
+        // ajax closing tag
+    })
+})
+
+$('#leave_btn_delete').on('click', function(e){
+    e.preventDefault()
+    $('#leave_btn_delete').prop('disabled', true)
+
+    let id = $('#leave_id_delete').val()
+
+
+    $.ajax({
+            url: '/time_and_attendance/api/leave/delete/'+id,
+            type: "PUT",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                Swal.fire(
+                    'Success!',
+                    data.message,
+                    'success'
+                )
+
+                $('#leave_form_delete').trigger("reset")
+                $('#leave_btn_delete').prop('disabled', false)
+                $('#leave_form_modal_delete').modal('hide')
+                refresh()
+            }
+        // ajax closing tag
+    })
+
+    $('#leave_btn_delete').prop('disabled', false)
+    
+})
+
+
+
+$('select').select2({
+  width: 'resolve'
+})
+
+</script>
+{%endblock%}
