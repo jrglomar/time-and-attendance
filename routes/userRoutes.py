@@ -22,7 +22,7 @@ router = APIRouter(
 
 @router.get('/')
 def all(db: Session = Depends(get_db)):
-    user = db.query(User).all()
+    user = db.query(User).filter(User.active_status == "Active").all()
     return {'user': user}
 
 @router.get('/{id}')
@@ -65,10 +65,13 @@ def update(id: str, user: CreateUser, db: Session = Depends(get_db)):
     db.commit()
     return {'message': 'User updated successfully.'}
 
-@router.delete('/{id}')
-def remove(id: str, db: Session = Depends(get_db)):
-    if not db.query(User).filter(User.id == id).delete():
+@router.put('/delete/{id}')
+def remove(id: str,  db: Session = Depends(get_db)):
+    if not db.query(User).filter(User.id == id).update({
+        'active_status': "Inactive",
+    }):
         raise HTTPException(404, 'User to delete is not found')
     db.commit()
     return {'message': 'User removed successfully.'}
+
 

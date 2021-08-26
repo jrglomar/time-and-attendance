@@ -158,8 +158,13 @@
               else{
                 sessionStorage.setItem("id", user.employees[0].id);
               }
+
               sessionStorage.setItem("email", user.email);
               sessionStorage.setItem("type", user.user_types.title);
+
+              console.log(sessionStorage.getItem("id"))
+              console.log(sessionStorage.getItem("email"))
+              console.log(sessionStorage.getItem("type"))
 
 
               if(user.user_types.title == "Employee"){

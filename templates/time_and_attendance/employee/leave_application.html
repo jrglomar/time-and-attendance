@@ -342,6 +342,7 @@ $(document).ready(function(){
 
 
 function refresh(){
+    let employee_id = sessionStorage.getItem('id')
     var url = "/time_and_attendance/api/leave/userleave/"+employee_id;
 
     leave_datatable.ajax.url(url).load();
