@@ -16,6 +16,9 @@ class LeaveBase(BaseModel):
 class CreateLeave(LeaveBase):
     pass
 
+class GetLeave(BaseModel):
+    start_date: date
+    
 # Schema for response body
 class Leave(BaseModel):
     # active_status: str

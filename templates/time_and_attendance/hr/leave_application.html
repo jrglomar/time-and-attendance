@@ -517,6 +517,7 @@ $(document).on('click', '.btn_edit', function(e){
 $('#leave_btn_edit').on('click', function(e){
     e.preventDefault()
     $('#leave_btn_edit').prop('disabled', true)
+    
 
     let id = $('#leave_id_edit').val()
 
@@ -614,6 +615,9 @@ $('#leave_btn_delete').on('click', function(e){
 $('select').select2({
   width: 'resolve'
 })
+
+// Retrieve
+
 
 </script>
 {%endblock%}

@@ -68,4 +68,3 @@ def remove(id: str,  db: Session = Depends(get_db)):
         raise HTTPException(404, 'Employee to delete is not found')
     db.commit()
     return {'message': 'Employee removed successfully.'}
-

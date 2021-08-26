@@ -77,6 +77,41 @@
 
     <div id="calendar"></div>
 
+    <!-- DELETE FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="leave_approved_modal">
+        <div class="modal-dialog leave_approved_modal modal-xl modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title"  id="leaves_title">List of Leave</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <table id="leave_approve_datatable" class="table table-bordered table-hover">
+                        <thead style="text-align: center;">
+                            <th>Employee</th>
+                            <th>Title</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Type of Leave</th>
+                        </thead>
+                        <tbody style="text-align: center;" id="list_of_employee">
+
+                        </tbody>
+                    </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+
     
 {%endblock%}
 
@@ -84,44 +119,126 @@
 <script>
 $(document).ready(function(){
 
-    let startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-    let endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
-    let startDate   = moment().startOf('month').format('DD');
-    let endDate   = moment().endOf('month').format('DD');
-    let startDay = moment(startOfMonth).day()
-    let endDay = moment(endOfMonth).day()
 
-    let dayDiff = (endDate - startDate) + 1
-
-    let trcount = 0
-    let tdcount = 0
-
-
-    for(i = 1; i <= dayDiff; i++){
-
-
-        if(parseInt(tdcount) < parseInt(startDay) && trcount == 0){
-            $('#'+trcount).append(`<td></td>`)
-            i--
-        }
-        else if(startDay <= 6){
-            $('#'+trcount).append(`<td><button type="button" class="btn btn-block btn-outline-warning btn-lg">${i}</button></td>`)
-            startDay ++
-        }
-        else if(startDay == 7){
-            trcount ++
-            startDay = 0
-            $('#'+trcount).append(`<td><button type="button" class="btn btn-block btn-outline-info btn-lg">${i}</button></td>`)
-            startDay ++
-        }
-        else{
-            $('#'+trcount).append(`<td></td>`)
-            startDay++
+    let dateNow = moment()
+    
+    function get_leave_date(date){
+        let formData = {
+            "start_date": date
         }
 
-        tdcount++
+        let leave_length
+
+        $.ajax({
+                url: '/time_and_attendance/api/leave/getApprovedLeave',
+                type: "POST",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                dataType: "JSON",
+                async: false,
+            
+                success: function(data){
+                    leave = data.leave
+                    leave_length = leave.length
+                }
+        })
+        // ajax closing tag
+
+        return leave_length
 
     }
+
+
+    function get_calendar(){
+        let startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+        let endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
+        let startDate   = moment().startOf('month').format('DD');
+        let endDate   = moment().endOf('month').format('DD');
+        let startDay = moment(startOfMonth).day()
+        let endDay = moment(endOfMonth).day()
+
+        let monthDate = dateNow.format('MM')
+        let yearDate = dateNow.format('YYYY')
+
+        let dayDiff = (endDate - startDate) + 1
+
+        let trcount = 0
+        let tdcount = 0
+
+        for(i = 1; i <= dayDiff; i++){
+            curr_date = yearDate + '-' + monthDate + '-' + i.toString().padStart(2, 0)
+
+            if(parseInt(tdcount) < parseInt(startDay) && trcount == 0){
+                
+                $('#'+trcount).append(`<td></td>`)
+                i--
+            }
+            else if(startDay <= 6){
+
+                if(get_leave_date(curr_date) > 0){color = "warning"}
+                else{color = "info"}
+
+                $('#'+trcount).append(`<td><button type="button" id="${curr_date}" value="${curr_date}" class="btn btn-block btn-${color} btn-lg btn_date">${i}</button></td>`)
+                startDay ++
+            }
+            else if(startDay == 7){
+
+                trcount ++
+                startDay = 0
+                $('#'+trcount).append(`<td><button type="button" id="${curr_date}" value="${curr_date}" class="btn btn-block btn-${color} btn-lg btn_date">${i}</button></td>`)
+                startDay ++
+            }
+            else{
+                $('#'+trcount).append(`<td></td>`)
+                startDay++
+            }
+
+            tdcount++
+        }
+    }
+
+    get_calendar()
+
+    $('.btn_date').on('click', function(){
+        start_date = this.value
+
+        let formData = {
+            "start_date": start_date
+        }
+
+        $.ajax({
+                url: '/time_and_attendance/api/leave/getApprovedLeave',
+                type: "POST",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                    leave_list = data.leave;
+                    console.log(leave_list)
+                    let html = ""
+
+                    for(var i=0; i < leave_list.length; i++){
+                        html += `<tr>
+                                <td>${leave_list[i].employees.users.email}</td>
+                                <td>${leave_list[i].title}</td>
+                                <td>${moment(leave_list[i].start_date).format('LL')}</td>
+                                <td>${moment(leave_list[i].end_date).format('LL')}</td>
+                                <td>${leave_list[i].leave_types.title} - ${leave_list[i].leave_sub_types.title}</td>
+                            </tr>`
+                    }
+
+                    $('#list_of_employee').html(html)
+                    $('#leaves_title').html(`Approved leave/s of ${moment(start_date).format('LL')}`)
+
+                    $('#leave_approved_modal').modal('show')
+                }
+        })
+        // ajax closing tag
+    })
+
+    
+
 
 
 })

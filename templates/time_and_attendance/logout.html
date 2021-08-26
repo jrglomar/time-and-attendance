@@ -31,28 +31,8 @@
 
 </head>
 
-<body class="hold-transition sidebar-mini">
-  
-    <div class="wrapper">
-
-      {%block navbar%}
-      
-      {%endblock%}
 
 
-      {%block sidebar%}
-      
-      {%endblock%}
-
-
-        <div class="content-wrapper">
-          <!-- BLOCK FOR MAIN CONTENT -->
-          {%block content%}
-
-          {%endblock%}
-        </div>
-
-    </div>
 
     <script src="{{url_for('static', path='/plugins/jquery/jquery.min.js')}}"></script>
     <script src="{{url_for('static', path='/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -94,5 +74,29 @@
     <!-- BLOCK FOR EXTRA SCRIPTS -->
     {%block scripts%}
     {%endblock%}
+
+
+    <script>
+      $(document).ready(function(){
+
+        $.ajax({
+            url: '/time_and_attendance/api/auth/logout',
+            type: 'POST',
+            contentType: "application/json",
+            dataType: "JSON",
+            async: false,
+
+            success: function(){
+                sessionStorage.removeItem("id");
+                sessionStorage.removeItem("email");
+                sessionStorage.removeItem("type");
+
+                window.location.href = '/time_and_attendance/login';
+            }
+        })
+       
+      })
+    </script>
+
 </body>
 </html>

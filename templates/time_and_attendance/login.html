@@ -31,28 +31,54 @@
 
 </head>
 
-<body class="hold-transition sidebar-mini">
+
   
-    <div class="wrapper">
+    <body class="hold-transition login-page bg-white">
+        <div class="login-box">
+          <div class="login-logo">
+            <a href=""><b>HM</b>System</a>
+          </div>
+          <!-- /.login-logo -->
+          <div class="card shadow-none">
+            <div class="card-body login-card-body">
+              <p class="login-box-msg">Sign in to start your session</p>
 
-      {%block navbar%}
-      
-      {%endblock%}
+              <form id="login_form">
+                <div class="input-group mb-3">
+                  <input type="email" id="login_email" class="form-control" placeholder="Email">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-envelope"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <input type="password" id="login_password" class="form-control" placeholder="Password">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-8">
+                    <div class="icheck-primary">
 
+                    </div>
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-4">
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                  </div>
+                  <!-- /.col -->
+                </div>
+              </form>
 
-      {%block sidebar%}
-      
-      {%endblock%}
-
-
-        <div class="content-wrapper">
-          <!-- BLOCK FOR MAIN CONTENT -->
-          {%block content%}
-
-          {%endblock%}
+            <!-- /.login-card-body -->
+          </div>
         </div>
+        <!-- /.login-box -->
 
-    </div>
 
     <script src="{{url_for('static', path='/plugins/jquery/jquery.min.js')}}"></script>
     <script src="{{url_for('static', path='/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -94,5 +120,73 @@
     <!-- BLOCK FOR EXTRA SCRIPTS -->
     {%block scripts%}
     {%endblock%}
+
+
+    <script>
+      $(document).ready(function(){
+
+          $('#login_form').on('submit', function(e){
+            e.preventDefault()
+
+            let formData = {
+              email: $('#login_email').val(),
+              password: $('#login_password').val()
+            }
+
+            $.ajax({
+              url: '/time_and_attendance/api/auth/verify',
+              type: 'POST',
+              data: JSON.stringify(formData),
+              contentType: "application/json",
+              dataType: "JSON",
+
+              success: function(data){
+                user = data.user;
+                console.log(user)
+
+                Swal.fire(
+                    'Success!',
+                    data.message,
+                    'success'
+                )
+
+              // Store
+
+              if(user.user_types.title != "Employee"){  
+                sessionStorage.setItem("id", user.id);
+              }
+              else{
+                sessionStorage.setItem("id", user.employees[0].id);
+              }
+              sessionStorage.setItem("email", user.email);
+              sessionStorage.setItem("type", user.user_types.title);
+
+
+              if(user.user_types.title == "Employee"){
+                  setInterval(function(){
+                    window.location.href = '/time_and_attendance/employee/employee'
+                  },2000)
+                }
+                else if(user.user_types.title == "Admin"){
+                  setInterval(function(){
+                    window.location.href = '/time_and_attendance/admin/user';
+                  },2000)
+                  
+                }
+                else if(user.user_types.title == "HR"){
+                  setInterval(function(){
+                    window.location.href = '/time_and_attendance/hr/employee';
+                  },2000)
+                }
+              }
+
+
+
+            })
+
+          })
+      })
+    </script>
+
 </body>
 </html>

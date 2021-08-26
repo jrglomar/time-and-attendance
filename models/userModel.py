@@ -15,4 +15,4 @@ class User(Base):
     updated_at = Column(DateTime, server_onupdate=text('NOW()'))
 
     user_types = relationship('UserType', back_populates='users', lazy='joined')
-    employees = relationship('Employee', back_populates='users')
+    employees = relationship('Employee', back_populates='users', lazy='joined')

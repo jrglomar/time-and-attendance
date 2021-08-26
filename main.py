@@ -30,9 +30,15 @@ app.include_router(leaveRoutes.router)
 # app.include_router(postRoutes.router)
 
 
-@app.get('/time_and_attendance', response_class=HTMLResponse)
+@app.get('/time_and_attendance/login', response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
-    return template.TemplateResponse('time_and_attendance/index.html', {
+    return template.TemplateResponse('time_and_attendance/login.html', {
+        'request': request,
+    })
+
+@app.get('/time_and_attendance/logout', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/logout.html', {
         'request': request,
     })
 
@@ -125,3 +131,4 @@ def index(request: Request, db: Session = Depends(get_db)):
 })
 
 # END OF HR SIDE
+

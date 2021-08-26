@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.leaveSchema import CreateLeave
+from schemas.leaveSchema import CreateLeave, GetLeave
 from models.leaveModel import Leave
 from database import get_db
 
@@ -13,6 +13,11 @@ router = APIRouter(
 @router.get('/')
 def all(db: Session = Depends(get_db)):
     leave = db.query(Leave).all()
+    return {'leave': leave}
+
+@router.get('/')
+def all(db: Session = Depends(get_db)):
+    leave = db.query(Leave).filter(Leave.active_status == 'Active').filter(Leave.employee_id == user.id).all()
     return {'leave': leave}
 
 @router.get('/{id}')
@@ -62,3 +67,14 @@ def remove(id: str, db: Session = Depends(get_db)):
     db.commit()
     return {'message': 'Leave removed successfully.'}
 
+
+@router.post('/getApprovedLeave')
+def all(leave_req: GetLeave, db: Session = Depends(get_db)):
+    leave = db.query(Leave).filter(Leave.start_date == leave_req.start_date).filter(Leave.status == "Approved").all()
+    return {'leave': leave}
+
+
+@router.get('/userleave/{id}')
+def all(id: str, db: Session = Depends(get_db)):
+    leave = db.query(Leave).filter(Leave.employee_id == id).filter(Leave.active_status == "Active").all()
+    return {'leave': leave}

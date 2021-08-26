@@ -280,10 +280,11 @@
 <script>
 $(document).ready(function(){
 
-
+    let employee_id = sessionStorage.getItem('id')
+    console.log(employee_id)
     function loadtable(){
         leave_datatable = $('#leave_datatable').DataTable( {
-            "ajax": {url:"/time_and_attendance/api/leave", dataSrc:"leave"},
+            "ajax": {url:"/time_and_attendance/api/leave/userleave/"+employee_id, dataSrc:"leave"},
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
@@ -341,7 +342,7 @@ $(document).ready(function(){
 
 
 function refresh(){
-    var url = "/time_and_attendance/api/leave";
+    var url = "/time_and_attendance/api/leave/userleave/"+employee_id;
 
     leave_datatable.ajax.url(url).load();
 }
@@ -429,7 +430,9 @@ $('#leave_form_submit').on('click', function(e){
 
     $('#leave_form_submit').prop('disabled', true)
 
-    let employee_id = '5ef5f4c4-04cf-11ec-bdbf-4ccc6ad9280e'
+    console.log(sessionStorage.getItem('id'))
+
+    let employee_id = sessionStorage.getItem('id')
 
     let formData = {
         title: $('#leave_title').val(),

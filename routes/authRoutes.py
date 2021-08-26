@@ -52,7 +52,7 @@ def verify(form: AuthForm, response: Response, db: Session = Depends(get_db)):
                 data = TokenData(email = user.email, id = user.id)
                 token = jwt.encode(dict(data), secret)
                 response.set_cookie('token', token, httponly=True)
-                return {'message': 'Log In Success!'}
+                return {'user':user, 'message': 'Log In Success!'}
         
         return {'message': 'User not found.'}
     except Exception as e:
@@ -61,4 +61,7 @@ def verify(form: AuthForm, response: Response, db: Session = Depends(get_db)):
 @router.post('/logout')
 def logout(response: Response):
     response.delete_cookie('token')
+    response.delete_cookie('id')
+    response.delete_cookie('email')
+    response.delete_cookie('type')
     return {'message': 'Logout Success!'}
