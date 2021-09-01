@@ -31,3 +31,4 @@ class Employee(Base):
     time_outs = relationship('TimeOut', back_populates='employees')
     attendances = relationship('Attendance', back_populates='employees')
     leaves = relationship('Leave', back_populates='employees')
+    missed_times = relationship('MissedTime', back_populates='employees')

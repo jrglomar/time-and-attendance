@@ -17,9 +17,7 @@ def all(db: Session = Depends(get_db)):
 
 @router.get('/{id}')
 def read(id: str, db: Session = Depends(get_db)):
-    timeout = db.query(TimeOut).filter(TimeOut.id == id).first()
-    if not timeout:
-        raise HTTPException(404, 'Time out not found')
+    timeout = db.query(TimeOut).filter(TimeOut.employee_id == id).all()
     return {'timeout': timeout}
 
 @router.post('/')

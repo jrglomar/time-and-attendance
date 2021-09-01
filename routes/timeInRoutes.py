@@ -17,9 +17,7 @@ def all(db: Session = Depends(get_db)):
 
 @router.get('/{id}')
 def read(id: str, db: Session = Depends(get_db)):
-    timein = db.query(TimeIn).filter(TimeIn.id == id).first()
-    if not timein:
-        raise HTTPException(404, 'Time in not found')
+    timein = db.query(TimeIn).filter(TimeIn.employee_id == id).all()
     return {'timein': timein}
 
 @router.post('/')

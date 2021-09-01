@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
-from routes import userRoutes, userTypeRoutes, employeeTypeRoutes, employeeRoutes, shiftTypeRoutes, timeInRoutes, timeOutRoutes, attendanceRoutes, leaveTypeRoutes, leaveSubTypeRoutes, leaveRoutes, authRoutes
+from routes import userRoutes, userTypeRoutes, employeeTypeRoutes, employeeRoutes, shiftTypeRoutes, timeInRoutes, timeOutRoutes, attendanceRoutes, leaveTypeRoutes, leaveSubTypeRoutes, leaveRoutes, authRoutes, missedTimeRoutes
 from database import get_db
 # from models.postModel import Post
 
@@ -27,6 +27,7 @@ app.include_router(attendanceRoutes.router)
 app.include_router(leaveTypeRoutes.router)
 app.include_router(leaveSubTypeRoutes.router)
 app.include_router(leaveRoutes.router)
+app.include_router(missedTimeRoutes.router)
 # app.include_router(postRoutes.router)
 
 

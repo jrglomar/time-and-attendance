@@ -78,6 +78,22 @@ def upgrade():
     )
     
     op.create_table(
+        'missed_times',
+        sa.Column('id', sa.String(36), primary_key=True),
+        sa.Column('employee_id', sa.String(36), sa.ForeignKey('employees.id'), nullable=True),
+        sa.Column('approved_by', sa.String(36), sa.ForeignKey('users.id'), nullable=True),
+        sa.Column('time_log', sa.Time, nullable=True),
+        sa.Column('time_log_type', sa.String(255), nullable=True),
+        sa.Column('date', sa.DateTime, nullable=True),
+        sa.Column('proof', sa.String(255), nullable=True),
+        sa.Column('status', sa.String(255), nullable=True, server_default=sa.text("'Pending'")),
+        sa.Column('active_status', sa.String(255), nullable=True, server_default=sa.text("'Active'")),
+        sa.Column('created_at', sa.DateTime, server_default=sa.text('NOW()')),
+        sa.Column('updated_at', sa.DateTime, server_onupdate=sa.text('NOW()'))
+    )
+    
+    
+    op.create_table(
         'time_ins',
         sa.Column('id', sa.String(36), primary_key=True),
         sa.Column('employee_id', sa.String(36), sa.ForeignKey('employees.id'), nullable=True),

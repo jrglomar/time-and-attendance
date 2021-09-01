@@ -38,6 +38,67 @@
                         <i class="far fa-plus-square"></i> Apply Missed Time-Log
                     </button>
                 </div>
+                <div class="card-body">
+                    <div class="card-header">
+                        List of Missed Time Application
+                    </div>
+                  <div class="">
+                    <table id="missed_time_datatable" class="table table-bordered table-hover" style="width: 100%;">
+                      <thead>
+                          <th>ID</th>
+                          <th>Log Type</th>
+                          <th>Time Log</th>
+                          <th>Date</th>
+                          <th>Status</th>
+                      </thead>
+                      <tbody>
+                          <tr>
+
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-header">
+                        List of Time In
+                    </div>
+                  <div class="">
+                    <table id="time_in_log_datatable" class="table table-bordered table-hover" style="width: 100%;">
+                      <thead>
+                          <th>ID</th>
+                          <th>Log Type</th>
+                          <th>Time Log</th>
+                          <th>Date</th>
+                      </thead>
+                      <tbody>
+                          <tr>
+
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="card-header">
+                    List of Time Out
+                  </div>
+                  <div class="">
+                    <table id="time_out_log_datatable" class="table table-bordered table-hover" style="width: 100%;">
+                      <thead>
+                          <th>ID</th>
+                          <th>Log Type</th>
+                          <th>Time Log</th>
+                          <th>Date</th>
+                      </thead>
+                      <tbody>
+                          <tr>
+
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
               
               <!-- /.card-body -->
             </div>
@@ -113,6 +174,126 @@
 <script>
 $(document).ready(function(){
 
+    let employee_id = sessionStorage.getItem("id")
+    console.log(employee_id)
+
+    function missedloadtable(){
+        missed_time_datatable = $('#missed_time_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/missed_time/employee/"+employee_id, dataSrc:"missed_time"},
+            "columns": [
+                { data: "id"},
+                { data: "time_log_type", render: function(data, type, row){
+                  return data
+                }},
+                { data: "time_log", render: function(data, type, row){
+                  date = moment().format('YYYY-MM-DD')
+                  return moment(date + " " + data).format('LT');
+                }},
+                { data: "date", render: function(data, type, row){
+                  return moment(data).format('LL')
+                }},
+                { data: "status", render: function(data, type, row){
+                    if(data == "Pending"){
+                        return `<h5 ><span style="padding:5px" class="badge badge-secondary">Pending</span></h5>`
+                    }
+                    else if(data == "Approved"){
+                        return `<h5><span style="padding:5px" class="badge badge-primary">Approved</span></h5>`
+                    }
+                    else if(data == "Declined"){
+                        return `<h5><span style="padding:5px" class="badge badge-danger">Declined</span></h5>`
+                    }
+                }},
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0] }],
+            "order": [[4, "desc"]]
+        })
+    }
+
+    missedloadtable()
+
+    function loadtable(){
+        time_in_log_datatable = $('#time_in_log_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/timein/"+employee_id, dataSrc:"timein"},
+            "columns": [
+                { data: "id"},
+                { data: "created_at", render: function(data, type, row){
+                  return "Time-In"
+                }},
+                { data: "time_log", render: function(data, type, row){
+                  date = moment().format('YYYY-MM-DD')
+                  return moment(date + " " + data).format('LT');
+                }},
+                { data: "created_at", render: function(data, type, row){
+                  return moment(data).format('LL')
+                }},
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0] }],
+            "order": [[3, "desc"]]
+        })
+    }
+
+    loadtable()
+
+    function loadouttable(){
+            time_out_log_datatable = $('#time_out_log_datatable').DataTable( {
+                "ajax": {url:"/time_and_attendance/api/timeout/"+employee_id, dataSrc:"timeout"},
+                "columns": [
+                    { data: "id"},
+                    { data: "created_at", render: function(data, type, row){
+                    return "Time-Out"
+                    }},
+                    { data: "time_log", render: function(data, type, row){
+                    date = moment().format('YYYY-MM-DD')
+                    return moment(date + " " + data).format('LT');
+                    }},
+                    { data: "created_at", render: function(data, type, row){
+                    return moment(data).format('LL')
+                    }},
+                ],
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+
+                "aoColumnDefs": [{ "bVisible": false, "aTargets": [0] }],
+                "order": [[3, "desc"]]
+            })
+    }
+
+    loadouttable();
+
+            
+    function refresh(){
+
+        var url = "/time_and_attendance/api/missed_time/employee/"+employee_id
+        missed_time_datatable.ajax.url(url).load();
+
+        var url = "/time_and_attendance/api/timein"
+        time_in_log_datatable.ajax.url(url).load();
+
+        var url = "/time_and_attendance/api/timeout"
+        time_out_log_datatable.ajax.url(url).load();
+    }
+
 
     $("#employee_missed_time_form_submit").on('click', function(e){
         e.preventDefault()
@@ -120,12 +301,34 @@ $(document).ready(function(){
         let employee_id = sessionStorage.getItem("id")
 
         let formData = {
-            "created_at": $('#employee_created_date').val(),
+            "date": $('#employee_created_date').val(),
             "time_log": $("#employee_time_log").val(),
+            "time_log_type": $('#employee_time_log_type').val(),
             "employee_id": employee_id,
         }
 
         console.log(formData)
+
+         $.ajax({
+            url: '/time_and_attendance/api/missed_time',
+            type: "POST",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                Swal.fire(
+                    'Success!',
+                    data.message,
+                    'success'
+                )
+
+                $('#time_log_form_modal').modal('hide')
+
+                console.log(data)
+            }
+        // ajax closing tag
+        })
     })
 
 

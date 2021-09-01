@@ -16,3 +16,4 @@ class User(Base):
 
     user_types = relationship('UserType', back_populates='users', lazy='joined')
     employees = relationship('Employee', back_populates='users', lazy='joined')
+    missed_times = relationship('MissedTime', back_populates='users')
