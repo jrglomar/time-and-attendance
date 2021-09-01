@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.timeOutSchema import CreateTimeOut
+from schemas.timeOutSchema import CreateTimeOut, CreateCustomTimeOut
 from models.timeOutModel import TimeOut
 from database import get_db
 
@@ -34,6 +34,19 @@ def store(timeout: CreateTimeOut, db: Session = Depends(get_db)):
     
     return {'message': 'Time out stored successfully.'}
 
+@router.post('/custom_time_out')
+def store(timein: CreateCustomTimeOut, db: Session = Depends(get_db)):
+    to_store = TimeOut(
+        employee_id = timein.employee_id,
+        time_log = timein.time_log,
+        created_at = timein.created_at,
+    )
+
+    db.add(to_store)
+    db.commit()
+    
+    return {'message': 'Time in stored successfully.'}
+
 @router.put('/{id}')
 def update(id: str, timeout: CreateTimeOut, db: Session = Depends(get_db)): 
     if not db.query(TimeOut).filter(TimeOut.id == id).update({
@@ -50,4 +63,5 @@ def remove(id: str, db: Session = Depends(get_db)):
         raise HTTPException(404, 'User to delete is not found')
     db.commit()
     return {'message': 'Time out removed successfully.'}
+
 

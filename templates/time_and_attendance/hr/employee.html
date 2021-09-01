@@ -339,7 +339,7 @@ $(document).ready(function(){
                 { data: "active_status", render: function(data, type, row){
                         if(data == "Active"){
                             return `
-                            <button type="button" id=${row.id} class="btn btn-warning btn_edit"><i class="far fa-edit"></i> Update</button>
+                            <button type="button" id=${row.id} class="btn btn-info btn_edit"><i class="far fa-edit"></i> Update</button>
                             <button type="button" id=${row.id} class="btn btn-danger btn_delete"><i class="far fa-trash-alt"></i> Deactivate</button>
                             `
                         }   

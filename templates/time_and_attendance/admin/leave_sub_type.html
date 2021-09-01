@@ -186,7 +186,7 @@
     <!-- DELETE FORM -->
     <!-- Extra Large Modal -->
       <div class="modal fade" id="leave_sub_types_form_modal_delete">
-        <div class="modal-dialog leave_sub_types_form_modal_delete modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog leave_sub_types_form_modal_delete modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Deactivate Leave Sub Type</h4>
@@ -202,6 +202,7 @@
                                 <input type="text" class="form-control" id="leave_sub_types_id_delete" name="leave_sub_types_id_delete" placeholder="Enter title">
                             </div>
                         </div>
+                        <p style="text-align: center;">Are you sure to deactivate it?</p>
                 </form>
             </div>
             <div class="modal-footer">
@@ -233,7 +234,7 @@ $(document).ready(function(){
                 { data: "active_status", render: function(data, type, row){
                         if(data == "Active"){
                             return `
-                            <button type="button" id=${row.id} class="btn btn-warning btn_edit"><i class="far fa-edit"></i> Update</button>
+                            <button type="button" id=${row.id} class="btn btn-info btn_edit"><i class="far fa-edit"></i> Update</button>
                             <button type="button" id=${row.id} class="btn btn-danger btn_delete"><i class="far fa-trash-alt"></i> Deactivate</button>
                             `
                         }   

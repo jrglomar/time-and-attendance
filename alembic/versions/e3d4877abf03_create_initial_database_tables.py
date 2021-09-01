@@ -63,6 +63,8 @@ def upgrade():
         sa.Column('employee_type_id', sa.String(36), sa.ForeignKey('employee_types.id'), nullable=True),
         sa.Column('user_id', sa.String(36), sa.ForeignKey('users.id'), nullable=True),
         sa.Column('shift_type_id', sa.String(36), sa.ForeignKey('shift_types.id'), nullable=True),
+        sa.Column('time_in_status', sa.String(255), nullable=True),
+        sa.Column('time_out_status', sa.String(255), nullable=True),
         sa.Column('monday', sa.String(255), nullable=True),
         sa.Column('tuesday', sa.String(255), nullable=True),
         sa.Column('wednesday', sa.String(255), nullable=True),

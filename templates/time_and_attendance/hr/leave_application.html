@@ -79,6 +79,7 @@
                     <thead>
                         <th>ID</th>
                         <th>Date Created</th>
+                        <th width="10%">Employee</th>
                         <th width="10%">Title</th>
                         <th width="10%">Leave Type</th>
                         <th width="10%">Leave Sub Type</th>
@@ -195,52 +196,45 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="card-body" hidden>
-                            <div class="form-group">
+                        <div class="card-body" ></div>
+                            <div class="form-group" hidden>
                                 <label for="leave_id_edit">ID</label>
                                 <input id="leave_id_edit"  type="text" class="custom-select rounded-0" readonly>
                             </div>
                         </div>
-                        <div class="card-body" hidden>
-                            <div class="form-group">
+                            <div class="form-group" hidden>
                                 <label for="leave_employee_id_edit">ID</label>
                                 <input id="leave_employee_id_edit"  type="text" class="custom-select rounded-0" readonly>
                             </div>
-                        </div>
-                        <div class="card-body">
                             <div class="form-group">
                                 <label for="leave_title_edit">Title</label>
                                 <input type="text" class="form-control" id="leave_title_edit" name="leave_title_edit" placeholder="Enter title" readonly>
                             </div>
-                        </div>
-                        <div class="card-body">
                             <div class="form-group">
                                 <label for="leave_type_edit">Leave Type</label>
                                 <input type="text" class="form-control" id="leave_type_edit" name="leave_type_edit" placeholder="" readonly>
                             </div>
-                        </div>
-                        <div class="card-body">
                             <div class="form-group">
                                 <label for="leave_sub_type_edit">Leave Sub Type</label>
                                 <input type="text" class="form-control" id="leave_sub_type_edit" name="leave_sub_type_edit" placeholder="" readonly>
                             </div>
-                        </div>
-                        <div class="card-body">
                             <div class="form-group">
                                 <label for="leave_reason_edit">Reason</label>
-                                <textarea class="form-control" id="leave_reason_edit" name="leave_reason_edit" rows="5" placeholder="Enter reason" readonly></textarea>
+                                <textarea class="form-control" id="leave_reason_edit" name="leave_reason_edit" rows="4" placeholder="Enter reason" readonly></textarea>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="leave_start_date_edit">Start Date</label>
-                                <input type="date" class="form-control" id="leave_start_date_edit" name="leave_start_date_edit" readonly>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="leave_end_date_edit">End Date</label>
-                                <input type="date" class="form-control" id="leave_end_date_edit" name="leave_end_date_edit" readonly>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="leave_start_date_edit">Start Date</label>
+                                        <input type="date" class="form-control" id="leave_start_date_edit"  name="leave_start_date_edit" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="leave_end_date_edit">End Date</label>
+                                        <input type="date" class="form-control" id="leave_end_date_edit" name="leave_end_date_edit" readonly>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                 </form>
@@ -301,6 +295,7 @@ $(document).ready(function(){
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
+                { data: "employees.users.email"},
                 { data: "title"},
                 { data: "leave_types.title"},
                 { data: "leave_sub_types.title"},
@@ -325,7 +320,7 @@ $(document).ready(function(){
                 { data: "active_status", render: function(data, type, row){
                         if(row.status == "Pending"){
                             return `
-                            <button type="button" id=${row.id} class="btn btn-warning btn_edit"><i class="far fa-edit"></i> Response</button>
+                            <button type="button" id=${row.id} class="btn btn-info btn_edit"><i class="far fa-edit"></i> Response</button>
                             `
                         }   
                         else{
@@ -493,6 +488,7 @@ $(document).on('click', '.btn_edit', function(e){
             dataType: "JSON",   
         
             success: function(data){
+
                 $('#leave_id_edit').val(data.leave.id);
                 $('#leave_employee_id_edit').val(data.leave.employee_id);
                 $('#leave_title_edit').val(data.leave.title);
@@ -504,8 +500,8 @@ $(document).on('click', '.btn_edit', function(e){
                 $("#leave_sub_type_edit").attr("name", data.leave.leave_sub_types.id);
 
                 $('#leave_reason_edit').val(data.leave.reason);
-                $('#leave_start_date_edit').val(data.leave.start_date);
-                $('#leave_end_date_edit').val(data.leave.end_date);
+                $('#leave_start_date_edit').val(moment(data.leave.start_date).format('YYYY-MM-DD'));
+                $('#leave_end_date_edit').val(moment(data.leave.end_date).format('YYYY-MM-DD'));
                 $('#leave_status_edit').val(data.leave.status);
 
                 $('#leave_form_modal_edit').modal('show');

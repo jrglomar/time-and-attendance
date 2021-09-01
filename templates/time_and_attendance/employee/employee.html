@@ -15,12 +15,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1>Employee</h1>
+            <h1>Profile</h1>
             </div>
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Employee Information</li>
+                <li class="breadcrumb-item active">Profile</li>
             </ol>
             </div>
         </div>
@@ -66,28 +66,53 @@
       <div class="container-fluid">
         <div class="row row align-items-center justify-content-center">
           <div class="col-12">
-            <div class="card">
-              
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table id="employee_datatable" class="table table-bordered table-hover">
-                    <thead>
-                        <th>ID</th>
-                        <th>Date Created</th>
-                        <th width="20%">Employee Email</th>
-                        <th width="20%">Shift Type</th>
-                        <th width="20%">Schedule</th>
-                        <th width="20%">Employee Type</th>
-                        <th width="20%">Actions</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Horizontal Form -->
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Employee Profile</h3>
               </div>
-              <!-- /.card-body -->
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form class="form-horizontal">
+                <div class="card-body">
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Email:</label>
+                    <div class="col-sm-10">
+                      <label style="font-weight: 400;" id="employee_email" class="col-sm-10 col-form-label"></label>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Type:</label>
+                    <div class="col-sm-10">
+                      <label style="font-weight: 400;" id="employee_type" class="col-sm-10 col-form-label"></label>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Shift Type:</label>
+                    <div class="col-sm-10">
+                      <label style="font-weight: 400;" id="employee_shift_type" class="col-sm-10 col-form-label"></label>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Schedule:</label>
+                    <div class="col-sm-10">
+                      <label style="font-weight: 400;" id="employee_schedule" class="col-sm-10 col-form-label"></label>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">QR Code:</label>
+                    <div class="col-sm-10">
+                      <label style="font-weight: 400;" id="employee_schedule" class="col-sm-10 col-form-label"></label>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+                <!-- <div class="card-footer">
+                  <button type="submit" class="btn btn-info">Sign in</button>
+                  <button type="submit" class="btn btn-default float-right">Cancel</button>
+                </div> -->
+                <!-- /.card-footer -->
+              </form>
             </div>
             <!-- /.card -->
           </div>
@@ -309,319 +334,45 @@
 <script>
 $(document).ready(function(){
 
-    
-    function loadtable(){
-        employee_datatable = $('#employee_datatable').DataTable( {
-            "ajax": {url:"/time_and_attendance/api/employee", dataSrc:"employee"},
-            "columns": [
-                { data: "id"},
-                { data: "created_at" },
-                { data: "users.email"},
-                { data: "shift_types.title"},
-                { data: "monday", render: function(data, type, row){
-                  let schedule = ""
-                    if(row.monday == "True"){schedule += "M-"}
-                    if(row.tuesday == "True"){schedule += "T-"}
-                    if(row.wednesday == "True"){schedule += "W-"}
-                    if(row.thursday == "True"){schedule += "Th-"}
-                    if(row.friday == "True"){schedule += "F-"}
-                    if(row.saturday == "True"){schedule += "S-"}
-                    if(row.sunday == "True"){schedule += "Su-"}
-                    
-                  return schedule.slice(0, (schedule.length - 1))
-                }},
-                { data: "employee_types.title"},
-                { data: "active_status", render: function(data, type, row){
-                        if(data == "Active"){
-                            return `
-                            <button type="button" id=${row.id} class="btn btn-warning btn_edit"><i class="far fa-edit"></i> Request Update</button>
-                            `
-                        }   
-                        else{
-                            return '<button>Activate</button>';
-                        }
-                    }
-                },
-            ],
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-
-            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1, 6] }],
-            "order": [[1, "desc"]]
-        })
-    }
-
-    loadtable();
 
 
-});
+function get_employee(){
+    let employee_id = sessionStorage.getItem("id");
 
+    $.ajax({
+      url: "/time_and_attendance/api/employee/"+employee_id,
+      type: "GET",
+      contentType: "application/json",
+      dataType: "JSON",
 
-function refresh(){
-    var url = "/time_and_attendance/api/employee";
+      success: function(data){
+        employee = data.employee
 
-    employee_datatable.ajax.url(url).load();
+        let schedule = ""
+                  if(employee.monday == "True"){schedule += "Mon-"}
+                  if(employee.tuesday == "True"){schedule += "Tue-"}
+                  if(employee.wednesday == "True"){schedule += "Wed-"}
+                  if(employee.thursday == "True"){schedule += "Thu-"}
+                  if(employee.friday == "True"){schedule += "Fri-"}
+                  if(employee.saturday == "True"){schedule += "Sat-"}
+                  if(employee.sunday == "True"){schedule += "Sun-"}
+
+                  date = moment().format('YYYY-MM-DD')
+
+        let shift = employee.shift_types.title + " (" + moment(date + " " + employee.shift_types.start_time).format('LT') + " - " + moment(date + " " +employee.shift_types.end_time).format('LT') + ")"
+        
+        $('#employee_email').html(employee.users.email)
+        $('#employee_type').html(employee.employee_types.title)
+        $('#employee_shift_type').html(shift)
+        $('#employee_schedule').html(schedule.slice(0, (schedule.length - 1)))
+      }
+
+    })
 }
 
-
-function get_user_email(){
-       
-        $.ajax({
-                url: '/time_and_attendance/api/user/',
-                type: "GET",
-                contentType: "application/json",
-                dataType: "JSON",
-            
-                success: function(data){
-                    user = data.user
-                    console.log(user)
-                    html = ""
-                    
-                    for(var i=0; i < user.length; i++){
-                        html += `<option value="${user[i].id}">${user[i].email}</option>`
-                    }
-
-                    $('#user_id_option').append(html)
-                    $('#user_id_option_edit').append(html)
-                }
-            })
-            // ajax closing tag
-
-            
-}
-
-get_user_email()
-
-function get_shift_type(){
-       
-        $.ajax({
-                url: '/time_and_attendance/api/shifttype/',
-                type: "GET",
-                contentType: "application/json",
-                dataType: "JSON",
-            
-                success: function(data){
-                    shifttype = data.shifttype
-                    html = ""
-                    
-                    for(var i=0; i < shifttype.length; i++){
-                        html += `<option value="${shifttype[i].id}">${shifttype[i].title}</option>`
-                    }
-
-                    $('#shift_type_id_option').append(html)
-                    $('#shift_type_id_option_edit').append(html)
-                }
-            })
-            // ajax closing tag
-
-}
-
-get_shift_type()
-
-function get_employee_type(){
-       
-        $.ajax({
-                url: '/time_and_attendance/api/employeetype/',
-                type: "GET",
-                contentType: "application/json",
-                dataType: "JSON",
-            
-                success: function(data){
-                    employeetype = data.employeetype
-                    html = ""
-                    
-                    for(var i=0; i < employeetype.length; i++){
-                        html += `<option value="${employeetype[i].id}">${employeetype[i].title}</option>`
-                    }
-
-                    $('#employee_type_id_option').append(html)
-                    $('#employee_type_id_option_edit').append(html)
-                }
-            })
-            // ajax closing tag
-
-                    
-}
-
-get_employee_type()
-
-$('#employee_form_submit').on('click', function(e){
-    e.preventDefault()
-
-    $('#employee_form_submit').prop('disabled', true)
-
-    let formData = {
-        user_id: $('#user_id_option').val(),
-        shift_type_id: $('#shift_type_id_option').val(),
-        employee_type_id: $('#employee_type_id_option').val(),
-        monday: $('#schedule_option_monday').is(":checked"),
-        tuesday: $('#schedule_option_tuesday').is(":checked"),
-        wednesday: $('#schedule_option_wednesday').is(":checked"),
-        thursday: $('#schedule_option_thursday').is(":checked"),
-        friday: $('#schedule_option_friday').is(":checked"),
-        saturday: $('#schedule_option_saturday').is(":checked"),
-        sunday: $('#schedule_option_sunday').is(":checked"),
-    }    
-
-    $.ajax({
-            url: '/time_and_attendance/api/employee',
-            type: "POST",
-            data: JSON.stringify(formData),
-            contentType: "application/json",
-            dataType: "JSON",
-        
-            success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
-
-                $('#employee_form').trigger("reset")
-                $('#employee_form_submit').prop('disabled', false)
-                $('#employee_form_modal').modal('hide')
-                refresh()
-            }
-        // ajax closing tag
-    })
-
-    $('#employee_form_submit').prop('disabled', false)
-});
-
-$(document).on('click', '.btn_edit', function(e){
-    e.preventDefault()
-
-    let id = this.id
-
-    $.ajax({
-            url: '/time_and_attendance/api/employee/'+id,
-            type: "GET",
-            contentType: "application/json",
-            dataType: "JSON",
-        
-            success: function(data){
-                $('#employee_id_edit').val(data.employee.id);
-                $('#user_id_option_edit').val(data.employee.users.id);
-                $('#employee_type_id_option_edit').val(data.employee.employee_types.id);
-                $('#shift_type_id_option_edit').val(data.employee.shift_types.id);
-
-                $('#schedule_option_monday_edit').prop('checked', JSON.parse(data.employee.monday.toLowerCase())),
-                $('#schedule_option_tuesday_edit').prop('checked', JSON.parse(data.employee.tuesday.toLowerCase())),
-                $('#schedule_option_wednesday_edit').prop('checked', JSON.parse(data.employee.wednesday.toLowerCase())),
-                $('#schedule_option_thursday_edit').prop('checked', JSON.parse(data.employee.thursday.toLowerCase()),
-                $('#schedule_option_friday_edit').prop('checked', JSON.parse(data.employee.friday.toLowerCase())),
-                $('#schedule_option_saturday_edit').prop('checked', JSON.parse(data.employee.saturday.toLowerCase())),
-                $('#schedule_option_sunday_edit').prop('checked', JSON.parse(data.employee.sunday.toLowerCase()))),
-
-                $('#employee_form_modal_edit').modal('show');
-            }
-        // ajax closing tag
-    })
-})
-
-$('#employee_btn_edit').on('click', function(e){
-    e.preventDefault()
-    $('#employee_btn_edit').prop('disabled', true)
-
-    let id = $('#employee_id_edit').val()
-
-    let formData = {
-        user_id: $('#user_id_option_edit').val(),
-        shift_type_id: $('#shift_type_id_option_edit').val(),
-        employee_type_id: $('#employee_type_id_option_edit').val(),
-        monday: $('#schedule_option_monday_edit').is(":checked"),
-        tuesday: $('#schedule_option_tuesday_edit').is(":checked"),
-        wednesday: $('#schedule_option_wednesday_edit').is(":checked"),
-        thursday: $('#schedule_option_thursday_edit').is(":checked"),
-        friday: $('#schedule_option_friday_edit').is(":checked"),
-        saturday: $('#schedule_option_saturday_edit').is(":checked"),
-        sunday: $('#schedule_option_sunday_edit').is(":checked"),
-    }
-
-    $.ajax({
-            url: '/time_and_attendance/api/employee/'+id,
-            type: "PUT",
-            data: JSON.stringify(formData),
-            contentType: "application/json",
-            dataType: "JSON",
-        
-            success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
-
-                $('#employee_form_edit').trigger("reset")
-                $('#employee_btn_edit').prop('disabled', false)
-                $('#employee_form_modal_edit').modal('hide')
-                refresh()
-            }
-        // ajax closing tag
-    })
-
-    $('#employee_btn_edit').prop('disabled', false)
-})
-
-$(document).on('click', '.btn_delete', function(e){
-    e.preventDefault()
-
-    let id = this.id
-
-    $.ajax({
-            url: '/time_and_attendance/api/employee/'+id,
-            type: "GET",
-            contentType: "application/json",
-            dataType: "JSON",
-        
-            success: function(data){
-                $('#employee_id_delete').val(data.employee.id);
-
-                $('#employee_form_modal_delete').modal('show');
-            }
-        // ajax closing tag
-    })
-})
-
-$('#employee_btn_delete').on('click', function(e){
-    e.preventDefault()
-    $('#employee_btn_delete').prop('disabled', true)
-
-    let id = $('#employee_id_delete').val()
+get_employee()
 
 
-    $.ajax({
-            url: '/time_and_attendance/api/employee/delete/'+id,
-            type: "PUT",
-            contentType: "application/json",
-            dataType: "JSON",
-        
-            success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
-
-                $('#employee_form_delete').trigger("reset")
-                $('#employee_btn_delete').prop('disabled', false)
-                $('#employee_form_modal_delete').modal('hide')
-                refresh()
-            }
-        // ajax closing tag
-    })
-
-    $('#employee_btn_delete').prop('disabled', false)
-    
-})
-
-$('select').select2({
-  width: 'resolve'
 })
 
 

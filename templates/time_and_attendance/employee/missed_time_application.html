@@ -1,0 +1,139 @@
+<!-- Apply layout from base.html -->
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/employee_navbar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/employee_sidebar.html'%}
+{%endblock%}
+
+{%block content%}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Missed Time</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Missed Time</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h3 class="card-title">List of Time Logs</h3>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#time_log_form_modal">
+                        <i class="far fa-plus-square"></i> Apply Missed Time-Log
+                    </button>
+                </div>
+              
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    <!-- Extra Large Modal -->
+        <div class="modal fade" id="time_log_form_modal">
+          <div class="modal-dialog time_log_form_modal modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Time In</h4>
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="employee_form_time_in">
+                      <div class="card-body">
+                            <div class="form-group" hidden>
+                                <label for="employee_email_id" h>User Email</label>
+                                <select id="employee_email_id" class="custom-select rounded-0" style="width:100%">
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_time_log_type">Type of Time-Log</label>
+                                <select id="employee_time_log_type" class="custom-select rounded-0" style="width:100%">
+                                    <option value="Time-In">Time-In</option>
+                                    <option value="Time-Out">Time-Out</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_created_date">Date</label>
+                                <input type="date" class="form-control" id="employee_created_date" name="employee_created_date">
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_time_log">Time-Log</label>
+                                <input type="time" class="form-control" id="employee_time_log" name="employee_time_log" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_proof">Proof (PDF Format)</label><br>
+                                <span class="btn btn-info fileinput-button">
+                                    <i class="fas fa-plus"></i>
+                                    <span>Upload file/s</span>
+                                </span>
+                            </div>
+                            
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="employee_missed_time_form_submit" class="btn btn-info">Submit</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+      <!-- /.modal -->
+
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+
+
+    $("#employee_missed_time_form_submit").on('click', function(e){
+        e.preventDefault()
+
+        let employee_id = sessionStorage.getItem("id")
+
+        let formData = {
+            "created_at": $('#employee_created_date').val(),
+            "time_log": $("#employee_time_log").val(),
+            "employee_id": employee_id,
+        }
+
+        console.log(formData)
+    })
+
+
+$('select').select2({
+  width: 'resolve'
+})
+
+
+})
+</script>
+{%endblock%}

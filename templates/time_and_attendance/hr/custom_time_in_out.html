@@ -1,0 +1,363 @@
+<!-- Apply layout from base.html -->
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/hr_navbar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/hr_sidebar.html'%}
+{%endblock%}
+
+{%block content%}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Custom Time In/Out</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Custom Time In/Out</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h3 class="card-title">List of Time Logs</h3>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#time_in_form_modal">
+                        <i class="far fa-plus-square"></i> Add Custom Time In
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#time_out_form_modal">
+                        <i class="far fa-plus-square"></i> Add Custom Time Out
+                    </button>
+                </div>
+                <div class="card-body">
+                  <div class="">
+                    <table id="time_in_log_datatable" class="table table-bordered table-hover" style="width: 100%;">
+                      <thead>
+                          <th>ID</th>
+                          <th>Employee Email</th>
+                          <th>Log Type</th>
+                          <th>Time Log</th>
+                          <th>Date</th>
+                      </thead>
+                      <tbody>
+                          <tr>
+
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="card-header">
+                    List of Time Out
+                  </div>
+                  <div class="">
+                    <table id="time_out_log_datatable" class="table table-bordered table-hover" style="width: 100%;">
+                      <thead>
+                          <th>ID</th>
+                          <th>Employee Email</th>
+                          <th>Log Type</th>
+                          <th>Time Log</th>
+                          <th>Date</th>
+                      </thead>
+                      <tbody>
+                          <tr>
+
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+            
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    <!-- ADD FORM -->
+      <!-- Extra Large Modal -->
+        <div class="modal fade" id="time_in_form_modal">
+          <div class="modal-dialog time_in_form_modal modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Time In</h4>
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="employee_form_time_in">
+                      <div class="card-body">
+                            <div class="form-group">
+                                <label for="employee_email_time_in">User Email</label>
+                                <select id="employee_email_time_in" class="custom-select rounded-0" style="width:100%">
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_created_date_time_in">Date</label>
+                                <input type="date" class="form-control" id="employee_created_date_time_in" name="employee_created_date_time_in">
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_time_in">Time-Log</label>
+                                <input type="time" class="form-control" id="employee_time_in" name="employee_time_in" value="08:00">
+                            </div>
+                            
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="employee_time_in_form_submit" class="btn btn-info">Submit</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+      <!-- /.modal -->
+
+    <!-- ADD FORM -->
+      <!-- Extra Large Modal -->
+        <div class="modal fade" id="time_out_form_modal">
+          <div class="modal-dialog time_out_form_modal modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Time In</h4>
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="employee_form_time_out">
+                      <div class="card-body">
+                            <div class="form-group">
+                                <label for="employee_email_time_out">User Email</label>
+                                <select id="employee_email_time_out" class="custom-select rounded-0" style="width:100%">
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_created_date_time_out">Date</label>
+                                <input type="date" class="form-control" id="employee_created_date_time_out" name="employee_created_date_time_out">
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_time_out">Time-Log</label>
+                                <input type="time" class="form-control" id="employee_time_out" name="employee_time_out" value="17:00">
+                            </div>
+                            
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="employee_time_out_form_submit" class="btn btn-info">Submit</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+      <!-- /.modal -->
+
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+
+  function loadtable(){
+        time_in_log_datatable = $('#time_in_log_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/timein", dataSrc:"timein"},
+            "columns": [
+                { data: "id"},
+                
+                { data: "employees.users.email"},
+                { data: "created_at", render: function(data, type, row){
+                  return "Time-In"
+                }},
+                { data: "time_log", render: function(data, type, row){
+                  date = moment().format('YYYY-MM-DD')
+                  return moment(date + " " + data).format('LT');
+                }},
+                { data: "created_at", render: function(data, type, row){
+                  return moment(data).format('LL')
+                }},
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0] }],
+            "order": [[4, "desc"]]
+        })
+    }
+
+    loadtable()
+
+  function loadouttable(){
+        time_out_log_datatable = $('#time_out_log_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/timeout", dataSrc:"timeout"},
+            "columns": [
+                { data: "id"},
+                
+                { data: "employees.users.email"},
+                { data: "created_at", render: function(data, type, row){
+                  return "Time-Out"
+                }},
+                { data: "time_log", render: function(data, type, row){
+                  date = moment().format('YYYY-MM-DD')
+                  return moment(date + " " + data).format('LT');
+                }},
+                { data: "created_at", render: function(data, type, row){
+                  return moment(data).format('LL')
+                }},
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0] }],
+            "order": [[4, "desc"]]
+        })
+    }
+
+    loadouttable();
+
+        
+    function refresh(){
+
+        var url = "/time_and_attendance/api/timein"
+        time_in_log_datatable.ajax.url(url).load();
+
+        var url = "/time_and_attendance/api/timeout"
+        time_out_log_datatable.ajax.url(url).load();
+    }
+
+
+
+  function get_user_email_in(){
+        
+          $.ajax({
+                  url: '/time_and_attendance/api/employee/get_employee_time_in',
+                  type: "GET",
+                  contentType: "application/json",
+                  dataType: "JSON",
+              
+                  success: function(data){
+                      employee = data.employee
+                      console.log(employee)
+                      html = "<option disabled selected>-- Please Select --</option>"
+                      
+                      for(var i=0; i < employee.length; i++){
+                          html += `<option value="${employee[i].id}">${employee[i].users.email}</option>`
+                      }
+
+                      $('#employee_email_time_in').html(html)
+                      $('#employee_email_time_out').html(html)
+                  }
+              })
+              // ajax closing tag
+
+              
+  }
+
+  get_user_email_in()
+
+
+  $("#employee_time_in_form_submit").on('click', function(e){
+      e.preventDefault()
+
+      let formData = {
+          "employee_id": $("#employee_email_time_in").val(),
+          "time_log": $("#employee_time_in").val(),
+          "created_at": $("#employee_created_date_time_in").val()
+      }
+
+      $.ajax({
+            url: '/time_and_attendance/api/timein/custom_time_in',
+            type: "POST",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                Swal.fire(
+                    'Success!',
+                    data.message,
+                    'success'
+                )
+                
+                refresh()
+                $('#time_in_form_modal').modal('hide')
+
+            }
+        // ajax closing tag
+    })
+
+  })
+
+  $("#employee_time_out_form_submit").on('click', function(e){
+      e.preventDefault()
+
+      let formData = {
+          "employee_id": $("#employee_email_time_out").val(),
+          "time_log": $("#employee_time_out").val(),
+          "created_at": $("#employee_created_date_time_out").val()
+      }
+
+      $.ajax({
+            url: '/time_and_attendance/api/timeout/custom_time_out',
+            type: "POST",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                Swal.fire(
+                    'Success!',
+                    data.message,
+                    'success'
+                )
+                
+                refresh()
+                $('#time_out_form_modal').modal('hide')
+
+            }
+        // ajax closing tag
+    })
+
+  })
+
+  $('select').select2({
+    width: 'resolve'
+  })
+  
+})
+</script>
+{%endblock%}

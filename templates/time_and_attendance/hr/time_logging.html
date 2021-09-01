@@ -81,6 +81,54 @@
                 </div>
                 <!-- /.card-body -->
               </div>
+              <div class="card">
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <div class="card-header">
+                    List of Time In
+                  </div>
+                  <div class="">
+                    <table id="time_in_log_datatable" class="table table-bordered table-hover" style="width: 100%;">
+                      <thead>
+                          <th>ID</th>
+                          <th>Employee Email</th>
+                          <th>Log Type</th>
+                          <th>Time Log</th>
+                          <th>Date</th>
+                      </thead>
+                      <tbody>
+                          <tr>
+
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <div class="card-header">
+                    List of Time Out
+                  </div>
+                  <div class="">
+                    <table id="time_out_log_datatable" class="table table-bordered table-hover" style="width: 100%;">
+                      <thead>
+                          <th>ID</th>
+                          <th>Employee Email</th>
+                          <th>Log Type</th>
+                          <th>Time Log</th>
+                          <th>Date</th>
+                      </thead>
+                      <tbody>
+                          <tr>
+
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
               
             </div>
             <!-- /.card -->
@@ -167,11 +215,87 @@
 <script>
 $(document).ready(function(){
 
+  function loadtable(){
+        time_in_log_datatable = $('#time_in_log_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/timein", dataSrc:"timein"},
+            "columns": [
+                { data: "id"},
+                
+                { data: "employees.users.email"},
+                { data: "created_at", render: function(data, type, row){
+                  return "Time-In"
+                }},
+                { data: "time_log", render: function(data, type, row){
+                  date = moment().format('YYYY-MM-DD')
+                  return moment(date + " " + data).format('LT');
+                }},
+                { data: "created_at", render: function(data, type, row){
+                  return moment(data).format('LL')
+                }},
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0] }],
+            "order": [[1, "desc"]]
+        })
+    }
+
+    loadtable()
+
+  function loadouttable(){
+        time_out_log_datatable = $('#time_out_log_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/timeout", dataSrc:"timeout"},
+            "columns": [
+                { data: "id"},
+                
+                { data: "employees.users.email"},
+                { data: "created_at", render: function(data, type, row){
+                  return "Time-Out"
+                }},
+                { data: "time_log", render: function(data, type, row){
+                  date = moment().format('YYYY-MM-DD')
+                  return moment(date + " " + data).format('LT');
+                }},
+                { data: "created_at", render: function(data, type, row){
+                  return moment(data).format('LL')
+                }},
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0] }],
+            "order": [[1, "desc"]]
+        })
+    }
+
+    loadouttable();
+
+        
+    function refresh(){
+
+        var url = "/time_and_attendance/api/timein"
+        time_in_log_datatable.ajax.url(url).load();
+
+        var url = "/time_and_attendance/api/timeout"
+        time_out_log_datatable.ajax.url(url).load();
+    }
+
     
-  function get_user_email(){
+  function get_user_email_in(){
         
           $.ajax({
-                  url: '/time_and_attendance/api/employee/',
+                  url: '/time_and_attendance/api/employee/get_employee_time_in',
                   type: "GET",
                   contentType: "application/json",
                   dataType: "JSON",
@@ -186,7 +310,6 @@ $(document).ready(function(){
                       }
 
                       $('#user_id_option_time_in').html(html)
-                      $('#user_id_option_time_out').html(html)
                   }
               })
               // ajax closing tag
@@ -194,13 +317,41 @@ $(document).ready(function(){
               
   }
 
-  get_user_email()
+  function get_user_email_out(){
+        
+          $.ajax({
+                  url: '/time_and_attendance/api/employee/get_employee_time_out',
+                  type: "GET",
+                  contentType: "application/json",
+                  dataType: "JSON",
+              
+                  success: function(data){
+                      employee = data.employee
+                      console.log(employee)
+                      html = "<option disabled selected>-- Please Select --</option>"
+                      
+                      for(var i=0; i < employee.length; i++){
+                          html += `<option value="${employee[i].id}">${employee[i].users.email}</option>`
+                      }
+
+                      $('#user_id_option_time_out').html(html)
+
+                  }
+              })
+              // ajax closing tag
+            
+  }
+
   
 
   $('#btn_time_in').on('click', function(e){
+    get_user_email_in()
+    
     $('#employee_time_in_form_modal').modal('show')
   })
   $('#btn_time_out').on('click', function(e){
+      get_user_email_out()
+
     $('#employee_time_out_form_modal').modal('show')
   })
 
@@ -226,7 +377,6 @@ $(document).ready(function(){
                   "time_log": time_log
                 }
 
-                
 
                 $.ajax({
                         url: '/time_and_attendance/api/timein',
@@ -242,8 +392,33 @@ $(document).ready(function(){
                                 'success'
                             )
 
+
                             $('#employee_time_in_form_modal').modal('hide')
 
+                            let formData2 = {
+                                "time_status": "Done"
+                              }
+
+                              $.ajax({
+                                      url: '/time_and_attendance/api/employee/time_in/'+id,
+                                      type: "PUT",
+                                      data: JSON.stringify(formData2),
+                                      contentType: "application/json",
+                                      dataType: "JSON",
+                                  
+                                      success: function(data){
+                                          Swal.fire(
+                                              'Success!',
+                                              data.message,
+                                              'success'
+                                          )
+
+                            refresh()
+                                          
+
+                                      }
+                                  // ajax closing tag
+                              })
                         }
                     // ajax closing tag
                 })
@@ -276,6 +451,8 @@ $(document).ready(function(){
                   "employee_id": id,
                   "time_log": time_log
                 }
+
+
                 
 
                 $.ajax({
@@ -292,7 +469,35 @@ $(document).ready(function(){
                                 'success'
                             )
 
+                                            
+
                             $('#employee_time_out_form_modal').modal('hide')
+
+                        }
+                    // ajax closing tag
+                })
+                
+                let formData2 = {
+                  "time_status": "Done"
+                }
+
+                $.ajax({
+                        url: '/time_and_attendance/api/employee/time_out/'+id,
+                        type: "PUT",
+                        data: JSON.stringify(formData2),
+                        contentType: "application/json",
+                        dataType: "JSON",
+                    
+                        success: function(data){
+                            Swal.fire(
+                                'Success!',
+                                data.message,
+                                'success'
+                            )
+
+                            refresh()
+
+                            
 
                         }
                     // ajax closing tag

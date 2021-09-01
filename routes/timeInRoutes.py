@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.timeInSchema import CreateTimeIn
+from schemas.timeInSchema import CreateTimeIn, CreateCustomTimeIn
 from models.timeInModel import TimeIn
 from database import get_db
 
@@ -27,6 +27,19 @@ def store(timein: CreateTimeIn, db: Session = Depends(get_db)):
     to_store = TimeIn(
         employee_id = timein.employee_id,
         time_log = timein.time_log,
+    )
+
+    db.add(to_store)
+    db.commit()
+    
+    return {'message': 'Time in stored successfully.'}
+
+@router.post('/custom_time_in')
+def store(timein: CreateCustomTimeIn, db: Session = Depends(get_db)):
+    to_store = TimeIn(
+        employee_id = timein.employee_id,
+        time_log = timein.time_log,
+        created_at = timein.created_at,
     )
 
     db.add(to_store)

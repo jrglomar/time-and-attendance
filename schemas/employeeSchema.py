@@ -18,6 +18,9 @@ class EmployeeBase(BaseModel):
 class CreateEmployee(EmployeeBase):
     pass
 
+class UpdateTimeLog(BaseModel):
+    time_status: str
+
 # Schema for response body
 class Employee(BaseModel):
     # active_status: str

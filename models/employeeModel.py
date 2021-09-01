@@ -11,6 +11,8 @@ class Employee(Base):
     employee_type_id = Column(Integer, ForeignKey('employee_types.id'), nullable=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     shift_type_id = Column(Integer, ForeignKey('shift_types.id'), nullable=True)
+    time_in_status = Column(String(255), nullable=True)
+    time_out_status = Column(String(255), nullable=True)
     monday = Column(String(255), nullable=True)
     tuesday = Column(String(255), nullable=True)
     wednesday = Column(String(255), nullable=True)

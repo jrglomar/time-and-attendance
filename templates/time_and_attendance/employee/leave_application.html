@@ -124,40 +124,38 @@
                                 <label for="leave_title">Title</label>
                                 <input type="text" class="form-control" id="leave_title" name="leave_title" placeholder="Enter title">
                             </div>
-                        </div>
-                        <div class="card-body">
                             <div class="form-group">
                                 <label for="leave_type">Leave Type</label>
                                 <select id="leave_type" class="custom-select rounded-0" style="width:100%">
                                     
                                 </select>
                             </div>
-                        </div>
-                        <div class="card-body">
                             <div class="form-group">
                                 <label for="leave_sub_type">Leave Sub Type</label>
                                 <select id="leave_sub_type" class="custom-select rounded-0" style="width:100%">
                                     
                                 </select>
                             </div>
-                        </div>
-                        <div class="card-body">
                             <div class="form-group">
                                 <label for="leave_reason">Reason</label>
-                                <textarea class="form-control" id="leave_reason" name="leave_reason" rows="5" placeholder="Enter reason"></textarea>
+                                <textarea class="form-control" id="leave_reason" name="leave_reason" rows="4" placeholder="Enter reason"></textarea>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="leave_start_date">Start Date</label>
-                                <input type="date" class="form-control" id="leave_start_date" name="leave_start_date">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="leave_start_date">Start Date</label>
+                                        <input type="date" class="form-control" id="leave_start_date" name="leave_start_date">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="leave_end_date">End Date</label>
+                                        <input type="date" class="form-control" id="leave_end_date" name="leave_end_date">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="leave_end_date">End Date</label>
-                                <input type="date" class="form-control" id="leave_end_date" name="leave_end_date">
-                            </div>
+                            
+                            
                         </div>
                 </form>
             </div>
@@ -185,50 +183,43 @@
             </div>
             <div class="modal-body">
               <form id="leave_form_edit">
-                        <div class="card-body" hidden>
-                            <div class="form-group">
-                                <label for="leave_id_edit">ID</label>
-                                <input id="leave_id_edit" type="text" class="custom-select rounded-0">
-                            </div>
-                        </div>
                         <div class="card-body">
+                            <div class="form-group" hidden>
+                                <label for="leave_id_edit">ID</label>
+                                <input id="leave_id_edit"  type="text" class="custom-select rounded-0" readonly>
+                            </div>
                             <div class="form-group">
                                 <label for="leave_title_edit">Title</label>
-                                <input type="text" class="form-control" id="leave_title_edit" name="leave_title_edit" placeholder="Enter title">
+                                <input type="text" class="form-control" id="leave_title_edit" name="leave_title_edit" placeholder="Enter title" readonly>
                             </div>
-                        </div>
-                        <div class="form-group">
+                            <div class="form-group">
                                 <label for="leave_type_edit">Leave Type</label>
-                                <select id="leave_type_edit" class="custom-select rounded-0 select_leave_type" style="width:100%">
-                                    
-                                </select>
-                        </div>
-                        <div class="card-body">
+                                <input type="text" class="form-control" id="leave_type_edit" name="leave_type_edit" placeholder="" readonly>
+                            </div>
                             <div class="form-group">
                                 <label for="leave_sub_type_edit">Leave Sub Type</label>
-                                <select id="leave_sub_type_edit" class="custom-select rounded-0" style="width:100%">
-                                    
-                                </select>
+                                <input type="text" class="form-control" id="leave_sub_type_edit" name="leave_sub_type_edit" placeholder="" readonly>
                             </div>
-                        </div>
-                        <div class="card-body">
                             <div class="form-group">
                                 <label for="leave_reason_edit">Reason</label>
-                                <textarea class="form-control" id="leave_reason_edit" name="leave_reason_edit" rows="5" placeholder="Enter reason"></textarea>
+                                <textarea class="form-control" id="leave_reason_edit" name="leave_reason_edit" rows="4" placeholder="Enter reason" readonly></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="leave_start_date_edit">Start Date</label>
+                                        <input type="date" class="form-control" id="leave_start_date_edit"  name="leave_start_date_edit" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="leave_end_date_edit">End Date</label>
+                                        <input type="date" class="form-control" id="leave_end_date_edit" name="leave_end_date_edit" readonly>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="leave_start_date_edit">Start Date</label>
-                                <input type="date" class="form-control" id="leave_start_date_edit" name="leave_start_date_edit">
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="leave_end_date_edit">End Date</label>
-                                <input type="date" class="form-control" id="leave_end_date_edit" name="leave_end_date_edit">
-                            </div>
-                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -280,6 +271,10 @@
 <script>
 $(document).ready(function(){
 
+    let min = moment().format('YYYY-MM-DD')
+    $('#leave_start_date').attr('min', min)
+    $('#leave_end_date').attr('min', min)
+
     let employee_id = sessionStorage.getItem('id')
     console.log(employee_id)
     function loadtable(){
@@ -312,7 +307,7 @@ $(document).ready(function(){
                 { data: "active_status", render: function(data, type, row){
                         if(data == "Active"){
                             return `
-                            <button type="button" id=${row.id} class="btn btn-warning btn_edit"><i class="far fa-edit"></i> Update</button>
+                            <button type="button" id=${row.id} class="btn btn-info btn_edit"><i class="far fa-edit"></i> Update</button>
                             <button type="button" id=${row.id} class="btn btn-danger btn_delete"><i class="far fa-trash-alt"></i> Deactivate</button>
                             `
                         }   
@@ -486,8 +481,8 @@ $(document).on('click', '.btn_edit', function(e){
             success: function(data){
                 $('#leave_id_edit').val(data.leave.id);
                 $('#leave_title_edit').val(data.leave.title);
-                $('#leave_start_time_edit').val(data.leave.start_time);
-                $('#leave_end_time_edit').val(data.leave.end_time);
+                $('#leave_start_time_edit').val(moment(data.leave.start_time).format('YYYY-MM-DD'));
+                $('#leave_end_time_edit').val(moment(data.leave.end_date).format('YYYY-MM-DD'));
 
 
                 $('#leave_form_modal_edit').modal('show');

@@ -1,4 +1,4 @@
-from datetime import datetime, time
+from datetime import datetime, time, date
 from pydantic import BaseModel
 
 class TimeOutBase(BaseModel):
@@ -8,6 +8,14 @@ class TimeOutBase(BaseModel):
 # Schema for request body
 class CreateTimeOut(TimeOutBase):
     pass
+
+class CreateCustomTimeOut(BaseModel):
+    employee_id: str
+    time_log: str
+    created_at: date
+
+class GetTimeOut(BaseModel):
+    date_today: date
 
 # Schema for response body
 class TimeOut(BaseModel):

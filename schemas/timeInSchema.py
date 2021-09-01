@@ -1,4 +1,4 @@
-from datetime import datetime, time
+from datetime import datetime, time, date
 from pydantic import BaseModel
 
 class TimeInBase(BaseModel):
@@ -8,6 +8,15 @@ class TimeInBase(BaseModel):
 # Schema for request body
 class CreateTimeIn(TimeInBase):
     pass
+
+# Schema for request body
+class CreateCustomTimeIn(BaseModel):
+    employee_id: str
+    time_log: str
+    created_at: date
+
+class GetTimeIn(BaseModel):
+    date_today: date
 
 # Schema for response body
 class TimeIn(BaseModel):
