@@ -332,11 +332,7 @@ $('#users_form_submit').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
 
                 $('#users_form').trigger("reset")
                 $('#users_form_submit').prop('disabled', false)
@@ -392,11 +388,7 @@ $('#users_btn_edit').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
 
                 $('#users_form_edit').trigger("reset")
                 $('#users_btn_edit').prop('disabled', false)
@@ -442,11 +434,7 @@ $('#users_btn_delete').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
 
                 $('#users_form_delete').trigger("reset")
                 $('#users_btn_delete').prop('disabled', false)

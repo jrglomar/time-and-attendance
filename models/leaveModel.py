@@ -7,9 +7,9 @@ class Leave(Base):
     __tablename__ = 'leaves'
 
     id = Column(String(36), primary_key=True, default=text('UUID()'))
-    employee_id = Column(Integer, ForeignKey('employees.id'), nullable=False)
-    leave_type_id = Column(Integer, ForeignKey('leave_types.id'), nullable=False)
-    leave_sub_type_id = Column(Integer, ForeignKey('leave_sub_types.id'), nullable=False)
+    employee_id = Column(String(36), ForeignKey('employees.id'), nullable=False)
+    leave_type_id = Column(String(36), ForeignKey('leave_types.id'), nullable=False)
+    leave_sub_type_id = Column(String(36), ForeignKey('leave_sub_types.id'), nullable=False)
     title = Column(String(255), nullable=False)
     reason = Column(String(500), nullable=False)
     start_date = Column(DateTime, nullable=False)

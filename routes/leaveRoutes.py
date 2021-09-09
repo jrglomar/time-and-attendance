@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.leaveSchema import CreateLeave, GetLeave
+from schemas.leaveSchema import CreateLeave, GetLeave, GetLeaveReport
 from models.leaveModel import Leave
 from database import get_db
 
@@ -77,4 +77,17 @@ def all(leave_req: GetLeave, db: Session = Depends(get_db)):
 @router.get('/userleave/{id}')
 def all(id: str, db: Session = Depends(get_db)):
     leave = db.query(Leave).filter(Leave.employee_id == id).filter(Leave.active_status == "Active").all()
+    return {'leave': leave}
+
+
+
+@router.post('/reports/{id}')
+def all(id: str, report: GetLeaveReport, db: Session = Depends(get_db)):
+    leave = db.query(Leave).filter(Leave.employee_id == id).filter(Leave.start_date >= report.start_date).filter(Leave.start_date <= report.end_date).filter(Leave.active_status == "Active").all()
+    return {'leave': leave}
+
+
+@router.post('/reports_all')
+def all(report: GetLeaveReport, db: Session = Depends(get_db)):
+    leave = db.query(Leave).filter(Leave.start_date >= report.start_date).filter(Leave.start_date <= report.end_date).filter(Leave.active_status == "Active").all()
     return {'leave': leave}

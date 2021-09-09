@@ -322,7 +322,10 @@ $(document).ready(function(){
                 { data: "id"},
                 { data: "created_at" },
                 { data: "users.email"},
-                { data: "shift_types.title"},
+                { data: "shift_types.title", render: function(data, type, row){
+                  date = moment().format('YYYY-MM-DD')
+                  return `${data} - (${moment(date + " " + row.shift_types.start_time).format('LT')} - ${moment(date + " " + row.shift_types.end_time).format('LT')})`
+                }},
                 { data: "monday", render: function(data, type, row){
                   let schedule = ""
                     if(row.monday == "True"){schedule += "M-"}
@@ -414,9 +417,11 @@ function get_shift_type(){
                 success: function(data){
                     shifttype = data.shifttype
                     html = ""
+
+                    date = moment().format('YYYY-MM-DD')
                     
                     for(var i=0; i < shifttype.length; i++){
-                        html += `<option value="${shifttype[i].id}">${shifttype[i].title}</option>`
+                        html += `<option value="${shifttype[i].id}">${shifttype[i].title} - (${moment(date + " " + shifttype[i].start_time).format('LT')} - ${moment(date + " " + shifttype[i].end_time).format('LT')})</option>`
                     }
 
                     $('#shift_type_id_option').append(html)
@@ -482,11 +487,7 @@ $('#employee_form_submit').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
 
                 $('#employee_form').trigger("reset")
                 $('#employee_form_submit').prop('disabled', false)
@@ -557,11 +558,7 @@ $('#employee_btn_edit').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
 
                 $('#employee_form_edit').trigger("reset")
                 $('#employee_btn_edit').prop('disabled', false)
@@ -608,11 +605,7 @@ $('#employee_btn_delete').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
 
                 $('#employee_form_delete').trigger("reset")
                 $('#employee_btn_delete').prop('disabled', false)

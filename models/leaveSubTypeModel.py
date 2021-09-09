@@ -8,7 +8,7 @@ class LeaveSubType(Base):
 
     id = Column(String(36), primary_key=True, default=text('UUID()'))
     title = Column(String(255), nullable=False)
-    leave_type_id = Column(Integer, ForeignKey('leave_types.id'), nullable=False)
+    leave_type_id = Column(String(36), ForeignKey('leave_types.id'), nullable=False)
     active_status = Column(String(255), nullable=False, server_default=text("'Active'"))
     created_at = Column(DateTime, server_default=text('NOW()'))
     updated_at = Column(DateTime, server_onupdate=text('NOW()'))

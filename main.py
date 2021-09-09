@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
-from routes import userRoutes, userTypeRoutes, employeeTypeRoutes, employeeRoutes, shiftTypeRoutes, timeInRoutes, timeOutRoutes, attendanceRoutes, leaveTypeRoutes, leaveSubTypeRoutes, leaveRoutes, authRoutes, missedTimeRoutes
+from routes import shiftChangeRoutes, userRoutes, userTypeRoutes, employeeTypeRoutes, employeeRoutes, shiftTypeRoutes, timeInRoutes, timeOutRoutes, attendanceRoutes, leaveTypeRoutes, leaveSubTypeRoutes, leaveRoutes, authRoutes, missedTimeRoutes
 from database import get_db
 # from models.postModel import Post
 
@@ -28,6 +28,7 @@ app.include_router(leaveTypeRoutes.router)
 app.include_router(leaveSubTypeRoutes.router)
 app.include_router(leaveRoutes.router)
 app.include_router(missedTimeRoutes.router)
+app.include_router(shiftChangeRoutes.router)
 # app.include_router(postRoutes.router)
 
 
@@ -112,11 +113,36 @@ def index(request: Request, db: Session = Depends(get_db)):
     return template.TemplateResponse('time_and_attendance/hr/leave_approved.html', {
         'request': request,
 })
-    
+
     
 @app.get('/time_and_attendance/hr/time_logging', response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
     return template.TemplateResponse('time_and_attendance/hr/time_logging.html', {
+        'request': request,
+})
+    
+@app.get('/time_and_attendance/hr/missed_time_application', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/hr/missed_time_application.html', {
+        'request': request,
+})
+    
+@app.get('/time_and_attendance/hr/shift_and_schedule_application', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/hr/shift_and_schedule_application.html', {
+        'request': request,
+})
+    
+@app.get('/time_and_attendance/hr/leave_reports', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/hr/leave_reports.html', {
+        'request': request,
+})
+
+
+@app.get('/time_and_attendance/hr/shift_and_schedule_reports', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/hr/shift_and_schedule_reports.html', {
         'request': request,
 })
     
@@ -142,6 +168,29 @@ def index(request: Request, db: Session = Depends(get_db)):
     return template.TemplateResponse('time_and_attendance/employee/missed_time_application.html', {
         'request': request,
 })
+    
+    
+@app.get('/time_and_attendance/employee/shift_and_schedule_application', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/employee/shift_and_schedule_application.html', {
+        'request': request,
+})
+    
+@app.get('/time_and_attendance/employee/leave_reports', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/employee/leave_reports.html', {
+        'request': request,
+})
+    
+    
+@app.get('/time_and_attendance/employee/shift_and_schedule_reports', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/employee/shift_and_schedule_reports.html', {
+        'request': request,
+})
+    
 
-# END OF HR SIDE
+    
+
+# END OF EMPLOYEE SIDE
 

@@ -33,6 +33,13 @@ def read(id: str, db: Session = Depends(get_db)):
         raise HTTPException(404, 'Employee not found')
     return {'employee': employee}
 
+@router.get('/datatables/{id}')
+def read(id: str, db: Session = Depends(get_db)):
+    employee = db.query(Employee).filter(Employee.id == id).filter(Employee.active_status == 'Active').all()
+    if not employee:
+        raise HTTPException(404, 'Employee not found')
+    return {'employee': employee}
+
 @router.post('/')
 def store(employee: CreateEmployee, db: Session = Depends(get_db)):
     to_store = Employee(

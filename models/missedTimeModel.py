@@ -7,8 +7,8 @@ class MissedTime(Base):
     __tablename__ = 'missed_times'
 
     id = Column(String(36), primary_key=True, default=text('UUID()'))
-    employee_id = Column(Integer, ForeignKey('employees.id'), nullable=False)
-    approved_by = Column(Integer, ForeignKey('users.id'), nullable=False)
+    employee_id = Column(String(36), ForeignKey('employees.id'), nullable=False)
+    approved_by = Column(String(36), ForeignKey('users.id'), nullable=False)
     date = Column(DateTime, nullable=False)
     time_log = Column(Time, nullable=False)
     time_log_type = Column(String(255), nullable=False)

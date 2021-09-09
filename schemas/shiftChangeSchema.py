@@ -1,12 +1,13 @@
-from datetime import datetime as dt
+from datetime import datetime, date
 from pydantic import BaseModel
 from sqlalchemy.sql.sqltypes import Boolean
 from typing import List, Optional
 
-class EmployeeBase(BaseModel):
+class ShiftChangeBase(BaseModel):
     user_id: Optional[str]
     shift_type_id: Optional[str]
     employee_type_id: Optional[str]
+    employee_id: Optional[str]
     monday: str
     tuesday: str
     wednesday: str
@@ -16,14 +17,18 @@ class EmployeeBase(BaseModel):
     sunday: str
 
 # Schema for request body
-class CreateEmployee(EmployeeBase):
+class CreateShiftChange(ShiftChangeBase):
     pass
 
-class UpdateTimeLog(BaseModel):
-    time_status: str
+class UpdateShiftChange(BaseModel):
+    status: str
+    
+class GetShiftChangeReport(BaseModel):
+    start_date: date
+    end_date: date
 
 # Schema for response body
-class Employee(BaseModel):
+class ShiftChange(BaseModel):
     # active_status: str
-    created_at: dt
-    updated_at: dt
+    created_at: datetime
+    updated_at: datetime

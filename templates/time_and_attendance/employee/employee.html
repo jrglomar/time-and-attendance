@@ -62,6 +62,8 @@
 </section> -->
 <!-- /.card -->
 
+        
+
 <section class="content">
       <div class="container-fluid">
         <div class="row row align-items-center justify-content-center">
@@ -103,6 +105,7 @@
                     <label class="col-sm-2 col-form-label">QR Code:</label>
                     <div class="col-sm-10">
                       <label style="font-weight: 400;" id="employee_schedule" class="col-sm-10 col-form-label"></label>
+                      <div id="qrcode"></div>
                     </div>
                   </div>
                 </div>
@@ -371,6 +374,28 @@ function get_employee(){
 }
 
 get_employee()
+
+  function generateQRcode(width, height, text) {
+      $('#qrcode').qrcode({width: width,height: height,text: text});
+   }
+
+  function generate_qr(){
+    $('#qrcode').html("")
+
+    txt = sessionStorage.getItem('id')
+
+    var size = '200x200';
+    var sizeSplit = size.split('x');
+    var width = sizeSplit[0];
+    var height = sizeSplit[1];
+    generateQRcode(width, height, txt);
+    
+  }
+
+  generate_qr()
+
+
+  
 
 
 })

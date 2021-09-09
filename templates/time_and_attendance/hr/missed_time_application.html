@@ -2,11 +2,11 @@
 {%extends '/time_and_attendance/base.html'%} 
 
 {%block navbar%}
-    {%include 'time_and_attendance/includes/employee_navbar.html'%}
+    {%include 'time_and_attendance/includes/hr_navbar.html'%}
 {%endblock%}
 
 {%block sidebar%}
-    {%include 'time_and_attendance/includes/employee_sidebar.html'%}
+    {%include 'time_and_attendance/includes/hr_sidebar.html'%}
 {%endblock%}
 
 {%block content%}
@@ -34,9 +34,9 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h3 class="card-title">List of Time Logs</h3>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#time_log_form_modal">
-                        <i class="far fa-plus-square"></i> Apply Missed Time-Log
-                    </button>
+                        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#time_log_form_modal">
+                            <i class="far fa-plus-square"></i> Apply Missed Time-Log
+                        </button> -->
                 </div>
                 <div class="card-body">
                     <div class="card-header">
@@ -46,10 +46,12 @@
                     <table id="missed_time_datatable" class="table table-bordered table-hover" style="width: 100%;">
                       <thead>
                           <th>ID</th>
+                          <th>Date created</th>
                           <th>Log Type</th>
                           <th>Time Log</th>
                           <th>Date</th>
                           <th>Status</th>
+                          <th>Actions</th>
                       </thead>
                       <tbody>
                           <tr>
@@ -124,34 +126,40 @@
               <div class="modal-body">
                 <form id="employee_form_time_in">
                       <div class="card-body">
-                            <div class="form-group" hidden>
-                                <label for="employee_email_id" h>User Email</label>
-                                <select id="employee_email_id" class="custom-select rounded-0" style="width:100%">
+                            <div class="form-group">
+                                <label for="missed_time_application_status" style="color:red">Status</label>
+                                <select id="missed_time_application_status" class="custom-select rounded-0" style="width:100%">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Declined">Declined</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_email_id">User Email</label>
+                                <select id="employee_email_id" class="custom-select rounded-0" style="width:100%" disabled>
                                     
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="employee_time_log_type">Type of Time-Log</label>
-                                <select id="employee_time_log_type" class="custom-select rounded-0" style="width:100%">
+                                <select id="employee_time_log_type" class="custom-select rounded-0" style="width:100%" disabled>
                                     <option value="Time-In">Time-In</option>
                                     <option value="Time-Out">Time-Out</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="employee_created_date">Date</label>
-                                <input type="date" class="form-control" id="employee_created_date" name="employee_created_date">
+                                <input type="date" class="form-control" id="employee_created_date" name="employee_created_date" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="employee_time_log">Time-Log</label>
-                                <input type="time" class="form-control" id="employee_time_log" name="employee_time_log" value="08:00">
+                                <input type="time" class="form-control" id="employee_time_log" name="employee_time_log" readonly>
                             </div>
-                            <!-- <div class="form-group">
-                                <label for="employee_proof">Proof (PDF Format)</label><br>
-                                <span class="btn btn-info fileinput-button">
-                                    <i class="fas fa-plus"></i>
-                                    <span>Upload file/s</span>
-                                </span>
-                            </div> -->
+                            <div class="form-group" hidden>
+                                <label for="missed_time_application_id">ID</label>
+                                <input type="text" class="form-control" id="missed_time_application_id" name="missed_time_application_id" readonly>
+                            </div>
+                            
                             
                       </div>
                   </form>
@@ -174,14 +182,13 @@
 <script>
 $(document).ready(function(){
 
-    let employee_id = sessionStorage.getItem("id")
-    console.log(employee_id)
 
     function missedloadtable(){
         missed_time_datatable = $('#missed_time_datatable').DataTable( {
-            "ajax": {url:"/time_and_attendance/api/missed_time/employee/"+employee_id, dataSrc:"missed_time"},
+            "ajax": {url:"/time_and_attendance/api/missed_time/", dataSrc:"missed_time"},
             "columns": [
                 { data: "id"},
+                { data: "created_at"},
                 { data: "time_log_type", render: function(data, type, row){
                   return data
                 }},
@@ -203,6 +210,17 @@ $(document).ready(function(){
                         return `<h5><span style="padding:5px" class="badge badge-danger">Declined</span></h5>`
                     }
                 }},
+                { data: "active_status", render: function(data, type, row){
+                        if(row.status == "Pending"){
+                            return `
+                            <button type="button" id=${row.id} class="btn btn-info btn_edit"><i class="far fa-edit"></i> Response</button>
+                            `
+                        }   
+                        else{
+                            return `<button type="button" id=${row.id} class="btn btn-secondary"><i class="far fa-edit"></i> Responded</button>`;
+                        }
+                    }
+                },
             ],
             "paging": true,
             "lengthChange": false,
@@ -212,8 +230,8 @@ $(document).ready(function(){
             "autoWidth": false,
             "responsive": true,
 
-            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0] }],
-            "order": [[4, "desc"]]
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1] }],
+            "order": [[1, "desc"]]
         })
     }
 
@@ -221,7 +239,7 @@ $(document).ready(function(){
 
     function loadtable(){
         time_in_log_datatable = $('#time_in_log_datatable').DataTable( {
-            "ajax": {url:"/time_and_attendance/api/timein/"+employee_id, dataSrc:"timein"},
+            "ajax": {url:"/time_and_attendance/api/timein/", dataSrc:"timein"},
             "columns": [
                 { data: "id"},
                 { data: "created_at", render: function(data, type, row){
@@ -252,7 +270,7 @@ $(document).ready(function(){
 
     function loadouttable(){
             time_out_log_datatable = $('#time_out_log_datatable').DataTable( {
-                "ajax": {url:"/time_and_attendance/api/timeout/"+employee_id, dataSrc:"timeout"},
+                "ajax": {url:"/time_and_attendance/api/timeout/", dataSrc:"timeout"},
                 "columns": [
                     { data: "id"},
                     { data: "created_at", render: function(data, type, row){
@@ -280,58 +298,117 @@ $(document).ready(function(){
     }
 
     loadouttable();
+    
+      
+    function get_user_email(){
+          
+            $.ajax({
+                    url: '/time_and_attendance/api/user/',
+                    type: "GET",
+                    contentType: "application/json",
+                    dataType: "JSON",
+                
+                    success: function(data){
+                        user = data.user
+                        console.log(user)
+                        html = ""
+                        
+                        for(var i=0; i < user.length; i++){
+                            html += `<option value="${user[i].id}">${user[i].email}</option>`
+                        }
+
+                        $('#employee_email_id').append(html)
+                    }
+                })
+                // ajax closing tag
+
+                
+    }
+
+    get_user_email()
+
 
             
     function refresh(){
 
-        var url = "/time_and_attendance/api/missed_time/employee/"+employee_id
+        var url = "/time_and_attendance/api/missed_time"
         missed_time_datatable.ajax.url(url).load();
 
-        var url = "/time_and_attendance/api/timein/"+employee_id
+        var url = "/time_and_attendance/api/timein"
         time_in_log_datatable.ajax.url(url).load();
 
-        var url = "/time_and_attendance/api/timeout/"+employee_id
+        var url = "/time_and_attendance/api/timeout"
         time_out_log_datatable.ajax.url(url).load();
     }
 
 
-    $("#employee_missed_time_form_submit").on('click', function(e){
-        e.preventDefault()
+    $(document).on('click', '.btn_edit', function(e){
+        let missed_time_application_id = this.id
 
-        let employee_id = sessionStorage.getItem("id")
+        
+        $.ajax({
+            url: '/time_and_attendance/api/missed_time/'+missed_time_application_id,
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
 
-        let formData = {
-            "date": $('#employee_created_date').val(),
-            "time_log": $("#employee_time_log").val(),
-            "time_log_type": $('#employee_time_log_type').val(),
-            "employee_id": employee_id,
-        }
+            success: function(data){
+              data = data.missed_time
+              console.log(data)
 
-        console.log(formData)
+              $('#employee_email_id').val(data.employees.users.id)
+              $('#employee_time_log_type').val(data.time_log_type)
+              $('#employee_time_log').val(data.time_log)
+              $('#missed_time_application_id').val(data.id)
 
-         $.ajax({
-            url: '/time_and_attendance/api/missed_time',
-            type: "POST",
+              $('#employee_created_date').val(moment(data.date).format('YYYY-MM-DD'));
+
+              selectize()
+              $('#time_log_form_modal').modal('show')
+
+            }
+        })
+
+    })
+
+
+    $('#employee_missed_time_form_submit').on('click', function(e){
+      e.preventDefault()
+
+      id = $('#missed_time_application_id').val()
+
+      let formData = {
+        "status": $('#missed_time_application_status').val(),
+      }
+
+      $.ajax({
+            url: '/time_and_attendance/api/missed_time/update_status/'+id,
+            type: "PUT",
             data: JSON.stringify(formData),
             contentType: "application/json",
             dataType: "JSON",
         
             success: function(data){
                 notification('bg-success', 'Success',  data.message)
-
-                refresh()
                 $('#time_log_form_modal').modal('hide')
-
-                console.log(data)
+                refresh()
             }
         // ajax closing tag
-        })
     })
 
 
-$('select').select2({
-  width: 'resolve'
-})
+      console.log(formData)
+    })
+
+
+function selectize(){
+  $('select').select2({
+    width: 'resolve'
+  })
+}
+
+
+  
 
 
 })

@@ -33,11 +33,18 @@
         <div class="row row align-items-center justify-content-center">
           <div class="col-12">
               <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <h3 class="card-title">List of Leaves</h3>
-                <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#leave_form_modal">
-                  <i class="far fa-plus-square"></i> Add New
-                </button> -->
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-2">
+                            <h3 class="card-title">List of Leaves</h3>
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <label>Month & Year</label>
+                                    <input id="month_selected" class="form-control" type="month">
+                            </div>
+                        </div>
+                    </div>
                 </div>
               <!-- /.card-header -->
                 <div class="card-body">
@@ -51,7 +58,7 @@
                             <th>Friday</th>
                             <th style="color:red">Saturday</th>
                         </thead>
-                        <tbody>
+                        <tbody id="tbody_calendar">
                             <tr id="0"></tr>
                             <tr id="1"></tr>
                             <tr id="2"></tr>
@@ -119,8 +126,7 @@
 <script>
 $(document).ready(function(){
 
-
-    let dateNow = moment()
+    
     
     function get_leave_date(date){
         let formData = {
@@ -149,16 +155,14 @@ $(document).ready(function(){
     }
 
 
-    function get_calendar(){
-        let startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-        let endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
-        let startDate   = moment().startOf('month').format('DD');
-        let endDate   = moment().endOf('month').format('DD');
+    function get_calendar(dateselected){
+
+        let startOfMonth = moment(dateselected).startOf('month').format('YYYY-MM-DD');
+        let endOfMonth   = moment(dateselected).endOf('month').format('YYYY-MM-DD');
+        let startDate   = moment(dateselected).startOf('month').format('DD');
+        let endDate   = moment(dateselected).endOf('month').format('DD');
         let startDay = moment(startOfMonth).day()
         let endDay = moment(endOfMonth).day()
-
-        let monthDate = dateNow.format('MM')
-        let yearDate = dateNow.format('YYYY')
 
         let dayDiff = (endDate - startDate) + 1
 
@@ -166,7 +170,7 @@ $(document).ready(function(){
         let tdcount = 0
 
         for(i = 1; i <= dayDiff; i++){
-            curr_date = yearDate + '-' + monthDate + '-' + i.toString().padStart(2, 0)
+            curr_date = dateselected + '-' + i.toString().padStart(2, 0)
 
             if(parseInt(tdcount) < parseInt(startDay) && trcount == 0){
                 
@@ -197,9 +201,8 @@ $(document).ready(function(){
         }
     }
 
-    get_calendar()
 
-    $('.btn_date').on('click', function(){
+    $(document).on('click', '.btn_date', function(){
         start_date = this.value
 
         let formData = {
@@ -220,12 +223,12 @@ $(document).ready(function(){
 
                     for(var i=0; i < leave_list.length; i++){
                         html += `<tr>
-                                <td>${leave_list[i].employees.users.email}</td>
-                                <td>${leave_list[i].title}</td>
-                                <td>${moment(leave_list[i].start_date).format('LL')}</td>
-                                <td>${moment(leave_list[i].end_date).format('LL')}</td>
-                                <td>${leave_list[i].leave_types.title} - ${leave_list[i].leave_sub_types.title}</td>
-                            </tr>`
+                                    <td>${leave_list[i].employees.users.email}</td>
+                                    <td>${leave_list[i].title}</td>
+                                    <td>${moment(leave_list[i].start_date).format('LL')}</td>
+                                    <td>${moment(leave_list[i].end_date).format('LL')}</td>
+                                    <td>${leave_list[i].leave_types.title} - ${leave_list[i].leave_sub_types.title}</td>
+                                </tr>`
                     }
 
                     $('#list_of_employee').html(html)
@@ -236,10 +239,28 @@ $(document).ready(function(){
         })
         // ajax closing tag
     })
-
     
+    dateNow = moment()
+    console.log(dateNow)
 
+    let monthDate = dateNow.format('MM')
+    let yearDate = dateNow.format('YYYY')
 
+    $('#month_selected').val(yearDate + "-" + monthDate)
+    get_calendar(yearDate + "-" + monthDate)
+
+    $('#month_selected').on('change', function(e){
+        $('#tbody_calendar').html(
+            `<tr id="0"></tr>
+            <tr id="1"></tr>
+            <tr id="2"></tr>
+            <tr id="3"></tr>
+            <tr id="4"></tr>
+            <tr id="5"></tr>
+            <tr id="6"></tr>`
+        )
+        get_calendar(this.value)
+    })
 
 })
 </script>

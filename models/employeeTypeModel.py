@@ -13,4 +13,3 @@ class EmployeeType(Base):
     updated_at = Column(DateTime, server_onupdate=text('NOW()'))
 
     employees = relationship('Employee', back_populates='employee_types')
-    

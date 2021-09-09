@@ -78,6 +78,26 @@ def upgrade():
     )
     
     op.create_table(
+        'shift_changes',
+        sa.Column('id', sa.String(36), primary_key=True),
+        sa.Column('employee_type_id', sa.String(36), nullable=True),
+        sa.Column('employee_id', sa.String(36), sa.ForeignKey('employees.id'), nullable=True),
+        sa.Column('user_id', sa.String(36), nullable=True),
+        sa.Column('shift_type_id', sa.String(36), nullable=True),
+        sa.Column('monday', sa.String(255), nullable=True),
+        sa.Column('tuesday', sa.String(255), nullable=True),
+        sa.Column('wednesday', sa.String(255), nullable=True),
+        sa.Column('thursday', sa.String(255), nullable=True),
+        sa.Column('friday', sa.String(255), nullable=True),
+        sa.Column('saturday', sa.String(255), nullable=True),
+        sa.Column('sunday', sa.String(255), nullable=True),
+        sa.Column('status', sa.String(255), nullable=True, server_default=sa.text("'Pending'")),
+        sa.Column('active_status', sa.String(255), nullable=True, server_default=sa.text("'Active'")),
+        sa.Column('created_at', sa.DateTime, server_default=sa.text('NOW()')),
+        sa.Column('updated_at', sa.DateTime, server_onupdate=sa.text('NOW()'))
+    )
+    
+    op.create_table(
         'missed_times',
         sa.Column('id', sa.String(36), primary_key=True),
         sa.Column('employee_id', sa.String(36), sa.ForeignKey('employees.id'), nullable=True),

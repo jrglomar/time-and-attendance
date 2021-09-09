@@ -56,7 +56,10 @@
 
     <script src="{{url_for('static', path='/plugins/jquery/jquery.min.js')}}"></script>
     <script src="{{url_for('static', path='/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 
     <!-- BLOCK FOR PLUGINS JAVASCRIPT -->
     {%block plugins_js%}
@@ -91,8 +94,18 @@
     <script src="{{url_for('static', path='/plugins/select2/js/select2.js')}}"></script>
     <script src="{{url_for('static', path='/plugins/select2/js/select2.min.js')}}"></script>
 
+    <script>
+      function notification(r_class, title, body){
+      $(document).Toasts('create', {
+        class: r_class,
+        title: title,
+        body: body
+      })
+    };
+    </script>
     <!-- BLOCK FOR EXTRA SCRIPTS -->
     {%block scripts%}
+    
     {%endblock%}
 </body>
 </html>

@@ -152,7 +152,10 @@
                 </button>
               </div>
               <div class="modal-body">
-                <form id="employee_form">
+                <div hidden>
+                  <input type="text" id="type_of_log">
+                </div>
+                <!-- <form id="employee_form">
                       <div class="card-body">
                           <div class="form-group">
                               <label for="user_id_option_time_in">User Email</label>
@@ -161,45 +164,19 @@
                               </select>
                           </div>
                       </div>
-                  </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id="employee_time_in_form_submit" class="btn btn-info">Submit</button>
-              </div>
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-      <!-- /.modal -->
+                </form> -->
 
-     <!-- ADD FORM -->
-      <!-- Extra Large Modal -->
-        <div class="modal fade" id="employee_time_out_form_modal">
-          <div class="modal-dialog employee_time_out_form_modal modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Time Out</h4>
-                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true"><i class="fas fa-times"></i></span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form id="employee_time_out_form">
-                      <div class="card-body">
-                          <div class="form-group">
-                              <label for="user_id_option_time_out">User Email</label>
-                              <select id="user_id_option_time_out" class="custom-select rounded-0" style="width:100%">
-                                  
-                              </select>
-                          </div>
-                      </div>
-                  </form>
+                <div class="container">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-md-6">
+                            <video id="preview" width="100%"></video>
+                        </div>
+                    </div>
+                </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id="employee_time_out_form_submit" class="btn btn-info">Submit</button>
+                <!-- <button type="button" id="employee_time_in_form_submit" class="btn btn-info">Submit</button> -->
               </div>
             </div>
             <!-- /.modal-content -->
@@ -345,14 +322,16 @@ $(document).ready(function(){
   
 
   $('#btn_time_in').on('click', function(e){
-    get_user_email_in()
+    // get_user_email_in()
     
+    $('#type_of_log').val('time_in')
     $('#employee_time_in_form_modal').modal('show')
   })
   $('#btn_time_out').on('click', function(e){
-      get_user_email_out()
-
-    $('#employee_time_out_form_modal').modal('show')
+      // get_user_email_out()
+      
+    $('#type_of_log').val('time_out')
+    $('#employee_time_in_form_modal').modal('show')
   })
 
   $('#employee_time_in_form_submit').on('click', function(e){
@@ -386,11 +365,7 @@ $(document).ready(function(){
                         dataType: "JSON",
                     
                         success: function(data){
-                            Swal.fire(
-                                'Success!',
-                                data.message,
-                                'success'
-                            )
+                            notification('bg-success', 'Success',  data.message)
 
 
                             $('#employee_time_in_form_modal').modal('hide')
@@ -407,11 +382,7 @@ $(document).ready(function(){
                                       dataType: "JSON",
                                   
                                       success: function(data){
-                                          Swal.fire(
-                                              'Success!',
-                                              data.message,
-                                              'success'
-                                          )
+                                          notification('bg-success', 'Success',  data.message)
 
                             refresh()
                                           
@@ -452,7 +423,6 @@ $(document).ready(function(){
                   "time_log": time_log
                 }
 
-
                 
 
                 $.ajax({
@@ -463,11 +433,7 @@ $(document).ready(function(){
                         dataType: "JSON",
                     
                         success: function(data){
-                            Swal.fire(
-                                'Success!',
-                                data.message,
-                                'success'
-                            )
+                            notification('bg-success', 'Success',  data.message)
 
                                             
 
@@ -489,12 +455,7 @@ $(document).ready(function(){
                         dataType: "JSON",
                     
                         success: function(data){
-                            Swal.fire(
-                                'Success!',
-                                data.message,
-                                'success'
-                            )
-
+                            notification('bg-success', 'Success',  data.message)
                             refresh()
 
                             
@@ -511,6 +472,133 @@ $(document).ready(function(){
   $('select').select2({
     width: 'resolve'
   })
+
+  
+  function qr_reader(){
+    let scanner = new Instascan.Scanner({ video: document.getElementById('preview')});
+      Instascan.Camera.getCameras().then(function(cameras){
+          if(cameras.length > 0 ){
+              scanner.start(cameras[0]);
+          } else{
+              alert('No cameras found');
+          }
+
+      }).catch(function(e) {
+          console.error(e);
+      });
+
+      scanner.addListener('scan', function(c){
+          log_type = $('#type_of_log').val()
+          
+          if(log_type == "time_out"){
+              d = new Date();
+                datetext = d.toTimeString();
+                datetext = datetext.split(' ')[0];
+                time_log = datetext.slice(0, -3)
+
+                                            
+
+                let formData = {
+                  "employee_id": c,
+                  "time_log": time_log
+                }
+
+                
+
+                $.ajax({
+                        url: '/time_and_attendance/api/timeout',
+                        type: "POST",
+                        data: JSON.stringify(formData),
+                        contentType: "application/json",
+                        dataType: "JSON",
+                    
+                        success: function(data){
+                            notification('bg-success', 'Success',  data.message)
+
+                                            
+
+                            $('#employee_time_in_form_modal').modal('hide')
+
+                        }
+                    // ajax closing tag
+                })
+                
+                let formData2 = {
+                  "time_status": "Done"
+                }
+
+                $.ajax({
+                        url: '/time_and_attendance/api/employee/time_out/'+c,
+                        type: "PUT",
+                        data: JSON.stringify(formData2),
+                        contentType: "application/json",
+                        dataType: "JSON",
+                    
+                        success: function(data){
+                            // notification('bg-success', 'Success',  data.message)
+                            refresh()
+
+                            
+
+                        }
+                    // ajax closing tag
+                })
+          }
+          else if(log_type == "time_in"){
+            d = new Date();
+                datetext = d.toTimeString();
+                datetext = datetext.split(' ')[0];
+                time_log = datetext.slice(0, -3)             
+
+                let formData = {
+                  "employee_id": c,
+                  "time_log": time_log
+                }
+
+
+                $.ajax({
+                        url: '/time_and_attendance/api/timein',
+                        type: "POST",
+                        data: JSON.stringify(formData),
+                        contentType: "application/json",
+                        dataType: "JSON",
+                    
+                        success: function(data){
+                            notification('bg-success', 'Success',  data.message)
+
+
+                            $('#employee_time_in_form_modal').modal('hide')
+
+                            let formData2 = {
+                                "time_status": "Done"
+                              }
+
+                              $.ajax({
+                                      url: '/time_and_attendance/api/employee/time_in/'+c,
+                                      type: "PUT",
+                                      data: JSON.stringify(formData2),
+                                      contentType: "application/json",
+                                      dataType: "JSON",
+                                  
+                                      success: function(data){
+                                          // notification('bg-success', 'Success',  data.message)
+
+                                          refresh()
+                                          
+
+                                      }
+                                  // ajax closing tag
+                              })
+                        }
+                    // ajax closing tag
+                })
+          }
+    });
+  }
+
+  qr_reader()
+
+
   
 })
 </script>

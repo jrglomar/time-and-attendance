@@ -1,0 +1,455 @@
+<!-- Apply layout from base.html -->
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/hr_navbar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/hr_sidebar.html'%}
+{%endblock%}
+
+{%block content%}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Shift and Schedule Application</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Shift and Schedule Application</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+
+
+<section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between">
+                <h3 class="card-title">Shift and Schedule Application</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="shift_and_schedule_table" class="table table-bordered table-hover">
+                    <thead>
+                        <th>ID</th>
+                        <th>Date Created</th>
+                        <th>Employee</th>
+                        <th>Shift Type</th>
+                        <th>Schedule</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+     <!-- EDIT FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="employee_form_modal_edit">
+        <div class="modal-dialog employee_form_modal_edit modal-xl modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Shift and Schedule Application</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="employee_form_edit">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="missed_time_application_status" style="color:red">Status</label>
+                                <select id="missed_time_application_status" class="custom-select rounded-0" style="width:100%">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Declined">Declined</option>
+                                </select>
+                            </div>
+                            <div class="form-group" hidden>
+                                <label for="shift_change_id">Shift Change ID</label>
+                                <input type="text" id="shift_change_id" class="custom-select rounded-0" style="width:100%">
+                            </div>
+                            <div class="form-group" hidden>
+                                <label for="employee_id_edit">Employee ID</label>
+                                <input type="text" id="employee_id_edit" class="custom-select rounded-0" style="width:100%">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="user_id_option_edit">User Email</label>
+                                <select id="user_id_option_edit" class="custom-select rounded-0" style="width:100%" disabled>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="employee_type_id_option_edit">Employee Type</label>
+                                <select id="employee_type_id_option_edit" class="custom-select rounded-0" style="width:100%" disabled>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="shift_type_id_option_edit">Shift Type</label>
+                                <select id="shift_type_id_option_edit" class="custom-select rounded-0" style="width:100%" disabled>
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                  <label for="schedule_option">Schedule</label>
+                                  <div class="row">
+                                        <div class="custom-control custom-checkbox" style="padding-left: 2.5rem;">
+                                          <input class="custom-control-input" type="checkbox" name="schedule_option_edit" id="schedule_option_monday_edit" disabled>
+                                          <label for="schedule_option_monday_edit" class="custom-control-label">Monday</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox" style="padding-left: 2.5rem;">
+                                          <input class="custom-control-input" type="checkbox" name="schedule_option_edit" id="schedule_option_tuesday_edit" disabled>
+                                          <label for="schedule_option_tuesday_edit" class="custom-control-label">Tuesday</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox" style="padding-left: 2.5rem;">
+                                          <input class="custom-control-input" type="checkbox" name="schedule_option_edit" id="schedule_option_wednesday_edit" disabled>
+                                          <label for="schedule_option_wednesday_edit" class="custom-control-label">Wednesday</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox" style="padding-left: 2.5rem;">
+                                          <input class="custom-control-input" type="checkbox" name="schedule_option_edit" id="schedule_option_thursday_edit" disabled>
+                                          <label for="schedule_option_thursday_edit" class="custom-control-label">Thursday</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox" style="padding-left: 2.5rem;">
+                                          <input class="custom-control-input" type="checkbox" name="schedule_option_edit" id="schedule_option_friday_edit" disabled>
+                                          <label for="schedule_option_friday_edit" class="custom-control-label">Friday</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox" style="padding-left: 2.5rem;">
+                                          <input class="custom-control-input" type="checkbox" name="schedule_option_edit" id="schedule_option_saturday_edit" disabled>
+                                          <label for="schedule_option_saturday_edit" class="custom-control-label">Saturday</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox" style="padding-left: 2.5rem;">
+                                          <input class="custom-control-input" type="checkbox" name="schedule_option_edit" id="schedule_option_sunday_edit" disabled>
+                                          <label for="schedule_option_sunday_edit" class="custom-control-label">Sunday</label>
+                                        </div>
+                                  </div>
+                            </div>
+                        </div>
+                        
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" id="employee_btn_edit" class="btn btn-primary">Update Changes</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+
+    let employee_id = sessionStorage.getItem("id");
+
+    console.log(employee_id)
+
+    function loadtable(){
+        shift_and_schedule_datatable = $('#shift_and_schedule_table').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/shift_change/", dataSrc:"shift_change"},
+            "columns": [
+                { data: "id"},
+                { data: "created_at" },
+                { data: "employees.users.email"},
+                { data: "employees.shift_types.title"},
+                { data: "monday", render: function(data, type, row){
+                  let schedule = ""
+                    if(row.monday == "True"){schedule += "Mon-"}
+                    if(row.tuesday == "True"){schedule += "Tue-"}
+                    if(row.wednesday == "True"){schedule += "Wed-"}
+                    if(row.thursday == "True"){schedule += "Thu-"}
+                    if(row.friday == "True"){schedule += "Fri-"}
+                    if(row.saturday == "True"){schedule += "Sat-"}
+                    if(row.sunday == "True"){schedule += "Sun-"}
+                    
+                  return schedule.slice(0, (schedule.length - 1))
+                }},
+                { data: "status", render: function(data, type, row){
+                    if(data == "Pending"){
+                        return `<h5 ><span style="padding:5px" class="badge badge-secondary">Pending</span></h5>`
+                    }
+                    else if(data == "Approved"){
+                        return `<h5><span style="padding:5px" class="badge badge-primary">Approved</span></h5>`
+                    }
+                    else if(data == "Declined"){
+                        return `<h5><span style="padding:5px" class="badge badge-danger">Declined</span></h5>`
+                    }
+                }},
+                { data: "active_status", render: function(data, type, row){
+                        if(row.status == "Pending"){
+                            return `
+                            <button type="button" id=${row.id} class="btn btn-info btn_edit"><i class="far fa-edit"></i> Response</button>
+                            `
+                        }   
+                        else{
+                            return `<button type="button" id=${row.id} class="btn btn-secondary"><i class="far fa-edit"></i> Responded</button>`;
+                        }
+                    }
+                },
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1] }],
+            "order": [[1, "desc"]]
+        })
+    }
+
+       
+    function refresh(){
+
+      let employee_id = sessionStorage.getItem("id"); 
+      
+        var url = "/time_and_attendance/api/shift_changes/employee/"+employee_id;
+
+        shift_and_schedule_datatable.ajax.url(url).load();
+    }
+
+    loadtable();
+
+
+    $(document).on('click', '.btn_edit', function(e){
+
+      let id = this.id
+
+          $.ajax({
+            url: '/time_and_attendance/api/shift_change/'+id,
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                data = data.shift_change;
+
+                $('#employee_type_id_option_edit').val(data.employee_type_id);
+                $('#shift_change_id').val(data.id);
+                $('#employee_id_edit').val(data.employee_id);
+                $('#shift_type_id_option_edit').val(data.shift_type_id);
+                $('#user_id_option_edit').val(data.user_id);
+
+                $('#schedule_option_monday_edit').prop('checked', JSON.parse(data.monday.toLowerCase())),
+                $('#schedule_option_tuesday_edit').prop('checked', JSON.parse(data.tuesday.toLowerCase())),
+                $('#schedule_option_wednesday_edit').prop('checked', JSON.parse(data.wednesday.toLowerCase())),
+                $('#schedule_option_thursday_edit').prop('checked', JSON.parse(data.thursday.toLowerCase()),
+                $('#schedule_option_friday_edit').prop('checked', JSON.parse(data.friday.toLowerCase())),
+                $('#schedule_option_saturday_edit').prop('checked', JSON.parse(data.saturday.toLowerCase())),
+                $('#schedule_option_sunday_edit').prop('checked', JSON.parse(data.sunday.toLowerCase()))),
+
+                selectize()
+
+                $('#employee_form_modal_edit').modal('show');
+                
+            }
+        // ajax closing tag
+          })
+
+    })
+
+    function selectize(){
+            
+      $('select').select2({
+        width: 'resolve'
+      })
+
+    }
+
+        
+    function get_shift_type(){
+          
+            $.ajax({
+                    url: '/time_and_attendance/api/shifttype/',
+                    type: "GET",
+                    contentType: "application/json",
+                    dataType: "JSON",
+                
+                    success: function(data){
+                        shifttype = data.shifttype
+                        html = ""
+
+                        date = moment().format('YYYY-MM-DD')
+                        
+                        for(var i=0; i < shifttype.length; i++){
+                            html += `<option value="${shifttype[i].id}">${shifttype[i].title} - (${moment(date + " " + shifttype[i].start_time).format('LT')} - ${moment(date + " " + shifttype[i].end_time).format('LT')})</option>`
+                        }
+
+                        $('#shift_type_id_option').append(html)
+                        $('#shift_type_id_option_edit').append(html)
+
+                    }
+                })
+                // ajax closing tag
+
+    }
+
+    get_shift_type()
+
+        
+    function get_user_email(){
+          
+            $.ajax({
+                    url: '/time_and_attendance/api/user/',
+                    type: "GET",
+                    contentType: "application/json",
+                    dataType: "JSON",
+                
+                    success: function(data){
+                        user = data.user
+                        console.log(user)
+                        html = ""
+                        
+                        for(var i=0; i < user.length; i++){
+                            html += `<option value="${user[i].id}">${user[i].email}</option>`
+                        }
+
+                        $('#user_id_option_edit').append(html)
+                    }
+                })
+                // ajax closing tag
+
+                
+    }
+
+    get_user_email()
+
+            
+    function get_employee_type(){
+          
+            $.ajax({
+                    url: '/time_and_attendance/api/employeetype/',
+                    type: "GET",
+                    contentType: "application/json",
+                    dataType: "JSON",
+                
+                    success: function(data){
+                        employeetype = data.employeetype
+                        html = ""
+                        
+                        for(var i=0; i < employeetype.length; i++){
+                            html += `<option value="${employeetype[i].id}">${employeetype[i].title}</option>`
+                        }
+
+                        $('#employee_type_id_option_edit').append(html)
+                    }
+                })
+                // ajax closing tag
+
+                        
+    }
+
+    get_employee_type()
+
+
+    $('#employee_btn_edit').on('click', function(e){
+        e.preventDefault()
+        $('#employee_btn_edit').prop('disabled', true)
+
+        let id = $('#employee_id_edit').val()
+        console.log(id)
+
+        shift_change_id = $('#shift_change_id').val()
+
+        let statusFormData = {
+          status: $('#missed_time_application_status').val()
+        }
+
+        let formData = {
+            user_id: $('#user_id_option_edit').val(),
+            employee_type_id: $('#employee_type_id_option_edit').val(),
+            employee_id: id,
+            shift_type_id: $('#shift_type_id_option_edit').val(),
+            monday: $('#schedule_option_monday_edit').is(":checked"),
+            tuesday: $('#schedule_option_tuesday_edit').is(":checked"),
+            wednesday: $('#schedule_option_wednesday_edit').is(":checked"),
+            thursday: $('#schedule_option_thursday_edit').is(":checked"),
+            friday: $('#schedule_option_friday_edit').is(":checked"),
+            saturday: $('#schedule_option_saturday_edit').is(":checked"),
+            sunday: $('#schedule_option_sunday_edit').is(":checked"),
+        }
+
+        console.log(formData)
+
+        $.ajax({
+                url: '/time_and_attendance/api/shift_change/update/'+shift_change_id,
+                type: "PUT",
+                data: JSON.stringify(statusFormData),
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                  $.ajax({
+                          url: '/time_and_attendance/api/employee/'+id,
+                          type: "PUT",
+                          data: JSON.stringify(formData),
+                          contentType: "application/json",
+                          dataType: "JSON",
+                      
+                          success: function(data){
+                              notification('bg-success', 'Success',  data.message)
+
+                              $('#employee_form_edit').trigger("reset")
+                              $('#employee_btn_edit').prop('disabled', false)
+                              $('#employee_form_modal_edit').modal('hide')
+                              refresh()
+                          }
+                      // ajax closing tag
+                  })
+                }
+            // ajax closing tag
+        })
+
+        
+
+        
+
+        $('#employee_btn_edit').prop('disabled', false)
+    })
+    
+
+     
+    
+
+
+})
+</script>
+{%endblock%}

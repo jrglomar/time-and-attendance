@@ -13,6 +13,9 @@ class MissedTimeBase(BaseModel):
 class CreateMissedTime(MissedTimeBase):
     pass
 
+class UpdateMissedTime(BaseModel):
+    status: str
+
 # Schema for response body
 class MissedTime(BaseModel):
     # active_status: str

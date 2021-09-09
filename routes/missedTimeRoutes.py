@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.missedTimeSchema import CreateMissedTime
+from schemas.missedTimeSchema import CreateMissedTime, UpdateMissedTime
 from models.missedTimeModel import MissedTime
 from database import get_db
 
@@ -61,4 +61,14 @@ def remove(id: str,  db: Session = Depends(get_db)):
         raise HTTPException(404, 'Missed Time to delete is not found')
     db.commit()
     return {'message': 'Missed Time removed successfully.'}
+
+
+@router.put('/update_status/{id}')
+def remove(id: str, update: UpdateMissedTime,  db: Session = Depends(get_db)):
+    if not db.query(MissedTime).filter(MissedTime.id == id).update({
+        'status': update.status
+    }):
+        raise HTTPException(404, 'Missed Time to update is not found')
+    db.commit()
+    return {'message': 'Missed Time updated successfully.'}
 

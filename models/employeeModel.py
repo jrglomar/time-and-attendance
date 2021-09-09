@@ -9,7 +9,7 @@ class Employee(Base):
 
     id = Column(String(36), primary_key=True, default=text('UUID()'))
     employee_type_id = Column(Integer, ForeignKey('employee_types.id'), nullable=True)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+    user_id = Column(String(36), ForeignKey('users.id'), nullable=True)
     shift_type_id = Column(Integer, ForeignKey('shift_types.id'), nullable=True)
     time_in_status = Column(String(255), nullable=True)
     time_out_status = Column(String(255), nullable=True)
@@ -32,3 +32,4 @@ class Employee(Base):
     attendances = relationship('Attendance', back_populates='employees')
     leaves = relationship('Leave', back_populates='employees')
     missed_times = relationship('MissedTime', back_populates='employees')
+    shift_changes = relationship('ShiftChange', back_populates='employees')

@@ -313,11 +313,7 @@ $('#leave_sub_types_form_submit').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
 
                 $('#leave_sub_types_form').trigger("reset")
                 $('#leave_sub_types_form_submit').prop('disabled', false)
@@ -374,11 +370,7 @@ $('#leave_sub_types_btn_edit').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
 
                 $('#leave_sub_types_form_edit').trigger("reset")
                 $('#leave_sub_types_btn_edit').prop('disabled', false)
@@ -425,11 +417,7 @@ $('#leave_sub_types_btn_delete').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
 
                 $('#leave_sub_types_form_delete').trigger("reset")
                 $('#leave_sub_types_btn_delete').prop('disabled', false)

@@ -307,11 +307,7 @@ $(document).ready(function(){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
                 
                 refresh()
                 $('#time_in_form_modal').modal('hide')
@@ -339,12 +335,7 @@ $(document).ready(function(){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
-                
+                notification('bg-success', 'Success',  data.message)
                 refresh()
                 $('#time_out_form_modal').modal('hide')
 

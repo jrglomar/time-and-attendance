@@ -1,0 +1,315 @@
+<!-- Apply layout from base.html -->
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/hr_navbar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/hr_sidebar.html'%}
+{%endblock%}
+
+{%block content%}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Leaves</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Leaves</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                  <div class="col-2" style="margin-right: 5%;">
+                            <div class="row">
+                                <h3 class="card-title">List of Leaves</h3>
+                            </div>
+                        </div><br>
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="row">
+                                <label>Employee:</label>&nbsp
+                                    <select id="employee_email_time_in" class="custom-select rounded-0" style="width:100%">
+                                    
+                                    </select>
+                            </div>
+                        </div>&nbsp
+                        <div class="col-2">
+                            <div class="row">
+                                <label>Date From:</label>
+                                    <input id="date_filter_from" class="form-control" type="date">
+                            </div>
+                        </div>&nbsp
+                        <div class="col-2">
+                            <div class="row">
+                                <label>Date To:</label>
+                                    <input id="date_filter_to" class="form-control" type="date">
+                            </div>
+                        </div>&nbsp
+                        <div class="col-4">
+                            <div class="row">
+                                <div class="col-2">
+                                    <button style="margin-top:32px;padding-left:25%;padding-right:25%" type="button" class="btn btn-primary" id="btn_filter">Filter</button>
+                                </div>
+                                <div class="col-2">
+                                    <button style="margin-top:32px;padding-left:25%;padding-right:25%" type="button" class="btn btn-secondary" id="btn_clear">Clear</button>
+                                </div>
+                                <div class="col-4">
+                                    <button style="margin-top:32px;" type="button" class="btn btn-info" id="btn_reset">Reset to all</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#leave_form_modal">
+                  <i class="far fa-plus-square"></i> Add New
+                </button> -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="leave_datatable" class="table table-bordered table-hover">
+                    <thead>
+                        <th>ID</th>
+                        <th>Date Created</th>
+                        <th width="10%">Employee</th>
+                        <th width="10%">Title</th>
+                        <th width="10%">Leave Type</th>
+                        <th width="10%">Leave Sub Type</th>
+                        <th width="10%">Reason</th>
+                        <th width="10%">Start Date</th>
+                        <th width="10%">End Date</th>
+                        <th width="10%">Status</th>
+                    </thead>
+                    <tbody id="dt_tbody">
+                        <tr>
+
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+
+    function selectize(){
+                
+        $('select').select2({
+        width: 'resolve'
+        })
+    }
+
+    function loadtable(){
+        leave_datatable = $('#leave_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/leave", dataSrc:"leave"},
+            "columns": [
+                { data: "id"},
+                { data: "created_at" },
+                { data: "employees.users.email"},
+                { data: "title"},
+                { data: "leave_types.title"},
+                { data: "leave_sub_types.title"},
+                { data: "reason"},
+                { data: "start_date", render: function(data, type, row){
+                    return moment(data).format('LL'); 
+                }},
+                { data: "end_date", render: function(data, type, row){
+                    return moment(data).format('LL'); 
+                }},
+                { data: "status", render: function(data, type, row){
+                    if(data == "Pending"){
+                        return `<h5 ><span style="padding:5px" class="badge badge-secondary">Pending</span></h5>`
+                    }
+                    else if(data == "Approved"){
+                        return `<h5><span style="padding:5px" class="badge badge-primary">Approved</span></h5>`
+                    }
+                    else if(data == "Declined"){
+                        return `<h5><span style="padding:5px" class="badge badge-danger">Declined</span></h5>`
+                    }
+                }},
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1] }],
+            "order": [[1, "desc"]]
+        })
+    }
+
+    loadtable();
+
+    function filter_loadtable(data){
+
+        $("#dt_tbody").empty();
+        console.log(data)
+        filter_leave_datatable = $('#leave_datatable').DataTable({
+            "aaData": data.leave,
+            "columns": [
+                { data: "id"},
+                { data: "created_at" },
+                { data: "employees.users.email"},
+                { data: "title"},
+                { data: "leave_types.title"},
+                { data: "leave_sub_types.title"},
+                { data: "reason"},
+                { data: "start_date", render: function(data, type, row){
+                    return moment(data).format('LL'); 
+                }},
+                { data: "end_date", render: function(data, type, row){
+                    return moment(data).format('LL'); 
+                }},
+                { data: "status", render: function(data, type, row){
+                    if(data == "Pending"){
+                        return `<h5 ><span style="padding:5px" class="badge badge-secondary">Pending</span></h5>`
+                    }
+                    else if(data == "Approved"){
+                        return `<h5><span style="padding:5px" class="badge badge-primary">Approved</span></h5>`
+                    }
+                    else if(data == "Declined"){
+                        return `<h5><span style="padding:5px" class="badge badge-danger">Declined</span></h5>`
+                    }
+                }},
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1] }],
+            "order": [[1, "desc"]]
+        })
+    }
+
+
+    function refresh(){
+        var url = "/time_and_attendance/api/leave";
+
+        leave_datatable.ajax.url(url).load();
+    }
+
+
+        
+    function get_user_email_in(){
+            
+            $.ajax({
+                    url: '/time_and_attendance/api/employee/get_employee_time_in',
+                    type: "GET",
+                    contentType: "application/json",
+                    dataType: "JSON",
+                
+                    success: function(data){
+                        employee = data.employee
+                        console.log(employee)
+                        html = `<option value="All" selected>All</option>`
+                        
+                        for(var i=0; i < employee.length; i++){
+                            html += `<option value="${employee[i].id}">${employee[i].users.email}</option>`
+                        }
+
+                        $('#employee_email_time_in').html(html)
+
+                        selectize()
+                    }
+                })
+                // ajax closing tag
+
+                
+    }
+
+    get_user_email_in()
+
+
+    $('#btn_filter').on('click', function(e){
+
+        let employee = $('#employee_email_time_in').val()
+        let formData = {
+            start_date: $('#date_filter_from').val(),
+            end_date: $('#date_filter_to').val(),
+        }
+
+        if(employee == "All"){
+            $.ajax({
+                url: '/time_and_attendance/api/leave/reports_all/',
+                type: "POST",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                    $("#leave_datatable").DataTable().destroy()
+                    filter_loadtable(data)
+                }
+                // ajax closing tag
+            })
+        }
+        else{
+            $.ajax({
+                url: '/time_and_attendance/api/leave/reports/'+employee,
+                type: "POST",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                    $("#leave_datatable").DataTable().destroy()
+                    filter_loadtable(data)
+                }
+                // ajax closing tag
+            })
+        }
+        
+    })
+
+    $('#btn_clear').on('click', function(e){
+
+        get_user_email_in()
+        
+        $('#date_filter_from').val("")
+        $('#date_filter_to').val("")
+    
+    })
+
+    
+    $('#btn_reset').on('click', function(e){
+        $("#leave_datatable").DataTable().destroy()
+        loadtable()
+    })
+
+
+
+})
+</script>
+{%endblock%}

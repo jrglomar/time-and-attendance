@@ -270,11 +270,7 @@ $('#employee_types_form_submit').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
 
                 $('#employee_types_form').trigger("reset")
                 $('#employee_types_form_submit').prop('disabled', false)
@@ -330,11 +326,7 @@ $('#employee_types_btn_edit').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
+                notification('bg-success', 'Success',  data.message)
 
                 $('#employee_types_form_edit').trigger("reset")
                 $('#employee_types_btn_edit').prop('disabled', false)
@@ -381,12 +373,7 @@ $('#employee_types_btn_delete').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                Swal.fire(
-                    'Success!',
-                    data.message,
-                    'success'
-                )
-
+                notification('bg-success', 'Success',  data.message)
                 $('#employee_types_form_delete').trigger("reset")
                 $('#employee_types_btn_delete').prop('disabled', false)
                 $('#employee_types_form_modal_delete').modal('hide')
