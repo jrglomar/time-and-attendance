@@ -15,27 +15,27 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1>Leaves</h1>
+            <h1>Attendance</h1>
             </div>
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Leaves</li>
+                <li class="breadcrumb-item active">Attendance</li>
             </ol>
             </div>
         </div>
     </div><!-- /.container-fluid -->
 </section>
 
-    <section class="content">
+<section class="content">
       <div class="container-fluid">
         <div class="row row align-items-center justify-content-center">
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                    <div class="col-2" style="margin-right: 5%;">
+                  <div class="col-2" style="margin-right: 5%;">
                             <div class="row">
-                                <h3 class="card-title">List of Leaves</h3>
+                                <h3 class="card-title">List of Attendance</h3>
                             </div>
                         </div><br>
                     <div class="row">
@@ -73,24 +73,16 @@
                             </div>
                         </div>
                     </div>
-                <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#leave_form_modal">
-                  <i class="far fa-plus-square"></i> Add New
-                </button> -->
               </div>
-              <!-- /.card-header -->
               <div class="card-body">
-                <table id="leave_datatable" class="table table-bordered table-hover">
+                <table id="attendance_datatable" class="table table-bordered table-hover">
                     <thead>
                         <th>ID</th>
                         <th>Date Created</th>
-                        <th width="10%">Employee</th>
-                        <th width="10%">Title</th>
-                        <th width="10%">Leave Type</th>
-                        <th width="10%">Leave Sub Type</th>
-                        <th width="10%">Reason</th>
-                        <th width="10%">Start Date</th>
-                        <th width="10%">End Date</th>
-                        <th width="10%">Status</th>
+                        <th>Email</th>
+                        <th>Date</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
                     </thead>
                     <tbody id="dt_tbody">
                         <tr>
@@ -116,41 +108,67 @@
 {%block scripts%}
 <script>
 $(document).ready(function(){
-
     function selectize(){
-                
-        $('select').select2({
-        width: 'resolve'
-        })
+                  
+          $('select').select2({
+          width: 'resolve'
+          })
     }
 
+
     function loadtable(){
-        leave_datatable = $('#leave_datatable').DataTable( {
-            "ajax": {url:"/time_and_attendance/api/leave", dataSrc:"leave"},
+        employee_id = sessionStorage.getItem("id")
+        attendance_datatable = $('#attendance_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/attendance", dataSrc:"attendance"},
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
                 { data: "employees.users.email"},
-                { data: "title"},
-                { data: "leave_types.title"},
-                { data: "leave_sub_types.title"},
-                { data: "reason"},
-                { data: "start_date", render: function(data, type, row){
-                    return moment(data).format('LL'); 
+                { data: "created_at", render: function(data, type, row){
+                  return moment(data).format('LL'); 
                 }},
-                { data: "end_date", render: function(data, type, row){
-                    return moment(data).format('LL'); 
+                { data: "time_ins.time_log", render: function(data, type, row){
+                    date = moment().format('YYYY-MM-DD')
+                    return moment(date + " " + data).format('LT');
                 }},
-                { data: "status", render: function(data, type, row){
-                    if(data == "Pending"){
-                        return `<h5 ><span style="padding:5px" class="badge badge-secondary">Pending</span></h5>`
-                    }
-                    else if(data == "Approved"){
-                        return `<h5><span style="padding:5px" class="badge badge-primary">Approved</span></h5>`
-                    }
-                    else if(data == "Declined"){
-                        return `<h5><span style="padding:5px" class="badge badge-danger">Declined</span></h5>`
-                    }
+                { data: "time_outs.time_log", render: function(data, type, row){
+                    date = moment().format('YYYY-MM-DD')
+                    return moment(date + " " + data).format('LT');
+                }},
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1] }],
+            "order": [[1, "desc"]]
+        })
+    }
+
+    function filter_loadtable(data){
+
+        $("#dt_tbody").empty();
+        console.log(data)
+        attendance_datatable = $('#attendance_datatable').DataTable({
+            "aaData": data.attendance,
+            "columns": [
+                { data: "id"},
+                { data: "created_at" },
+                { data: "employees.users.email"},
+                { data: "created_at", render: function(data, type, row){
+                  return moment(data).format('LL'); 
+                }},
+                { data: "time_ins.time_log", render: function(data, type, row){
+                    date = moment().format('YYYY-MM-DD')
+                    return moment(date + " " + data).format('LT');
+                }},
+                { data: "time_outs.time_log", render: function(data, type, row){
+                    date = moment().format('YYYY-MM-DD')
+                    return moment(date + " " + data).format('LT');
                 }},
             ],
             "paging": true,
@@ -168,60 +186,6 @@ $(document).ready(function(){
 
     loadtable();
 
-    function filter_loadtable(data){
-
-        $("#dt_tbody").empty();
-        console.log(data)
-        filter_leave_datatable = $('#leave_datatable').DataTable({
-            "aaData": data.leave,
-            "columns": [
-                { data: "id"},
-                { data: "created_at" },
-                { data: "employees.users.email"},
-                { data: "title"},
-                { data: "leave_types.title"},
-                { data: "leave_sub_types.title"},
-                { data: "reason"},
-                { data: "start_date", render: function(data, type, row){
-                    return moment(data).format('LL'); 
-                }},
-                { data: "end_date", render: function(data, type, row){
-                    return moment(data).format('LL'); 
-                }},
-                { data: "status", render: function(data, type, row){
-                    if(data == "Pending"){
-                        return `<h5 ><span style="padding:5px" class="badge badge-secondary">Pending</span></h5>`
-                    }
-                    else if(data == "Approved"){
-                        return `<h5><span style="padding:5px" class="badge badge-primary">Approved</span></h5>`
-                    }
-                    else if(data == "Declined"){
-                        return `<h5><span style="padding:5px" class="badge badge-danger">Declined</span></h5>`
-                    }
-                }},
-            ],
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-
-            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1] }],
-            "order": [[1, "desc"]]
-        })
-    }
-
-
-    function refresh(){
-        var url = "/time_and_attendance/api/leave";
-
-        leave_datatable.ajax.url(url).load();
-    }
-
-
-        
     function get_user_email_in(){
             
             $.ajax({
@@ -251,6 +215,14 @@ $(document).ready(function(){
 
     get_user_email_in()
 
+    
+    function refresh(){
+
+        var url = "/time_and_attendance/api/attendance/";
+
+        attendance_datatable.ajax.url(url).load();
+    }
+
 
     $('#btn_filter').on('click', function(e){
 
@@ -260,16 +232,20 @@ $(document).ready(function(){
             end_date: $('#date_filter_to').val(),
         }
 
+        if($('#date_filter_from').val() == "" && $('#date_filter_to').val() == ""){
+            $("#attendance_datatable").DataTable().destroy()
+            loadtable()
+        }
         if(employee == "All"){
             $.ajax({
-                url: '/time_and_attendance/api/leave/reports_all/',
+                url: '/time_and_attendance/api/attendance/reports_all/',
                 type: "POST",
                 data: JSON.stringify(formData),
                 contentType: "application/json",
                 dataType: "JSON",
             
                 success: function(data){
-                    $("#leave_datatable").DataTable().destroy()
+                    $("#attendance_datatable").DataTable().destroy()
                     filter_loadtable(data)
                 }
                 // ajax closing tag
@@ -277,21 +253,25 @@ $(document).ready(function(){
         }
         else{
             $.ajax({
-                url: '/time_and_attendance/api/leave/reports/'+employee,
+                url: '/time_and_attendance/api/attendance/reports/'+employee,
                 type: "POST",
                 data: JSON.stringify(formData),
                 contentType: "application/json",
                 dataType: "JSON",
             
                 success: function(data){
-                    $("#leave_datatable").DataTable().destroy()
+                    $("#attendance_datatable").DataTable().destroy()
                     filter_loadtable(data)
                 }
                 // ajax closing tag
             })
         }
+
+            
         
     })
+
+    
 
     $('#btn_clear').on('click', function(e){
 
@@ -302,12 +282,10 @@ $(document).ready(function(){
     
     })
 
-    
     $('#btn_reset').on('click', function(e){
-        $("#leave_datatable").DataTable().destroy()
+        $("#attendance_datatable").DataTable().destroy()
         loadtable()
     })
-
 
 
 })

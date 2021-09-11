@@ -20,6 +20,12 @@ def read(id: str, db: Session = Depends(get_db)):
     timeout = db.query(TimeOut).filter(TimeOut.employee_id == id).all()
     return {'timeout': timeout}
 
+
+@router.get('/latest/{id}')
+def read(id: str, db: Session = Depends(get_db)):
+    timeout = db.query(TimeOut).filter(TimeOut.employee_id == id).order_by(TimeOut.created_at).all()
+    return {'timeout': timeout}
+
 @router.post('/')
 def store(timeout: CreateTimeOut, db: Session = Depends(get_db)):
     to_store = TimeOut(

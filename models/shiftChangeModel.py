@@ -11,7 +11,7 @@ class ShiftChange(Base):
     employee_id = Column(String(36), ForeignKey('employees.id'), nullable=True)
     employee_type_id = Column(String(36), nullable=True)
     user_id = Column(String(36), nullable=True)
-    shift_type_id = Column(String(36), nullable=True)
+    shift_type_id = Column(String(36), ForeignKey('shift_types.id'), nullable=True)
     monday = Column(String(255), nullable=True)
     tuesday = Column(String(255), nullable=True)
     wednesday = Column(String(255), nullable=True)
@@ -26,3 +26,5 @@ class ShiftChange(Base):
 
 
     employees = relationship('Employee', back_populates='shift_changes', lazy='joined')
+    shift_types = relationship('ShiftType', back_populates='shift_changes', lazy='joined')
+    

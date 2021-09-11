@@ -176,7 +176,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <!-- <button type="button" id="employee_time_in_form_submit" class="btn btn-info">Submit</button> -->
+                <!-- <button type="button" id="employee_time_in_form_submit" class="btn btn-primary">Submit</button> -->
               </div>
             </div>
             <!-- /.modal-content -->
@@ -482,7 +482,6 @@ $(document).ready(function(){
           } else{
               alert('No cameras found');
           }
-
       }).catch(function(e) {
           console.error(e);
       });
@@ -491,20 +490,16 @@ $(document).ready(function(){
           log_type = $('#type_of_log').val()
           
           if(log_type == "time_out"){
-              d = new Date();
+                d = new Date();
                 datetext = d.toTimeString();
                 datetext = datetext.split(' ')[0];
-                time_log = datetext.slice(0, -3)
-
-                                            
+                time_log = datetext.slice(0, -3)                                            
 
                 let formData = {
                   "employee_id": c,
                   "time_log": time_log
                 }
-
                 
-
                 $.ajax({
                         url: '/time_and_attendance/api/timeout',
                         type: "POST",
@@ -515,34 +510,83 @@ $(document).ready(function(){
                         success: function(data){
                             notification('bg-success', 'Success',  data.message)
 
-                                            
-
                             $('#employee_time_in_form_modal').modal('hide')
 
+                            let formData2 = {
+                              "time_status": "Pending"
+                            }
+
+                            $.ajax({
+                                    url: '/time_and_attendance/api/employee/attendance/'+c,
+                                    type: "PUT",
+                                    data: JSON.stringify(formData2),
+                                    contentType: "application/json",
+                                    dataType: "JSON",
+                                
+                                    success: function(data){
+                                        // notification('bg-success', 'Success',  data.message)
+                                        refresh()
+                                        $.ajax({
+                                            url: '/time_and_attendance/api/timeout/latest/'+c,
+                                            type: "GET",
+                                            contentType: "application/json",
+                                            dataType: "JSON",
+                                        
+                                            success: function(data){
+                                                // notification('bg-success', 'Success',  data.message)
+                                                console.log(data)
+
+                                                console.log((data.timeout.length) - 1)
+                                                lastdata = (data.timeout.length) - 1
+
+                                                console.log(data.timeout[lastdata])
+                                                time_out_id = data.timeout[lastdata].id                                 
+
+                                                let formData4 = {
+                                                  "time_out_id": time_out_id
+                                                }
+                                                $.ajax({
+                                                    url: '/time_and_attendance/api/timein/latest/'+c,
+                                                      type: "GET",
+                                                      contentType: "application/json",
+                                                      dataType: "JSON",
+                                                  
+                                                      success: function(data){
+                                                          // notification('bg-success', 'Success',  data.message)
+                                                          console.log(data)
+
+                                                          console.log((data.timein.length) - 1)
+                                                          lastdata = (data.timein.length) - 1
+
+                                                          console.log(data.timein[lastdata])
+                                                          timein_data = data.timein[lastdata].id
+
+                                                          $.ajax({
+                                                            url: '/time_and_attendance/api/attendance/update_timeout/'+timein_data,
+                                                            type: "PUT",
+                                                            data: JSON.stringify(formData4),
+                                                            contentType: "application/json",
+                                                            dataType: "JSON",
+                                                        
+                                                            success: function(data){
+                                                                console.log(data)
+                                                            }
+                                                          })
+                                                      }
+                                                })
+
+                                                
+                                            }
+                                    })
+                                    }
+                                // ajax closing tag
+                          })
                         }
                     // ajax closing tag
                 })
+
                 
-                let formData2 = {
-                  "time_status": "Done"
-                }
 
-                $.ajax({
-                        url: '/time_and_attendance/api/employee/time_out/'+c,
-                        type: "PUT",
-                        data: JSON.stringify(formData2),
-                        contentType: "application/json",
-                        dataType: "JSON",
-                    
-                        success: function(data){
-                            // notification('bg-success', 'Success',  data.message)
-                            refresh()
-
-                            
-
-                        }
-                    // ajax closing tag
-                })
           }
           else if(log_type == "time_in"){
             d = new Date();
@@ -566,29 +610,62 @@ $(document).ready(function(){
                         success: function(data){
                             notification('bg-success', 'Success',  data.message)
 
+                            $.ajax({
+                                url: '/time_and_attendance/api/timein/latest/'+c,
+                                  type: "GET",
+                                  contentType: "application/json",
+                                  dataType: "JSON",
+                              
+                                  success: function(data){
+                                      // notification('bg-success', 'Success',  data.message)
+                                      console.log(data)
+
+                                      console.log((data.timein.length) - 1)
+                                      lastdata = (data.timein.length) - 1
+
+                                      console.log(data.timein[lastdata])
+                                      timein_data = data.timein[lastdata].id
+                                      
+                                      let formData3 = {
+                                        "employee_id": c,
+                                        "time_in_id": timein_data,
+                                      }
+
+                                      $.ajax({
+                                        url: '/time_and_attendance/api/attendance',
+                                          type: "POST",
+                                          data: JSON.stringify(formData3),
+                                          contentType: "application/json",
+                                          dataType: "JSON",
+                                      
+                                          success: function(data){
+                                              let formData2 = {
+                                                  "time_status": "Done"
+                                              }
+
+                                                $.ajax({
+                                                        url: '/time_and_attendance/api/employee/attendance/'+c,
+                                                        type: "PUT",
+                                                        data: JSON.stringify(formData2),
+                                                        contentType: "application/json",
+                                                        dataType: "JSON",
+                                                    
+                                                        success: function(data){
+                                                            // notification('bg-success', 'Success',  data.message)
+
+                                                            refresh()
+                                                            
+                                                        }
+                                                    // ajax closing tag
+                                                })
+                                          }
+                                  })
+                                  }
+                          })
 
                             $('#employee_time_in_form_modal').modal('hide')
 
-                            let formData2 = {
-                                "time_status": "Done"
-                              }
-
-                              $.ajax({
-                                      url: '/time_and_attendance/api/employee/time_in/'+c,
-                                      type: "PUT",
-                                      data: JSON.stringify(formData2),
-                                      contentType: "application/json",
-                                      dataType: "JSON",
-                                  
-                                      success: function(data){
-                                          // notification('bg-success', 'Success',  data.message)
-
-                                          refresh()
-                                          
-
-                                      }
-                                  // ajax closing tag
-                              })
+                            
                         }
                     // ajax closing tag
                 })

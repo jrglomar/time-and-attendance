@@ -20,6 +20,11 @@ def read(id: str, db: Session = Depends(get_db)):
     timein = db.query(TimeIn).filter(TimeIn.employee_id == id).all()
     return {'timein': timein}
 
+@router.get('/latest/{id}')
+def read(id: str, db: Session = Depends(get_db)):
+    timein = db.query(TimeIn).filter(TimeIn.employee_id == id).order_by(TimeIn.created_at).all()
+    return {'timein': timein}
+
 @router.post('/')
 def store(timein: CreateTimeIn, db: Session = Depends(get_db)):
     to_store = TimeIn(

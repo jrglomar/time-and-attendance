@@ -15,6 +15,7 @@ def all(db: Session = Depends(get_db)):
     employee = db.query(Employee).filter(Employee.active_status == 'Active').all()
     return {'employee': employee}
 
+
 @router.get('/get_employee_time_out')
 def get_employee_time_out(db: Session = Depends(get_db)):
     employee = db.query(Employee).filter(Employee.active_status == 'Active').all()
@@ -87,19 +88,10 @@ def remove(id: str,  db: Session = Depends(get_db)):
     db.commit()
     return {'message': 'Employee removed successfully.'}
 
-@router.put('/time_in/{id}')
+@router.put('/attendance/{id}')
 def time_in(id: str, time_log: UpdateTimeLog,  db: Session = Depends(get_db)):
     if not db.query(Employee).filter(Employee.id == id).update({
-        'time_in_status': time_log.time_status,
-    }):
-        raise HTTPException(404, 'Employee to update is not found')
-    db.commit()
-    return {'message': 'Employee time log status updated successfully.'}
-
-@router.put('/time_out/{id}')
-def time_out(id: str, time_log: UpdateTimeLog,  db: Session = Depends(get_db)):
-    if not db.query(Employee).filter(Employee.id == id).update({
-        'time_out_status': time_log.time_status,
+        'attendance_status': time_log.time_status,
     }):
         raise HTTPException(404, 'Employee to update is not found')
     db.commit()

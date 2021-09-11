@@ -234,7 +234,7 @@ $(document).ready(function(){
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
-                { data: "employees.shift_types.title"},
+                { data: "shift_types.title"},
                 { data: "monday", render: function(data, type, row){
                   let schedule = ""
                     if(row.monday == "True"){schedule += "Mon-"}

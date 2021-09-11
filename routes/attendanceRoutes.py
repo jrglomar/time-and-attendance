@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.attendanceSchema import CreateAttendance
+from schemas.attendanceSchema import CreateAttendance, GetAttendanceReport, UpdateAttendanceOut, GetAttendance, GetAttendanceOne
 from models.attendanceModel import Attendance
 from database import get_db
+from datetime import datetime
 
 
 router = APIRouter(
@@ -22,14 +23,17 @@ def read(id: str, db: Session = Depends(get_db)):
         raise HTTPException(404, 'Attendance not found')
     return {'attendance': attendance}
 
+
+@router.get('/datatable/{id}')
+def read(id: str, db: Session = Depends(get_db)):
+    attendance = db.query(Attendance).filter(Attendance.employee_id == id).all()
+    return {'attendance': attendance}
+
 @router.post('/')
 def store(attendance: CreateAttendance, db: Session = Depends(get_db)):
     to_store = Attendance(
         employee_id = attendance.employee_id,
-        shift_type_id = attendance.shift_type_id,
         time_in_id = attendance.time_in_id,
-        time_out_id = attendance.time_out_id,
-        hours_worked = attendance.hours_worked,
     )
 
     db.add(to_store)
@@ -54,3 +58,37 @@ def remove(id: str, db: Session = Depends(get_db)):
     db.commit()
     return {'message': 'Attendance removed successfully.'}
 
+
+@router.put('/update_timeout/{id}')
+def update(id: str, attendance: UpdateAttendanceOut, db: Session = Depends(get_db)): 
+    if not db.query(Attendance).filter(Attendance.time_in_id == id).update({
+        'time_out_id': attendance.time_out_id
+    }):
+        raise HTTPException(404, 'Attendance to update is not found')
+    db.commit()
+    return {'message': 'Attendance updated successfully.'}
+
+
+
+@router.post('/reports/{id}')
+def all(id: str, report: GetAttendanceReport, db: Session = Depends(get_db)):
+    attendance = db.query(Attendance).filter(Attendance.employee_id == id).filter(Attendance.created_at >= report.start_date).filter(Attendance.created_at <= report.end_date).filter(Attendance.active_status == "Active").all()
+    return {'attendance': attendance}
+
+
+@router.post('/reports_all')
+def all(report: GetAttendanceReport, db: Session = Depends(get_db)):
+    attendance = db.query(Attendance).filter(Attendance.created_at >= report.start_date).filter(Attendance.created_at <= report.end_date).filter(Attendance.active_status == "Active").all()
+    return {'attendance': attendance}
+
+@router.post('/getAttendance')
+def all(attendance: GetAttendance, db: Session = Depends(get_db)):
+    
+    attendance = db.query(Attendance).filter(Attendance.created_at >= attendance.start_date).filter(Attendance.created_at <= attendance.end_date).all()
+    return {'attendance': attendance}
+
+@router.post('/getAttendanceOne')
+def all(attendance: GetAttendanceOne, db: Session = Depends(get_db)):
+    
+    attendance = db.query(Attendance).filter(Attendance.employee_id == attendance.employee_id).filter(Attendance.created_at >= attendance.start_date).filter(Attendance.created_at <= attendance.end_date).all()
+    return {'attendance': attendance}

@@ -187,6 +187,8 @@ $(document).ready(function(){
             }
             else if(startDay == 7){
 
+                if(get_leave_date(curr_date) > 0){color = "warning"}
+                else{color = "info"}
                 trcount ++
                 startDay = 0
                 $('#'+trcount).append(`<td><button type="button" id="${curr_date}" value="${curr_date}" class="btn btn-block btn-${color} btn-lg btn_date">${i}</button></td>`)

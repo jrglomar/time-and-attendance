@@ -187,7 +187,7 @@ $(document).ready(function(){
                 { data: "id"},
                 { data: "created_at" },
                 { data: "employees.users.email"},
-                { data: "employees.shift_types.title"},
+                { data: "shift_types.title"},
                 { data: "monday", render: function(data, type, row){
                   let schedule = ""
                     if(row.monday == "True"){schedule += "Mon-"}
@@ -241,7 +241,7 @@ $(document).ready(function(){
 
       let employee_id = sessionStorage.getItem("id"); 
       
-        var url = "/time_and_attendance/api/shift_changes/employee/"+employee_id;
+        var url = "/time_and_attendance/api/shift_change"
 
         shift_and_schedule_datatable.ajax.url(url).load();
     }

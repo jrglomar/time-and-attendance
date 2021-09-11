@@ -1,0 +1,461 @@
+<!-- Apply layout from base.html -->
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/employee_sidebar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/employee_sidebar.html'%}
+{%endblock%}
+
+{%block content%}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Attendance</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Attendance</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                  <div class="col-2" style="margin-right: 5%;">
+                            <div class="row">
+                                <h3 class="card-title">List of Attendance</h3>
+                            </div>
+                        </div><br>
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="row">
+                                <label>Date From:</label>
+                                    <input id="date_filter_from" class="form-control" type="date">
+                            </div>
+                        </div>&nbsp
+                        <div class="col-3">
+                            <div class="row">
+                                <label>Date To:</label>
+                                    <input id="date_filter_to" class="form-control" type="date">
+                            </div>
+                        </div>&nbsp
+                        <div class="col-4">
+                            <div class="row">
+                                <div class="col-2">
+                                    <button style="margin-top:32px;padding-left:25%;padding-right:25%" type="button" class="btn btn-primary" id="btn_filter">Filter</button>
+                                </div>
+                                <div class="col-2">
+                                    <button style="margin-top:32px;padding-left:25%;padding-right:25%" type="button" class="btn btn-secondary" id="btn_clear">Clear</button>
+                                </div>
+                                <div class="col-4">
+                                    <button style="margin-top:32px;" type="button" class="btn btn-info" id="btn_reset">Reset to all</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+              <div class="card-body">
+                <table id="attendance_datatable" class="table table-bordered table-hover">
+                    <thead>
+                        <th>ID</th>
+                        <th>Date Created</th>
+                        <th>Date</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                    </thead>
+                    <tbody id="dt_tbody">
+                        <tr>
+
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-2">
+                            <h3 class="card-title">Calendar</h3>
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <label>Month & Year</label>
+                                    <input id="month_selected" class="form-control" type="month">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="attendance_datatable" class="table table-bordered table-hover">
+                        <thead>
+                            <th style="color:red">Sunday</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th style="color:red">Saturday</th>
+                        </thead>
+                        <tbody id="tbody_calendar">
+                            <tr id="0"></tr>
+                            <tr id="1"></tr>
+                            <tr id="2"></tr>
+                            <tr id="3"></tr>
+                            <tr id="4"></tr>
+                            <tr id="5"></tr>
+                            <tr id="6"></tr>
+                        </tbody>
+                    </table>
+                </div>
+              <!-- /.card-body -->
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+
+    <div id="calendar"></div>
+
+
+    <!-- DELETE FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="attendance_approved_modal">
+        <div class="modal-dialog attendance_approved_modal modal-xl modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title"  id="attendances_title">Attendance</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <table id="attendance_approve_datatable" class="table table-bordered table-hover">
+                        <thead style="text-align: center;">
+                            <th>Date</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                        </thead>
+                        <tbody style="text-align: center;" id="list_of_employee">
+
+                        </tbody>
+                    </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+    function loadtable(){
+        employee_id = sessionStorage.getItem("id")
+        attendance_datatable = $('#attendance_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/attendance/datatable/"+employee_id, dataSrc:"attendance"},
+            "columns": [
+                { data: "id"},
+                { data: "created_at" },
+                { data: "created_at", render: function(data, type, row){
+                  return moment(data).format('LL'); 
+                }},
+                { data: "time_ins.time_log", render: function(data, type, row){
+                    date = moment().format('YYYY-MM-DD')
+                    return moment(date + " " + data).format('LT');
+                }},
+                { data: "time_outs.time_log", render: function(data, type, row){
+                    date = moment().format('YYYY-MM-DD')
+                    return moment(date + " " + data).format('LT');
+                }},
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1] }],
+            "order": [[1, "desc"]]
+        })
+    }
+
+    function filter_loadtable(data){
+
+        $("#dt_tbody").empty();
+        console.log(data)
+        attendance_datatable = $('#attendance_datatable').DataTable({
+            "aaData": data.attendance,
+            "columns": [
+                { data: "id"},
+                { data: "created_at" },
+                { data: "created_at", render: function(data, type, row){
+                  return moment(data).format('LL'); 
+                }},
+                { data: "time_ins.time_log", render: function(data, type, row){
+                    date = moment().format('YYYY-MM-DD')
+                    return moment(date + " " + data).format('LT');
+                }},
+                { data: "time_outs.time_log", render: function(data, type, row){
+                    date = moment().format('YYYY-MM-DD')
+                    return moment(date + " " + data).format('LT');
+                }},
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1] }],
+            "order": [[1, "desc"]]
+        })
+    }
+
+    loadtable();
+
+    
+    function refresh(){
+
+        employee_id = sessionStorage.getItem('id')
+        var url = "/time_and_attendance/api/attendance/datatable/"+employee_id;
+
+        attendance_datatable.ajax.url(url).load();
+    }
+
+
+    $('#btn_filter').on('click', function(e){
+
+        let employee = sessionStorage.getItem("id")
+        let formData = {
+            start_date: $('#date_filter_from').val(),
+            end_date: $('#date_filter_to').val(),
+        }
+
+        if($('#date_filter_from').val() == "" && $('#date_filter_to').val() == ""){
+            $("#attendance_datatable").DataTable().destroy()
+            loadtable()
+        }
+        else{
+            $.ajax({
+                url: '/time_and_attendance/api/attendance/reports/'+employee,
+                type: "POST",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                    $("#attendance_datatable").DataTable().destroy()
+                    filter_loadtable(data)
+                }
+                // ajax closing tag
+            })
+        }
+
+            
+        
+    })
+
+    $('#btn_clear').on('click', function(e){
+
+        get_user_email_in()
+        
+        $('#date_filter_from').val("")
+        $('#date_filter_to').val("")
+    
+    })
+
+    $('#btn_reset').on('click', function(e){
+        $("#attendance_datatable").DataTable().destroy()
+        loadtable()
+    })
+
+    function get_attendance_date(date){
+
+        let employee = sessionStorage.getItem("id")
+        let formData = {
+            "start_date": date + " 00:00:00",
+            "end_date": date + " 23:59:59",
+            "employee_id": employee
+        }
+        console.log(formData)
+        
+        let attendance_length
+
+        $.ajax({
+                url: '/time_and_attendance/api/attendance/getAttendanceOne',
+                type: "POST",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                dataType: "JSON",
+                async: false,
+            
+                success: function(data){
+                    attendance = data.attendance
+                    attendance_length = attendance.length
+                }
+        })
+        // ajax closing tag
+
+        return attendance_length
+
+    }
+
+
+    function get_calendar(dateselected){
+
+        let startOfMonth = moment(dateselected).startOf('month').format('YYYY-MM-DD');
+        let endOfMonth   = moment(dateselected).endOf('month').format('YYYY-MM-DD');
+        let startDate   = moment(dateselected).startOf('month').format('DD');
+        let endDate   = moment(dateselected).endOf('month').format('DD');
+        let startDay = moment(startOfMonth).day()
+        let endDay = moment(endOfMonth).day()
+
+        let dayDiff = (endDate - startDate) + 1
+
+        let trcount = 0
+        let tdcount = 0
+
+        for(i = 1; i <= dayDiff; i++){
+            curr_date = dateselected + '-' + i.toString().padStart(2, 0)
+
+            if(parseInt(tdcount) < parseInt(startDay) && trcount == 0){
+                
+                $('#'+trcount).append(`<td></td>`)
+                i--
+            }
+            else if(startDay <= 6){
+
+                if(get_attendance_date(curr_date) > 0){color = "primary"}
+                else{color = "info"}
+
+                $('#'+trcount).append(`<td><button type="button" id="${curr_date}" value="${curr_date}" class="btn btn-block btn-${color} btn-lg btn_date">${i}</button></td>`)
+                startDay ++
+            }
+            else if(startDay == 7){
+
+                if(get_attendance_date(curr_date) > 0){color = "primary"}
+                else{color = "info"}
+                trcount ++
+                startDay = 0
+                $('#'+trcount).append(`<td><button type="button" id="${curr_date}" value="${curr_date}" class="btn btn-block btn-${color} btn-lg btn_date">${i}</button></td>`)
+                startDay ++
+            }
+            else{
+                $('#'+trcount).append(`<td></td>`)
+                startDay++
+            }
+
+            tdcount++
+        }
+    }
+
+
+    $(document).on('click', '.btn_date', function(){
+        start_date = this.value
+
+        let employee = sessionStorage.getItem("id")
+        let formData = {
+            "start_date": start_date + " 00:00:00",
+            "end_date": start_date + " 23:59:59",
+            "employee_id": employee
+        }
+        
+        $.ajax({
+                url: '/time_and_attendance/api/attendance/getAttendanceOne',
+                type: "POST",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                    attendance_list = data.attendance;
+                    console.log(attendance_list)
+                    let html = ""
+                    date = moment().format('YYYY-MM-DD')
+
+                    for(var i=0; i < attendance_list.length; i++){
+                        html += `<tr>
+                                    <td>${moment(attendance_list[i].created_at).format('LL')}</td>
+                                    <td>${moment(date + " " + attendance_list[i].time_ins.time_log).format('LT')}</td>
+                                    <td>${moment(date + " " + attendance_list[i].time_outs.time_log).format('LT')}</td>
+                                </tr>`
+                    }
+
+                    $('#list_of_employee').html(html)
+                    $('#attendances_title').html(`Attendance log of ${moment(start_date).format('LL')}`)
+
+                    $('#attendance_approved_modal').modal('show')
+                }
+        })
+        // ajax closing tag
+    })
+    
+    dateNow = moment()
+    console.log(dateNow)
+
+    let monthDate = dateNow.format('MM')
+    let yearDate = dateNow.format('YYYY')
+
+    $('#month_selected').val(yearDate + "-" + monthDate)
+    get_calendar(yearDate + "-" + monthDate)
+
+    $('#month_selected').on('change', function(e){
+        $('#tbody_calendar').html(
+            `<tr id="0"></tr>
+            <tr id="1"></tr>
+            <tr id="2"></tr>
+            <tr id="3"></tr>
+            <tr id="4"></tr>
+            <tr id="5"></tr>
+            <tr id="6"></tr>`
+        )
+        get_calendar(this.value)
+    })
+
+
+})
+</script>
+{%endblock%}
