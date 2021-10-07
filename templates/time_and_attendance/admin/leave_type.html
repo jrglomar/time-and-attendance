@@ -159,7 +159,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" id="leave_types_btn_edit" class="btn btn-info">Save Changes</button>
+              <button type="button" id="leave_types_btn_edit" class="btn btn-primary">Save Changes</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -192,7 +192,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" id="leave_types_btn_delete" class="btn btn-danger">Deactivate</button>
+              <button type="button" id="leave_types_btn_delete" class="btn btn-danger">Yes, deactivate it!</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -218,7 +218,7 @@ $(document).ready(function(){
                 { data: "active_status", render: function(data, type, row){
                         if(data == "Active"){
                             return `
-                            <button type="button" id=${row.id} class="btn btn-info btn_edit"><i class="far fa-edit"></i> Update</button>
+                            <button type="button" id=${row.id} class="btn btn-info btn_edit"><i class="far fa-edit"></i> Edit</button>
                             <button type="button" id=${row.id} class="btn btn-danger btn_delete"><i class="far fa-trash-alt"></i> Deactivate</button>
                             `
                         }   
@@ -326,7 +326,7 @@ $('#leave_types_btn_edit').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                notification('bg-success', 'Success',  data.message)
+                notification('bg-info', 'Success',  data.message)
 
                 $('#leave_types_form_edit').trigger("reset")
                 $('#leave_types_btn_edit').prop('disabled', false)
@@ -373,7 +373,7 @@ $('#leave_types_btn_delete').on('click', function(e){
             dataType: "JSON",
         
             success: function(data){
-                notification('bg-success', 'Success',  data.message)
+                notification('bg-danger', 'Success',  data.message)
 
                 $('#leave_types_form_delete').trigger("reset")
                 $('#leave_types_btn_delete').prop('disabled', false)
