@@ -42,7 +42,7 @@
           <!-- /.login-logo -->
           <div class="card shadow-none">
             <div class="card-body login-card-body">
-              <p class="login-box-msg">Sign in to start your session</p>
+              <p class="login-box-msg">Log in to start your session</p>
 
               <form id="login_form">
                 <div class="input-group mb-3">
@@ -62,32 +62,25 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-8">
-                    <div class="icheck-primary">
-                      <input type="checkbox" id="remember">
-                        <label for="remember">
-                          Remember Me
-                      </label>
-                    </div>
-                  </div>
+                  
                   <!-- /.col -->
-                  <div class="col-4">
-                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-block">Log In</button>
                   </div>
                   <!-- /.col -->
                 </div>
               </form>
-
+<!-- 
               <div class="social-auth-links text-center mb-3">
                 <p>- OR -</p>
-              </div>
-
+              </div> -->
+<!-- 
               <p class="mb-1">
                 <a href="#">I forgot my password</a>
               </p>
               <p class="mb-0">
                 <a href="#" class="text-center">Register a new membership</a>
-              </p>
+              </p> -->
 
             <!-- /.login-card-body -->
           </div>
@@ -140,6 +133,9 @@
 
     <script>
       function notification(r_class, title, body){
+        toastr.options = {
+            "positionClass": "toast-top-center"
+        }
         if(r_class == "bg-success"){
           toastr.success(body)
         }
