@@ -22,6 +22,8 @@
         </div>
       </div>
 
+      
+
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -84,7 +86,7 @@
 
                 <li class="nav-header">USER</li>
                     <li class="nav-item">
-                        <a href="/time_and_attendance/logout" class="nav-link" id="logout_sidebar">
+                        <a href="#" class="nav-link" id="logout_sidebar" onClick="logoutFunc()">
                             <script>if(window.location.pathname == '/time_and_attendance/logout'){document.getElementById("logout_sidebar").classList.add('active')}</script>
                             <i class="nav-icon fas fa-sign-out-alt"></i>
                             <p>Logout</p>
@@ -101,4 +103,6 @@
   </aside>
   <!-- /.main-sidebar -->
 
+
+</script>
 {%endblock%}

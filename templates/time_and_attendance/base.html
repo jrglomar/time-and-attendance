@@ -25,6 +25,7 @@
     {%endblock%}
     
     <link rel="stylesheet" href="{{url_for('static', path='/dist/css/adminlte.min.css')}}">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     
     <!-- BLOCK FOR EXTRA STYLES -->
     {%block styles%}
@@ -53,6 +54,30 @@
           {%endblock%}
         </div>
 
+        <div class="modal fade" id="logout_modal">
+            <div class="modal-dialog logout_modal modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title"><i class="nav-icon fas fa-sign-out-alt"></i> Logout</h4>
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                </button>
+                </div>
+                <div class="modal-body">
+                <form id="leave_types_form_delete">
+                            <p class="float-left" style="text-align: center;">Are you sure to you want to logout?</p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" id="logout_btn" class="btn btn-danger">Logout <i class="nav-icon fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
     </div>
 
     <script src="{{url_for('static', path='/plugins/jquery/jquery.min.js')}}"></script>
@@ -117,6 +142,15 @@
         //   body: body,
         // })
       };
+
+            
+      function logoutFunc(){
+          $('#logout_modal').modal('show');
+      }
+
+      $('#logout_btn').on('click', function(e){
+        window.location.pathname = '/time_and_attendance/logout'
+      })
     </script>
     <!-- BLOCK FOR EXTRA SCRIPTS -->
     {%block scripts%}
