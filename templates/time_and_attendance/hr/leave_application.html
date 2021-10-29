@@ -319,12 +319,27 @@ $(document).ready(function(){
                 { data: "active_status", render: function(data, type, row){
                         if(row.status == "Pending"){
                             return `
-                            <button type="button" id=${row.id} class="btn btn-info btn_edit"><i class="far fa-edit"></i> Response</button>
-                            `
-                        }   
-                        else{
-                            return `<button type="button" id=${row.id} class="btn btn-secondary"><i class="far fa-edit"></i> Responded</button>`;
+                            <div class="text-center dropdown"><div class="btn btn-sm btn-default" data-toggle="dropdown" role="button"><i class="fas fa-ellipsis-v"></i></div>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-item d-flex btn_edit" id=${row.id} role="button">
+                                      <div style="width: 2rem"><i class="far fa-edit"></i></div>
+                                        <div>Response</div>
+                                    </div>
+                              </div>
+                            </div>
+                                    `;
                         }
+                        else{
+                            return ``
+                        }
+                        // if(row.status == "Pending"){
+                        //     return `
+                        //     <button type="button" id=${row.id} class="btn btn-info btn_edit"><i class="far fa-edit"></i> Response</button>
+                        //     `
+                        // }   
+                        // else{
+                        //     return `<button type="button" id=${row.id} class="btn btn-secondary"><i class="far fa-edit"></i> Responded</button>`;
+                        // }
                     }
                 },
             ],
