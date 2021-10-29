@@ -32,6 +32,12 @@ app.include_router(shiftChangeRoutes.router)
 # app.include_router(postRoutes.router)
 
 
+@app.get('/home', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/home.html', {
+        'request': request,
+    })
+
 @app.get('/time_and_attendance/login', response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
     return template.TemplateResponse('time_and_attendance/login.html', {
