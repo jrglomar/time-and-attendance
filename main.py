@@ -38,6 +38,12 @@ def index(request: Request, db: Session = Depends(get_db)):
         'request': request,
     })
 
+@app.get('/homedashboard', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/homedashboard.html', {
+        'request': request,
+    })
+
 @app.get('/time_and_attendance/login', response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
     return template.TemplateResponse('time_and_attendance/login.html', {

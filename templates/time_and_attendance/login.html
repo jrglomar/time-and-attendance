@@ -37,7 +37,7 @@
     <body class="hold-transition login-page bg-white">
         <div class="login-box">
           <div class="login-logo">
-            <a href=""><b>HM</b>CMS</a>
+            <a href=""><b></b>HoMIES</a>
           </div>
           <!-- /.login-logo -->
           <div class="card shadow-none">
@@ -45,16 +45,21 @@
               <p class="login-box-msg">Log in to start your session</p>
 
               <form id="login_form">
+                <label for="email">Email</label>
                 <div class="input-group mb-3">
-                  <input type="email" id="login_email" class="form-control" placeholder="Email">
+                  <input type="email" id="login_email" class="form-control" placeholder="Type your email here" required>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-envelope"></span>
                     </div>
                   </div>
                 </div>
+                <div class="d-flex align-items-center justify-content-between">
+                            <label for="password">Password</label>
+                            <a class="mb-3" href="#">I forgot my password</a>
+                        </div>
                 <div class="input-group mb-3">
-                  <input type="password" id="login_password" class="form-control" placeholder="Password">
+                  <input type="password" id="login_password" class="form-control" placeholder="Type your password here" required>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-lock"></span>
@@ -64,12 +69,31 @@
                 <div class="row">
                   
                   <!-- /.col -->
-                  <div class="col-12">
+                  <div class="col-8">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="remember">
+                                <label for="remember">Remember Me</label>
+                            </div>
+                        </div>
+                  <div class="col-4">
                     <button type="submit" class="btn btn-primary btn-block">Log In</button>
                   </div>
                   <!-- /.col -->
                 </div>
               </form>
+
+              <div class="dropdown-divider mt-5 mb-1"></div>
+
+              <div class="d-flex justify-content-between text-sm">
+                    <div>
+                        <a href="./home.html">Home</a>
+                    </div>
+                    <div>
+                        <a href="#">About Us</a>
+                        <span class="text-secondary">&middot;</span>
+                        <a href="#">Terms and Policies</a>
+                    </div>
+                </div>
 <!-- 
               <div class="social-auth-links text-center mb-3">
                 <p>- OR -</p>
@@ -200,7 +224,6 @@
               console.log(sessionStorage.getItem("email"))
               console.log(sessionStorage.getItem("type"))
 
-
               if(user.user_types.title == "Employee"){
                   setInterval(function(){
                     window.location.href = '/time_and_attendance/employee/employee'
@@ -208,7 +231,8 @@
                 }
                 else if(user.user_types.title == "Admin"){
                   setInterval(function(){
-                    window.location.href = '/time_and_attendance/admin/user';
+                    window.location.href = '/homedashboard'
+                    // window.location.href = '/time_and_attendance/admin/user';
                   },2000)
                   
                 }
