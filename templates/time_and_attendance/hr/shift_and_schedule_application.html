@@ -31,6 +31,54 @@
 
 <section class="content">
       <div class="container-fluid">
+        <div class="col-12">
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title">Shift and Schedule</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                  <div class="col-4">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-success"><i class="fas fa-check-circle"></i></span>
+          
+                        <div class="info-box-content">
+                          <span class="info-box-text">Approved</span>
+                          <span class="info-box-number" id="icon_approved">0</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
+                    </div>
+                    <div class="col-4">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-warning"><i class="fas fa-clock"></i></span>
+          
+                        <div class="info-box-content">
+                          <span class="info-box-text">Pending</span>
+                          <span class="info-box-number" id="icon_pending">0</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
+                    </div>
+                    <div class="col-4">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-danger"><i class="fas fa-times"></i></span>
+          
+                        <div class="info-box-content">
+                          <span class="info-box-text">Declined</span>
+                          <span class="info-box-number" id="icon_denied">0</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.col -->
         <div class="row row align-items-center justify-content-center">
           <div class="col-12">
             <div class="card card-outline card-primary">
@@ -391,6 +439,40 @@ $(document).ready(function(){
 
                         
     }
+
+    function get_icon_details(){
+        $.ajax({
+                url: '/time_and_attendance/api/shift_change',
+                type: "GET",
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                    for(i=0; i<data.shift_change.length; i++){
+                        icon_pending = 0;
+                        icon_approved = 0;
+                        icon_denied = 0;
+
+                        if(data.shift_change[i].status == "Pending"){
+                            icon_pending ++
+                            $('#icon_pending').html(icon_pending)
+                        }
+                        else if(data.shift_change[i].status == "Declined"){
+                            icon_denied ++
+                            $('#icon_denied').html(icon_denied)
+                        }
+                        else if(data.shift_change[i].status == "Approved"){
+                            icon_approved ++
+                            $('#icon_approved').html(icon_approved)
+                        }
+                        
+                    }
+                }
+            // ajax closing tag
+        })
+    }
+
+    get_icon_details()
 
     get_employee_type()
 
