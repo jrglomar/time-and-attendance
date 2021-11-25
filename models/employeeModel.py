@@ -9,6 +9,7 @@ class Employee(Base):
 
     id = Column(String(36), primary_key=True, default=text('UUID()'))
     employee_type_id = Column(Integer, ForeignKey('employee_types.id'), nullable=True)
+    employee_status_id = Column(Integer, ForeignKey('employee_status.id'), nullable=True)
     user_id = Column(String(36), ForeignKey('users.id'), nullable=True)
     shift_type_id = Column(Integer, ForeignKey('shift_types.id'), nullable=True)
     attendance_status = Column(String(255), nullable=True)
@@ -25,6 +26,7 @@ class Employee(Base):
 
     users = relationship('User', back_populates='employees', lazy='joined')
     employee_types = relationship('EmployeeType', back_populates='employees', lazy='joined')
+    employee_status = relationship('EmployeeStatus', back_populates='employees', lazy='joined')
     shift_types = relationship('ShiftType', back_populates='employees', lazy='joined')
     time_ins = relationship('TimeIn', back_populates='employees')
     time_outs = relationship('TimeOut', back_populates='employees')

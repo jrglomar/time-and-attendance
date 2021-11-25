@@ -83,6 +83,7 @@
                         <th width="20%">Shift Type</th>
                         <th width="20%">Schedule</th>
                         <th width="20%">Employee Type</th>
+                        <th width="20%">Employee Status</th>
                         <th class="text-center" width="20%">Actions</th>
                     </thead>
                     <tbody>
@@ -128,6 +129,14 @@
                             <div class="form-group">
                                 <label for="employee_type_id_option">Employee Type</label>
                                 <select id="employee_type_id_option" class="custom-select rounded-0" style="width:100%">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="employee_status_id_option">Employee Status</label>
+                                <select id="employee_status_id_option" class="custom-select rounded-0" style="width:100%">
                                     
                                 </select>
                             </div>
@@ -217,6 +226,14 @@
                             <div class="form-group">
                                 <label for="employee_type_id_option_edit">Employee Type</label>
                                 <select id="employee_type_id_option_edit" class="custom-select rounded-0" style="width:100%">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="employee_status_id_option_edit">Employee Status</label>
+                                <select id="employee_status_id_option_edit" class="custom-select rounded-0" style="width:100%">
                                     
                                 </select>
                             </div>
@@ -339,6 +356,7 @@ $(document).ready(function(){
                   return schedule.slice(0, (schedule.length - 1))
                 }},
                 { data: "employee_types.title"},
+                { data: "employee_status.title"},
                 { data: "active_status", render: function(data, type, row){
                         if(data == "Active"){
                             return `
@@ -480,6 +498,33 @@ function get_employee_type(){
 
 get_employee_type()
 
+function get_employee_status(){
+       
+        $.ajax({
+                url: '/time_and_attendance/api/employeestatus/',
+                type: "GET",
+                contentType: "application/json",
+                dataType: "JSON",
+            
+                success: function(data){
+                    employeestatus = data.employeestatus
+                    html = ""
+                    
+                    for(var i=0; i < employeestatus.length; i++){
+                        html += `<option value="${employeestatus[i].id}">${employeestatus[i].title}</option>`
+                    }
+
+                    $('#employee_status_id_option').append(html)
+                    $('#employee_status_id_option_edit').append(html)
+                }
+            })
+            // ajax closing tag
+
+                    
+}
+
+get_employee_status()
+
 $('#employee_form_submit').on('click', function(e){
     e.preventDefault()
 
@@ -489,6 +534,7 @@ $('#employee_form_submit').on('click', function(e){
         user_id: $('#user_id_option').val(),
         shift_type_id: $('#shift_type_id_option').val(),
         employee_type_id: $('#employee_type_id_option').val(),
+        employee_status_id: $('#employee_status_id_option').val(),
         monday: $('#schedule_option_monday').is(":checked"),
         tuesday: $('#schedule_option_tuesday').is(":checked"),
         wednesday: $('#schedule_option_wednesday').is(":checked"),
@@ -534,6 +580,7 @@ $(document).on('click', '.btn_edit', function(e){
                 $('#employee_id_edit').val(data.employee.id);
                 $('#user_id_option_edit').val(data.employee.users.id);
                 $('#employee_type_id_option_edit').val(data.employee.employee_types.id);
+                $('#employee_status_id_option_edit').val(data.employee.employee_status.id);
                 $('#shift_type_id_option_edit').val(data.employee.shift_types.id);
 
                 $('#schedule_option_monday_edit').prop('checked', JSON.parse(data.employee.monday.toLowerCase())),
@@ -560,6 +607,7 @@ $('#employee_btn_edit').on('click', function(e){
         user_id: $('#user_id_option_edit').val(),
         shift_type_id: $('#shift_type_id_option_edit').val(),
         employee_type_id: $('#employee_type_id_option_edit').val(),
+        employee_status_id: $('#employee_status_id_option_edit').val(),
         monday: $('#schedule_option_monday_edit').is(":checked"),
         tuesday: $('#schedule_option_tuesday_edit').is(":checked"),
         wednesday: $('#schedule_option_wednesday_edit').is(":checked"),

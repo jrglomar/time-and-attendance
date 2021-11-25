@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
-from routes import shiftChangeRoutes, userRoutes, userTypeRoutes, employeeTypeRoutes, employeeRoutes, shiftTypeRoutes, timeInRoutes, timeOutRoutes, attendanceRoutes, leaveTypeRoutes, leaveSubTypeRoutes, leaveRoutes, authRoutes, missedTimeRoutes
+from routes import shiftChangeRoutes, userRoutes, userTypeRoutes, employeeTypeRoutes, employeeStatusRoutes, employeeRoutes, shiftTypeRoutes, timeInRoutes, timeOutRoutes, attendanceRoutes, leaveTypeRoutes, leaveSubTypeRoutes, leaveRoutes, authRoutes, missedTimeRoutes
 from database import get_db
 # from models.postModel import Post
 
@@ -19,6 +19,7 @@ app.include_router(authRoutes.router)
 app.include_router(userRoutes.router)
 app.include_router(userTypeRoutes.router)
 app.include_router(employeeTypeRoutes.router)
+app.include_router(employeeStatusRoutes.router)
 app.include_router(employeeRoutes.router)
 app.include_router(shiftTypeRoutes.router)
 app.include_router(timeInRoutes.router)
@@ -75,6 +76,12 @@ def index(request: Request, db: Session = Depends(get_db)):
 @app.get('/time_and_attendance/admin/employee_type', response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
     return template.TemplateResponse('time_and_attendance/admin/employee_type.html', {
+        'request': request,
+})
+
+@app.get('/time_and_attendance/admin/employee_status', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/admin/employee_status.html', {
         'request': request,
 })
     

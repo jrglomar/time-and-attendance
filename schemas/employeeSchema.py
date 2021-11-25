@@ -7,6 +7,7 @@ class EmployeeBase(BaseModel):
     user_id: Optional[str]
     shift_type_id: Optional[str]
     employee_type_id: Optional[str]
+    employee_status_id: Optional[str]
     monday: str
     tuesday: str
     wednesday: str

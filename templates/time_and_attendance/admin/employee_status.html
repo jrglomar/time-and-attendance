@@ -1,0 +1,409 @@
+<!-- Apply layout from base.html -->
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/admin_navbar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/admin_sidebar.html'%}
+{%endblock%}
+
+{%block content%}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Employee Status</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Employee Status</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- general form elements -->
+<!-- <section class="content">
+    <div class="container-fluid">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-8">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Create Employee Status</h3>
+                    </div>
+                    <form id="shift_type_form">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="employee_statuss_title">Title</label>
+                                <input type="text" class="form-control" id="employee_statuss_title" name="employee_statuss_title" placeholder="Enter title">
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_statuss_start_time">Start-Time</label>
+                                <input type="time" class="form-control" id="employee_statuss_start_time" name="employee_statuss_start_time" placeholder="Select Start-Time" value="08:00">
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_statuss_end_time">End-Time</label>
+                                <input type="time" class="form-control" id="employee_statuss_end_time" name="employee_statuss_end_time" placeholder="Select End-Time" value="17:00">
+                            </div>
+                        </div>
+                    <div class="card-footer float-right">
+                        <input type="submit" class="btn btn-info" value='Submit'>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<!-- /.card -->
+
+<section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+            <div class="card card-outline card-primary">
+              <div class="card-header">
+                <h3 class="card-title">List of Employee Statuss</h3>
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#employee_statuss_form_modal">
+                  <i class="fa fa-plus"></i> Add New
+                </button>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="employee_statuss_datatable" class="table table-bordered table-hover">
+                    <thead>
+                        <th>ID</th>
+                        <th>Date Created</th>
+                        <th width="80%">Title</th>
+                        <th class="text-center" width="20%">Actions</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    <!-- ADD FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="employee_statuss_form_modal">
+        <div class="modal-dialog employee_statuss_form_modal modal-xl modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Create Employee Status</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="employee_statuss_form">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="employee_statuss_title">Title</label>
+                                <input type="text" class="form-control" id="employee_statuss_title" name="employee_statuss_title" placeholder="Enter title">
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" id="employee_statuss_form_submit" class="btn btn-primary">Submit<i class='fas fa-check ml-1'></i></button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+
+    <!-- EDIT FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="employee_statuss_form_modal_edit">
+        <div class="modal-dialog employee_statuss_form_modal_edit modal-xl modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Edit Employee Status</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="employee_statuss_form_edit">
+                        <div class="card-body">
+                            <div class="form-group" hidden>
+                                <label for="employee_statuss_id_edit">ID</label>
+                                <input type="text" class="form-control" id="employee_statuss_id_edit" name="employee_statuss_id_edit" placeholder="Enter title">
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_statuss_title_edit">Title</label>
+                                <input type="text" class="form-control" id="employee_statuss_title_edit" name="employee_statuss_title_edit" placeholder="Enter title">
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" id="employee_statuss_btn_edit" class="btn btn-info">Yes, update it! <i class='fas fa-check ml-1'></i></button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+
+    <!-- DELETE FORM -->
+    <!-- Extra Large Modal -->
+      <div class="modal fade" id="employee_statuss_form_modal_delete">
+        <div class="modal-dialog employee_statuss_form_modal_delete modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Deactivate Employee Status</h4>
+              <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="employee_statuss_form_delete">
+                      
+                                <input hidden type="text" class="form-control" id="employee_statuss_id_delete" name="employee_statuss_id_delete" placeholder="Enter title">
+                            
+                        <p>Are you sure to deactivate it?</p>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" id="employee_statuss_btn_delete" class="btn btn-danger">Yes, deactivate it!</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+
+
+    function loadtable(){
+        employee_statuss_datatable = $('#employee_statuss_datatable').DataTable( {
+            "ajax": {url:"/time_and_attendance/api/employeestatus", dataSrc:"employeestatus"},
+            "columns": [
+                { data: "id"},
+                { data: "created_at" },
+                { data: "title"},
+                { data: "active_status", render: function(data, type, row){
+                        if(data == "Active"){
+                            return `
+                            <div class="text-center dropdown"><div class="btn btn-sm btn-default" data-toggle="dropdown" role="button"><i class="fas fa-ellipsis-v"></i></div>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-item d-flex btn_edit" id=${row.id} role="button">
+                                      <div style="width: 2rem"><i class="far fa-edit"></i></div>
+                                        <div>Edit</div>
+                                    </div>
+                                    <div class="dropdown-item d-flex btn_delete" id=${row.id} role="button">
+                                      <div style="width: 2rem"><i class="far fa-trash-alt"></i></div>
+                                        <div>Deactivate</div>
+                                    </div>
+                              </div>
+                            </div>
+                                    `;
+                        }
+                        else{
+                            return '<button>Activate</button>';
+                        }
+                        // if(data == "Active"){
+                        //     return `
+                        //     <button type="button" id=${row.id} class="btn btn-info btn_edit"><i class="far fa-edit"></i> Edit</button>
+                        //     <button type="button" id=${row.id} class="btn btn-danger btn_delete"><i class="far fa-trash-alt"></i> Deactivate</button>
+                        //     `
+                        // }   
+                        
+                    }
+                },
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+            "aoColumnDefs": [{ "bVisible": false, "aTargets": [0, 1] }],
+            "order": [[1, "desc"]]
+        })
+    }
+
+    loadtable();
+
+
+});
+
+
+function refresh(){
+    var url = "/time_and_attendance/api/employeestatus";
+
+    employee_statuss_datatable.ajax.url(url).load();
+}
+
+$('#employee_statuss_form_submit').on('click', function(e){
+    e.preventDefault()
+
+    $('#employee_statuss_form_submit').prop('disabled', true)
+
+    let formData = {
+        title: $('#employee_statuss_title').val(),
+    }
+
+    $.ajax({
+            url: '/time_and_attendance/api/employeestatus',
+            type: "POST",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                notification('bg-success', 'Success',  data.message)
+
+                $('#employee_statuss_form').trigger("reset")
+                $('#employee_statuss_form_submit').prop('disabled', false)
+                $('#employee_statuss_form_modal').modal('hide')
+                refresh()
+            }
+        // ajax closing tag
+    })
+
+    $('#employee_statuss_form_submit').prop('disabled', false)
+});
+
+$(document).on('click', '.btn_edit', function(e){
+    e.preventDefault()
+
+    let id = this.id
+
+    $.ajax({
+            url: '/time_and_attendance/api/employeestatus/'+id,
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                $('#employee_statuss_id_edit').val(data.employeestatus.id);
+                $('#employee_statuss_title_edit').val(data.employeestatus.title);
+                $('#employee_statuss_start_time_edit').val(data.employeestatus.start_time);
+                $('#employee_statuss_end_time_edit').val(data.employeestatus.end_time);
+
+
+                $('#employee_statuss_form_modal_edit').modal('show');
+            }
+        // ajax closing tag
+    })
+})
+
+$('#employee_statuss_btn_edit').on('click', function(e){
+    e.preventDefault()
+    $('#employee_statuss_btn_edit').prop('disabled', true)
+
+    let id = $('#employee_statuss_id_edit').val()
+
+    let formData = {
+        title: $('#employee_statuss_title_edit').val(),
+    }
+    console.log(formData)
+
+    $.ajax({
+            url: '/time_and_attendance/api/employeestatus/'+id,
+            type: "PUT",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                notification('bg-info', 'Success',  data.message)
+
+                $('#employee_statuss_form_edit').trigger("reset")
+                $('#employee_statuss_btn_edit').prop('disabled', false)
+                $('#employee_statuss_form_modal_edit').modal('hide')
+                refresh()
+            }
+        // ajax closing tag
+    })
+
+    $('#employee_statuss_btn_edit').prop('disabled', false)
+})
+
+$(document).on('click', '.btn_delete', function(e){
+    e.preventDefault()
+
+    let id = this.id
+
+    $.ajax({
+            url: '/time_and_attendance/api/employeestatus/'+id,
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                $('#employee_statuss_id_delete').val(data.employeestatus.id);
+
+                $('#employee_statuss_form_modal_delete').modal('show');
+            }
+        // ajax closing tag
+    })
+})
+
+$('#employee_statuss_btn_delete').on('click', function(e){
+    e.preventDefault()
+    $('#employee_statuss_btn_delete').prop('disabled', true)
+
+    let id = $('#employee_statuss_id_delete').val()
+
+
+    $.ajax({
+            url: '/time_and_attendance/api/employeestatus/delete/'+id,
+            type: "PUT",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                notification('bg-danger', 'Success',  data.message)
+                $('#employee_statuss_form_delete').trigger("reset")
+                $('#employee_statuss_btn_delete').prop('disabled', false)
+                $('#employee_statuss_form_modal_delete').modal('hide')
+                refresh()
+            }
+        // ajax closing tag
+    })
+
+    $('#employee_statuss_btn_delete').prop('disabled', false)
+    
+})
+
+
+$('select').select2({
+  width: 'resolve'
+})
+
+</script>
+{%endblock%}
