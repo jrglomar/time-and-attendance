@@ -27,6 +27,7 @@ def read(id: str, db: Session = Depends(get_db)):
 def store(employeestatus: CreateEmployeeStatus, db: Session = Depends(get_db)):
     to_store = EmployeeStatus(
         title = employeestatus.title,
+        number_of_days = employeestatus.number_of_days,
     )
 
     db.add(to_store)
@@ -35,9 +36,10 @@ def store(employeestatus: CreateEmployeeStatus, db: Session = Depends(get_db)):
     return {'message': 'Employee Status stored successfully.'}
 
 @router.put('/{id}')
-def update(id: str, employeetype: CreateEmployeeStatus, db: Session = Depends(get_db)): 
+def update(id: str, employeestatus: CreateEmployeeStatus, db: Session = Depends(get_db)): 
     if not db.query(EmployeeStatus).filter(EmployeeStatus.id == id).update({
-        'title': employeetype.title,
+        'title': employeestatus.title,
+        'number_of_days': employeestatus.number_of_days
     }):
         raise HTTPException(404, 'Employee to update is not found')
     db.commit()

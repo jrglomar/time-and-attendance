@@ -39,6 +39,7 @@ def upgrade():
         'employee_status',
         sa.Column('id', sa.String(36), primary_key=True),
         sa.Column('title', sa.String(255), nullable=True),
+        sa.Column('number_of_days', sa.String(255), nullable=True),
         sa.Column('active_status', sa.String(255), nullable=True, server_default=sa.text("'Active'")),
         sa.Column('created_at', sa.DateTime, server_default=sa.text('NOW()')),
         sa.Column('updated_at', sa.DateTime, server_onupdate=sa.text('NOW()'))

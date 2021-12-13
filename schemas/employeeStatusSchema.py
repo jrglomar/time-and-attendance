@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 class EmployeeStatusBase(BaseModel):
     title: str
+    number_of_days: str
 
 # Schema for request body
 class CreateEmployeeStatus(EmployeeStatusBase):
