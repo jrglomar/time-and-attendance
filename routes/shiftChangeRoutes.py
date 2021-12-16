@@ -110,3 +110,8 @@ def all(report: GetShiftChangeReport, db: Session = Depends(get_db)):
 def count(db: Session = Depends(get_db)):
     count = db.query(ShiftChange).filter(ShiftChange.active_status == "Active").count()
     return {'count': count}
+
+@router.post('/count/{id}')
+def count(id: str, db: Session = Depends(get_db)):
+    count = db.query(ShiftChange).filter(ShiftChange.employee_id == id).filter(ShiftChange.active_status == "Active").count()
+    return {'count': count}

@@ -104,3 +104,15 @@ def count(db: Session = Depends(get_db)):
     today = datetime.today()
     count = db.query(Attendance).filter(extract('day', Attendance.created_at)==today.day).filter(extract('month', Attendance.created_at)==today.month).filter(extract('year', Attendance.created_at)==today.year).count()
     return {'count': count}
+
+@router.post('/count/month/{id}')
+def count(id: str, db: Session = Depends(get_db)):
+    today = datetime.today()
+    count = db.query(Attendance).filter(Attendance.employee_id == id).filter(extract('month', Attendance.created_at)==today.month).filter(extract('year', Attendance.created_at)==today.year).count()
+    return {'count': count}
+
+@router.post('/count/today/{id}')
+def count(id: str, db: Session = Depends(get_db)):
+    today = datetime.today()
+    count = db.query(Attendance).filter(Attendance.employee_id == id).filter(extract('day', Attendance.created_at)==today.day).filter(extract('month', Attendance.created_at)==today.month).filter(extract('year', Attendance.created_at)==today.year).count()
+    return {'count': count}

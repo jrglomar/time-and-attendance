@@ -24,7 +24,6 @@ class UpdateAttendanceOut(BaseModel):
 class GetAttendanceReport(BaseModel):
     start_date: date
     end_date: date
-    
 
 # Schema for response body
 class Attendance(BaseModel):

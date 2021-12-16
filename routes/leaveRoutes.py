@@ -106,3 +106,18 @@ def count(db: Session = Depends(get_db)):
 def count(db: Session = Depends(get_db)):
     count = db.query(Leave).filter(Leave.active_status == "Active").filter(Leave.status == "Declined").count()
     return {'count': count}
+
+@router.post('/count/{id}')
+def count(id: str, db: Session = Depends(get_db)):
+    count = db.query(Leave).filter(Leave.employee_id == id).filter(Leave.active_status == "Active").count()
+    return {'count': count}
+
+@router.post('/count/approved/{id}')
+def count(id: str, db: Session = Depends(get_db)):
+    count = db.query(Leave).filter(Leave.employee_id == id).filter(Leave.active_status == "Active").filter(Leave.status == "Approved").count()
+    return {'count': count}
+
+@router.post('/count/denied/{id}')
+def count(id: str, db: Session = Depends(get_db)):
+    count = db.query(Leave).filter(Leave.employee_id == id).filter(Leave.active_status == "Active").filter(Leave.status == "Declined").count()
+    return {'count': count}

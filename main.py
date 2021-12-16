@@ -187,6 +187,12 @@ def index(request: Request, db: Session = Depends(get_db)):
 
 # EMPLOYEE SIDE
 
+@app.get('/time_and_attendance/employee/dashboard', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/employee/dashboard.html', {
+        'request': request,
+})
+
 @app.get('/time_and_attendance/employee/employee', response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
     return template.TemplateResponse('time_and_attendance/employee/employee.html', {
