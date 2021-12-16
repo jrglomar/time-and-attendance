@@ -105,3 +105,8 @@ def all(id: str, report: GetShiftChangeReport, db: Session = Depends(get_db)):
 def all(report: GetShiftChangeReport, db: Session = Depends(get_db)):
     shift_change = db.query(ShiftChange).filter(ShiftChange.created_at >= report.start_date).filter(ShiftChange.created_at <= report.end_date).filter(ShiftChange.active_status == "Active").all()
     return {'shift_change': shift_change}
+
+@router.get('/count/')
+def count(db: Session = Depends(get_db)):
+    count = db.query(ShiftChange).filter(ShiftChange.active_status == "Active").count()
+    return {'count': count}

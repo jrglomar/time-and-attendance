@@ -33,6 +33,7 @@ def store(leavesubtype: CreateLeaveSubType, db: Session = Depends(get_db)):
     to_store = LeaveSubType(
         title = leavesubtype.title,
         leave_type_id = leavesubtype.leave_type_id,
+        number_of_days = leavesubtype.number_of_days,
     )
 
     db.add(to_store)
@@ -45,6 +46,8 @@ def update(id: str, leavesubtype: CreateLeaveSubType, db: Session = Depends(get_
     if not db.query(LeaveSubType).filter(LeaveSubType.id == id).update({
         'title': leavesubtype.title,
         'leave_type_id': leavesubtype.leave_type_id,
+        'number_of_days': leavesubtype.number_of_days,
+        
     }):
         raise HTTPException(404, 'Leave Sub Type to update is not found')
     db.commit()
@@ -59,3 +62,7 @@ def remove(id: str,  db: Session = Depends(get_db)):
     db.commit()
     return {'message': 'Leave Sub Type removed successfully.'}
 
+@router.get('/count/')
+def count(db: Session = Depends(get_db)):
+    count = db.query(LeaveSubType).filter(LeaveSubType.active_status == "Active").count()
+    return {'count': count}

@@ -52,3 +52,7 @@ def remove(id: str,  db: Session = Depends(get_db)):
     db.commit()
     return {'message': 'Leave type removed successfully.'}
 
+@router.get('/count/')
+def count(db: Session = Depends(get_db)):
+    count = db.query(LeaveType).filter(LeaveType.active_status == "Active").count()
+    return {'count': count}

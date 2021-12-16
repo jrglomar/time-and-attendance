@@ -4,7 +4,7 @@ from schemas.attendanceSchema import CreateAttendance, GetAttendanceReport, Upda
 from models.attendanceModel import Attendance
 from database import get_db
 from datetime import datetime
-
+from sqlalchemy import extract
 
 router = APIRouter(
     prefix='/time_and_attendance/api/attendance',
@@ -92,3 +92,15 @@ def all(attendance: GetAttendanceOne, db: Session = Depends(get_db)):
     
     attendance = db.query(Attendance).filter(Attendance.employee_id == attendance.employee_id).filter(Attendance.created_at >= attendance.start_date).filter(Attendance.created_at <= attendance.end_date).all()
     return {'attendance': attendance}
+
+@router.get('/count/month/')
+def count(db: Session = Depends(get_db)):
+    today = datetime.today()
+    count = db.query(Attendance).filter(extract('month', Attendance.created_at)==today.month).filter(extract('year', Attendance.created_at)==today.year).count()
+    return {'count': count}
+
+@router.get('/count/today/')
+def count(db: Session = Depends(get_db)):
+    today = datetime.today()
+    count = db.query(Attendance).filter(extract('day', Attendance.created_at)==today.day).filter(extract('month', Attendance.created_at)==today.month).filter(extract('year', Attendance.created_at)==today.year).count()
+    return {'count': count}

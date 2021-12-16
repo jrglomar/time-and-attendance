@@ -73,6 +73,11 @@ def index(request: Request, db: Session = Depends(get_db)):
 })
 
 # SYSTEM CONFIG
+@app.get('/time_and_attendance/admin/dashboard', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/admin/dashboard.html', {
+        'request': request,
+})
 @app.get('/time_and_attendance/admin/employee_type', response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
     return template.TemplateResponse('time_and_attendance/admin/employee_type.html', {
@@ -107,6 +112,12 @@ def index(request: Request, db: Session = Depends(get_db)):
 # END OF ADMIN SIDE
 
 # HR SIDE
+
+@app.get('/time_and_attendance/hr/dashboard', response_class=HTMLResponse)
+def index(request: Request, db: Session = Depends(get_db)):
+    return template.TemplateResponse('time_and_attendance/hr/dashboard.html', {
+        'request': request,
+})
 
 @app.get('/time_and_attendance/hr/employee', response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):

@@ -98,3 +98,8 @@ def time_in(id: str, time_log: UpdateTimeLog,  db: Session = Depends(get_db)):
         raise HTTPException(404, 'Employee to update is not found')
     db.commit()
     return {'message': 'Employee time log status updated successfully.'}
+
+@router.get('/count/')
+def count(db: Session = Depends(get_db)):
+    count = db.query(Employee).filter(Employee.active_status == "Active").count()
+    return {'count': count}

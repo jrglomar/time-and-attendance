@@ -32,6 +32,11 @@ def read(id: str, db: Session = Depends(get_db)):
         raise HTTPException(404, 'User not found')
     return {'user': user}
 
+@router.get('/count/')
+def count(db: Session = Depends(get_db)):
+    count = db.query(User).filter(User.active_status == "Active").count()
+    return {'count': count}
+
 @router.post('/')
 def store(request: CreateUser, db: Session = Depends(get_db)):
     try:
@@ -73,5 +78,4 @@ def remove(id: str,  db: Session = Depends(get_db)):
         raise HTTPException(404, 'User to delete is not found')
     db.commit()
     return {'message': 'User removed successfully.'}
-
 

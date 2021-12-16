@@ -1,0 +1,275 @@
+<!-- Apply layout from base.html -->
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/admin_navbar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/admin_sidebar.html'%}
+{%endblock%}
+
+{%block content%}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Dashboard</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+            <h5 class="mb-2">User Management</h5>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-12">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="fas fa-user"></i></span>
+          
+                        <div class="info-box-content">
+                          <span class="info-box-text">User Count</span>
+                          <span class="info-box-number" id="user_count"></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-6 col-sm-6 col-12">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-success"><i class="fas fa-users"></i></span>
+          
+                        <div class="info-box-content">
+                          <span class="info-box-text">User Type Count</span>
+                          <span class="info-box-number" id="user_type_count"></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                  </div>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h5 class="mb-2">Time and Attendance Configuration</h5>
+            </div>
+            <div class="col-lg-6 col-6">
+              <!-- small card -->
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <h3 id="employee_type_count">0</h3>
+  
+                  <p>Employee Type Count</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-id-card"></i>
+                </div>
+                <a href="employee_type" class="small-box-footer">
+                  More info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-6 col-6">
+              <!-- small card -->
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3 id="employee_status_count">0<sup style="font-size: 20px"></sup></h3>
+  
+                  <p>Employee Status Count</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-user-tag"></i>
+                </div>
+                <a href="employee_status" class="small-box-footer">
+                  More info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-4 col-6">
+              <!-- small card -->
+              <div class="small-box bg-warning">
+                <div class="inner">
+                  <h3 id="shift_type_count">0</h3>
+  
+                  <p>Shift Type Count</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <a href="shift_type" class="small-box-footer">
+                  More info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-4 col-6">
+              <!-- small card -->
+              <div class="small-box bg-danger">
+                <div class="inner">
+                  <h3 id="leave_type_count">0</h3>
+  
+                  <p>Leave Type Count</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-sticky-note"></i>
+                </div>
+                <a href="leave_type" class="small-box-footer">
+                  More info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-6">
+              <!-- small card -->
+              <div class="small-box bg-dark">
+                <div class="inner">
+                  <h3 id="leave_sub_type_count">0</h3>
+  
+                  <p>Leave Sub Type Count</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-copy"></i>
+                </div>
+                <a href="leave_sub_type" class="small-box-footer">
+                  More info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <!-- ./col -->
+          </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/user/count/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                user_count = data.count
+
+                $('#user_count').html(user_count)
+            }
+        // ajax closing tag
+    })
+
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/usertype/count/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                user_type_count = data.count
+
+                $('#user_type_count').html(user_type_count)
+            }
+        // ajax closing tag
+    })
+
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/employeetype/count/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                employee_type_count = data.count
+
+                $('#employee_type_count').html(employee_type_count)
+            }
+        // ajax closing tag
+    })
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/employeestatus/count/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                employee_status_count = data.count
+
+                $('#employee_status_count').html(employee_status_count)
+            }
+        // ajax closing tag
+    })
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/shifttype/count/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                shift_type_count = data.count
+
+                $('#shift_type_count').html(shift_type_count)
+            }
+        // ajax closing tag
+    })
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/leavetype/count/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                leave_type_count = data.count
+
+                $('#leave_type_count').html(leave_type_count)
+            }
+        // ajax closing tag
+    })
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/leavesubtype/count/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                leave_sub_type_count = data.count
+
+                $('#leave_sub_type_count').html(leave_sub_type_count)
+            }
+        // ajax closing tag
+    })
+
+});
+</script>
+{%endblock%}

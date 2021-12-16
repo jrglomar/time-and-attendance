@@ -54,3 +54,8 @@ def remove(id: str,  db: Session = Depends(get_db)):
     db.commit()
     return {'message': 'Employee type removed successfully.'}
 
+
+@router.get('/count/')
+def count(db: Session = Depends(get_db)):
+    count = db.query(EmployeeStatus).filter(EmployeeStatus.active_status == "Active").count()
+    return {'count': count}

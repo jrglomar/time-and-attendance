@@ -1,0 +1,280 @@
+<!-- Apply layout from base.html -->
+{%extends '/time_and_attendance/base.html'%} 
+
+{%block navbar%}
+    {%include 'time_and_attendance/includes/hr_navbar.html'%}
+{%endblock%}
+
+{%block sidebar%}
+    {%include 'time_and_attendance/includes/hr_sidebar.html'%}
+{%endblock%}
+
+{%block content%}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Dashboard</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+      <div class="container-fluid">
+        <div class="row row align-items-center justify-content-center">
+          <div class="col-12">
+            <h5 class="mb-2">Time and Attendance</h5>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-12">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-success"><i class="fas fa-chart-bar"></i></span>
+          
+                        <div class="info-box-content">
+                          <span class="info-box-text">Attendance Count (Today)</span>
+                          <span class="info-box-number" id="attendance_count_today"></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-12">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="fas fa-chart-bar"></i></span>
+          
+                        <div class="info-box-content">
+                          <span class="info-box-text">Attendance Count (<span id="current_month"></span>)</span>
+                          <span class="info-box-number" id="attendance_count"></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                  </div>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h5 class="mb-2">Shift And Scheduling</h5>
+            </div>
+            <div class="col-lg-6 col-6">
+              <!-- small card -->
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <h3 id="employee_count">0</h3>
+  
+                  <p>Employees</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-id-card"></i>
+                </div>
+                <a href="employee" class="small-box-footer">
+                  More info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-6 col-6">
+              <!-- small card -->
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3 id="shift_and_schedule_application_count">0<sup style="font-size: 20px"></sup></h3>
+  
+                  <p>Shift and Schedule Application</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-user-tag"></i>
+                </div>
+                <a href="shift_and_schedule_application" class="small-box-footer">
+                  More info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <div class="col-12">
+              <h5 class="mb-2">Leave Management</h5>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-4 col-6">
+              <!-- small card -->
+              <div class="small-box bg-dark">
+                <div class="inner">
+                  <h3 id="leave_application_count">0</h3>
+  
+                  <p>Leave Application</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <a href="leave_application" class="small-box-footer">
+                  More info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-4 col-6">
+              <!-- small card -->
+              <div class="small-box bg-warning">
+                <div class="inner">
+                  <h3 id="leave_approved_count">0</h3>
+  
+                  <p>Leave Approved</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-sticky-note"></i>
+                </div>
+                <a href="leave_application" class="small-box-footer">
+                  More info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-6">
+              <!-- small card -->
+              <div class="small-box bg-danger">
+                <div class="inner">
+                  <h3 id="leave_denied_count">0</h3>
+  
+                  <p>Leave Denied</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-copy"></i>
+                </div>
+                <a href="leave_application" class="small-box-footer">
+                  More info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <!-- ./col -->
+          </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    
+{%endblock%}
+
+{%block scripts%}
+<script>
+$(document).ready(function(){
+
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/attendance/count/month',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                attendance_count = data.count
+
+                $('#attendance_count').html(attendance_count)
+            }
+        // ajax closing tag
+    })
+
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/attendance/count/today',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                attendance_count_today = data.count
+
+                $('#attendance_count_today').html(attendance_count_today)
+            }
+        // ajax closing tag
+    })
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/employee/count/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                employee_count = data.count
+
+                $('#employee_count').html(employee_count)
+            }
+        // ajax closing tag
+    })
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/shift_change/count/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                shift_and_schedule_application_count = data.count
+
+                $('#shift_and_schedule_application_count').html(shift_and_schedule_application_count)
+            }
+        // ajax closing tag
+    })
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/leave/count/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                leave_application_count = data.count
+
+                $('#leave_application_count').html(leave_application_count)
+            }
+        // ajax closing tag
+    })
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/leave/count/approved/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                leave_approved_count = data.count
+
+                $('#leave_approved_count').html(leave_approved_count)
+            }
+        // ajax closing tag
+    })
+    // Get User Count
+    $.ajax({
+            url: '/time_and_attendance/api/leave/count/denied/',
+            type: "GET",
+            contentType: "application/json",
+            dataType: "JSON",
+        
+            success: function(data){
+                console.log(data)
+                leave_denied_count = data.count
+
+                $('#leave_denied_count').html(leave_denied_count)
+            }
+        // ajax closing tag
+    })
+
+    current_date = moment()
+    current_month = current_date.format('MMMM')
+    $('#current_month').html(current_month)
+
+});
+</script>
+{%endblock%}

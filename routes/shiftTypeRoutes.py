@@ -56,3 +56,7 @@ def remove(id: str,  db: Session = Depends(get_db)):
     db.commit()
     return {'message': 'Shift type removed successfully.'}
 
+@router.get('/count/')
+def count(db: Session = Depends(get_db)):
+    count = db.query(ShiftType).filter(ShiftType.active_status == "Active").count()
+    return {'count': count}

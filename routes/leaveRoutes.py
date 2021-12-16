@@ -91,3 +91,18 @@ def all(id: str, report: GetLeaveReport, db: Session = Depends(get_db)):
 def all(report: GetLeaveReport, db: Session = Depends(get_db)):
     leave = db.query(Leave).filter(Leave.start_date >= report.start_date).filter(Leave.start_date <= report.end_date).filter(Leave.active_status == "Active").all()
     return {'leave': leave}
+
+@router.get('/count/')
+def count(db: Session = Depends(get_db)):
+    count = db.query(Leave).filter(Leave.active_status == "Active").count()
+    return {'count': count}
+
+@router.get('/count/approved/')
+def count(db: Session = Depends(get_db)):
+    count = db.query(Leave).filter(Leave.active_status == "Active").filter(Leave.status == "Approved").count()
+    return {'count': count}
+
+@router.get('/count/denied/')
+def count(db: Session = Depends(get_db)):
+    count = db.query(Leave).filter(Leave.active_status == "Active").filter(Leave.status == "Declined").count()
+    return {'count': count}

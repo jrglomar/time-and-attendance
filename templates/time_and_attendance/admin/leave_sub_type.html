@@ -81,6 +81,7 @@
                         <th>Date Created</th>
                         <th width="33%">Leave Type</th>
                         <th width="33%">Title</th>
+                        <th width="33%">Number of Days</th>
                         <th class="text-center" width="33%">Actions</th>
                     </thead>
                     <tbody>
@@ -127,6 +128,10 @@
                                 <label for="leave_sub_types_title">Title</label>
                                 <input type="text" class="form-control" id="leave_sub_types_title" name="leave_sub_types_title" placeholder="Enter title">
                             </div>
+                            <div class="form-group">
+                                <label for="leave_sub_types_number_of_days">Number of Days</label>
+                                <input type="text" class="form-control" id="leave_sub_types_number_of_days" name="leave_sub_types_number_of_days" placeholder="Enter number of days">
+                            </div>
                         </div>
                 </form>
             </div>
@@ -165,10 +170,14 @@
                                       
                                   </select>
                             </div>
-                            <div class="form-group">
-                                <label for="leave_sub_types_title_edit">Title</label>
-                                <input type="text" class="form-control" id="leave_sub_types_title_edit" name="leave_sub_types_title_edit" placeholder="Enter title">
-                            </div>
+                              <div class="form-group">
+                                  <label for="leave_sub_types_title_edit">Title</label>
+                                  <input type="text" class="form-control" id="leave_sub_types_title_edit" name="leave_sub_types_title_edit" placeholder="Enter title">
+                              </div>
+                              <div class="form-group">
+                                  <label for="leave_sub_types_number_of_days_edit">Number of Days</label>
+                                  <input type="text" class="form-control" id="leave_sub_types_number_of_days_edit" name="leave_sub_types_number_of_days_edit" placeholder="Enter number of days">
+                              </div>
                         </div>
                 </form>
             </div>
@@ -227,6 +236,7 @@ $(document).ready(function(){
                 { data: "id"},
                 { data: "created_at" },
                 { data: "leave_types.title"},
+                { data: "number_of_days"},
                 { data: "title"},
                 { data: "active_status", render: function(data, type, row){
                         if(data == "Active"){
@@ -319,6 +329,7 @@ $('#leave_sub_types_form_submit').on('click', function(e){
     let formData = {
         title: $('#leave_sub_types_title').val(),
         leave_type_id: $('#leave_type').val(),
+        number_of_days: $('#leave_sub_types_number_of_days').val(),
     }
 
     $.ajax({
@@ -356,6 +367,7 @@ $(document).on('click', '.btn_edit', function(e){
             success: function(data){
                 $('#leave_sub_types_id_edit').val(data.leavesubtype.id);
                 $('#leave_sub_types_title_edit').val(data.leavesubtype.title);
+                $('#leave_sub_types_number_of_days_edit').val(data.leavesubtype.number_of_days);
                 $('#leave_type_edit').val(data.leavesubtype.leave_types.id);
                 $('#leave_sub_types_end_time_edit').val(data.leavesubtype.end_time);
 
@@ -374,6 +386,7 @@ $('#leave_sub_types_btn_edit').on('click', function(e){
 
     let formData = {
         title: $('#leave_sub_types_title_edit').val(),
+        number_of_days: $('#leave_sub_types_number_of_days_edit').val(),
         leave_type_id: $('#leave_type_edit').val(),
     }
     console.log(formData)
