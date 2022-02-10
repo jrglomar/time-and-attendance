@@ -32,7 +32,7 @@
         <div class="col-12">
             <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Shift and Schedule</h3>
+                <h3 class="card-title">Leave Count</h3>
               </div>
               <div class="card-body">
                   <div class="row">
@@ -275,13 +275,15 @@ $(document).ready(function(){
                 type: "GET",
                 contentType: "application/json",
                 dataType: "JSON",
+                async: false,
             
                 success: function(data){
                   console.log(data)
+                  
                     for(i=0; i<data.leave.length; i++){
-                        icon_pending = 0;
-                        icon_approved = 0;
-                        icon_denied = 0;
+                        icon_pending = $('#icon_pending').html();
+                        icon_approved = $('#icon_approved').html();
+                        icon_denied = $('#icon_denied').html();
                         
                         if(data.leave[i].status == "Pending"){
                             icon_pending ++

@@ -22,6 +22,10 @@ class GetLeave(BaseModel):
 class GetLeaveReport(BaseModel):
     start_date: date
     end_date: date
+
+class GetLeaveReportMonth(BaseModel):
+    start: date
+    end: date
     
 # Schema for response body
 class Leave(BaseModel):

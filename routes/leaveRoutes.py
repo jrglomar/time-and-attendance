@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.leaveSchema import CreateLeave, GetLeave, GetLeaveReport
+from schemas.leaveSchema import CreateLeave, GetLeave, GetLeaveReport, GetLeaveReportMonth
 from models.leaveModel import Leave
 from database import get_db
 
@@ -120,4 +120,14 @@ def count(id: str, db: Session = Depends(get_db)):
 @router.post('/count/denied/{id}')
 def count(id: str, db: Session = Depends(get_db)):
     count = db.query(Leave).filter(Leave.employee_id == id).filter(Leave.active_status == "Active").filter(Leave.status == "Declined").count()
+    return {'count': count}
+
+@router.post('/count/approved_month/')
+def count(month: GetLeaveReportMonth, db: Session = Depends(get_db)):
+    count = db.query(Leave).filter(Leave.start_date >= month.start).filter(Leave.start_date <= month.end).filter(Leave.active_status == "Active").filter(Leave.status == "Approved").count()
+    return {'count': count}
+
+@router.post('/count/declined_month/')
+def count(month: GetLeaveReportMonth, db: Session = Depends(get_db)):
+    count = db.query(Leave).filter(Leave.start_date >= month.start).filter(Leave.start_date <= month.end).filter(Leave.active_status == "Active").filter(Leave.status == "Declined").count()
     return {'count': count}
