@@ -59,11 +59,11 @@
                                 <div class="col-2">
                                     <button style="margin-top:32px;padding-left:25%;padding-right:25%" type="button" class="btn btn-secondary" id="btn_clear">Clear</button>
                                 </div>
-                                <div class="col-4">
-                                    <button style="margin-top:32px;" type="button" class="btn btn-info" id="btn_reset">Reset to all</button>
+                                <div class="col-2">
+                                    <button style="margin-top:32px;" type="button" class="btn btn-info" id="btn_reset">Reset</button>
                                 </div>
-                                <div class="col-4">
-                                    <button style="margin-top:32px;" type="button" class="btn btn-success" id="btn_reset">Print Attendance</button>
+                                <div class="col-2">
+                                    <!-- <button style="margin-top:32px;" type="button" class="btn btn-success" id="btn_print">Print</button> -->
                                 </div>
                             </div>
                         </div>
@@ -191,10 +191,23 @@
 {%block scripts%}
 <script>
 $(document).ready(function(){
+
     function loadtable(){
         employee_id = sessionStorage.getItem("id")
         attendance_datatable = $('#attendance_datatable').DataTable( {
             "ajax": {url:"/time_and_attendance/api/attendance/datatable/"+employee_id, dataSrc:"attendance"},
+            dom: 'Blfrtip',
+            buttons: [
+            
+            {
+                    extend: 'print',
+                    messageTop: `All time Attendance`,
+                    title: '<h1 style="text-align:center">Attendance Report<h1>',
+                    exportOptions: {
+                    columns: [ 2, 3, 4 ]
+                }
+            },
+        ],
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
@@ -223,12 +236,26 @@ $(document).ready(function(){
         })
     }
 
-    function filter_loadtable(data){
+    function filter_loadtable(data, start_date, end_date){
 
         $("#dt_tbody").empty();
+        console.log(start_date)
+        console.log(end_date)
         console.log(data)
         attendance_datatable = $('#attendance_datatable').DataTable({
             "aaData": data.attendance,
+            dom: 'Blfrtip',
+            buttons: [
+            
+            {
+                    extend: 'print',
+                    messageTop: `Attendance of ${moment(start_date).format('LL')} to ${moment(end_date).format('LL')}`,
+                    title: '<h1 style="text-align:center">Attendance Report<h1>',
+                    exportOptions: {
+                    columns: [ 2, 3, 4 ]
+                }
+            },
+        ],
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
@@ -291,7 +318,7 @@ $(document).ready(function(){
             
                 success: function(data){
                     $("#attendance_datatable").DataTable().destroy()
-                    filter_loadtable(data)
+                    filter_loadtable(data, $('#date_filter_from').val(), $('#date_filter_to').val())
                 }
                 // ajax closing tag
             })
@@ -314,6 +341,10 @@ $(document).ready(function(){
         $("#attendance_datatable").DataTable().destroy()
         loadtable()
     })
+
+    // $('#btn_print').on('click', function(e){
+    //     alert('test')
+    // })
 
     function get_attendance_date(date){
 
