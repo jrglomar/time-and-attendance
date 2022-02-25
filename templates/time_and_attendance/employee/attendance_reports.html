@@ -239,9 +239,6 @@ $(document).ready(function(){
     function filter_loadtable(data, start_date, end_date){
 
         $("#dt_tbody").empty();
-        console.log(start_date)
-        console.log(end_date)
-        console.log(data)
         attendance_datatable = $('#attendance_datatable').DataTable({
             "aaData": data.attendance,
             dom: 'Blfrtip',
@@ -249,7 +246,7 @@ $(document).ready(function(){
             
             {
                     extend: 'print',
-                    messageTop: `Attendance of ${moment(start_date).format('LL')} to ${moment(end_date).format('LL')}`,
+                    messageTop: `Attendance as of ${moment(start_date).format('LL')} to ${moment(end_date).format('LL')}`,
                     title: '<h1 style="text-align:center">Attendance Report<h1>',
                     exportOptions: {
                     columns: [ 2, 3, 4 ]
