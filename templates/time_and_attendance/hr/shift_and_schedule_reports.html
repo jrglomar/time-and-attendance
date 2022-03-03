@@ -223,6 +223,18 @@ $(document).ready(function(){
     function loadtable(){
         shift_and_schedule_datatable = $('#shift_and_schedule_table').DataTable( {
             "ajax": {url:"/time_and_attendance/api/shift_change/", dataSrc:"shift_change"},
+            dom: 'Blfrtip',
+            buttons: [
+            
+                {
+                        extend: 'print',
+                        messageTop: `List of all Shift and Schedule Change`,
+                        title: '<h1 style="text-align:center">Shift and Schedule Change Report<h1>',
+                        exportOptions: {
+                        columns: [2, 3, 4, 5, 6]
+                    }
+                },
+            ],
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
@@ -280,12 +292,24 @@ $(document).ready(function(){
 
     loadtable();
 
-    function filter_loadtable(data){
+    function filter_loadtable(data, start_date, end_date, employee_name){
 
         $("#dt_tbody").empty();
         console.log(data)
         filter_shift_and_schedule_datatable = $('#shift_and_schedule_table').DataTable({
             "aaData": data.shift_change,
+            dom: 'Blfrtip',
+            buttons: [
+            
+                {
+                        extend: 'print',
+                        messageTop: `List of shift and schedule change of ${employee_name} as of ${moment(start_date).format('LL')} to ${moment(end_date).format('LL')}`,
+                        title: '<h1 style="text-align:center">Shift and Schedule Change Report<h1>',
+                        exportOptions: {
+                        columns: [2, 3, 4, 5, 6]
+                    }
+                },
+            ],
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
@@ -582,7 +606,7 @@ $(document).ready(function(){
             
                 success: function(data){
                     $("#shift_and_schedule_table").DataTable().destroy()
-                    filter_loadtable(data)
+                    filter_loadtable(data, $('#date_filter_from').val(), $('#date_filter_to').val(), 'All Employees')
                 }
                 // ajax closing tag
             })
@@ -597,7 +621,14 @@ $(document).ready(function(){
             
                 success: function(data){
                     $("#shift_and_schedule_table").DataTable().destroy()
-                    filter_loadtable(data)
+                    if(data.shift_change.length == 0){
+                        filter_loadtable(data, $('#date_filter_from').val(), $('#date_filter_to').val(), "")
+                    }
+                    else{
+                        employee_data = data.shift_change[0]
+                        employee_email = employee_data.employees.users.email
+                        filter_loadtable(data, $('#date_filter_from').val(), $('#date_filter_to').val(), employee_email)
+                    }
                 }
                 // ajax closing tag
             })

@@ -175,6 +175,18 @@ $(document).ready(function(){
     function loadtable(){
         leave_datatable = $('#leave_datatable').DataTable( {
             "ajax": {url:"/time_and_attendance/api/leave", dataSrc:"leave"},
+            dom: 'Blfrtip',
+            buttons: [
+            
+                {
+                        extend: 'print',
+                        messageTop: `List of all Leave`,
+                        title: '<h1 style="text-align:center">Leave Report<h1>',
+                        exportOptions: {
+                        columns: [2, 3, 4, 5, 6, 7, 8, 9]
+                    }
+                },
+            ],
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
@@ -216,12 +228,24 @@ $(document).ready(function(){
 
     loadtable();
 
-    function filter_loadtable(data){
+    function filter_loadtable(data, start_date, end_date, employee_name){
 
         $("#dt_tbody").empty();
         console.log(data)
         filter_leave_datatable = $('#leave_datatable').DataTable({
             "aaData": data.leave,
+            dom: 'Blfrtip',
+            buttons: [
+            
+                {
+                        extend: 'print',
+                        messageTop: `List of leaves of ${employee_name} as of ${moment(start_date).format('LL')} to ${moment(end_date).format('LL')}`,
+                        title: '<h1 style="text-align:center">Leave Report<h1>',
+                        exportOptions: {
+                        columns: [2, 3, 4, 5, 6, 7, 8, 9]
+                    }
+                },
+            ],
             "columns": [
                 { data: "id"},
                 { data: "created_at" },
@@ -356,7 +380,7 @@ $(document).ready(function(){
             
                 success: function(data){
                     $("#leave_datatable").DataTable().destroy()
-                    filter_loadtable(data)
+                    filter_loadtable(data, $('#date_filter_from').val(), $('#date_filter_to').val(), 'All Employees')
                 }
                 // ajax closing tag
             })
@@ -371,7 +395,14 @@ $(document).ready(function(){
             
                 success: function(data){
                     $("#leave_datatable").DataTable().destroy()
-                    filter_loadtable(data)
+                    if(data.leave.length == 0){
+                        filter_loadtable(data, $('#date_filter_from').val(), $('#date_filter_to').val(), "")
+                    }
+                    else{
+                        employee_data = data.leave[0]
+                    employee_email = employee_data.employees.users.email
+                        filter_loadtable(data, $('#date_filter_from').val(), $('#date_filter_to').val(), employee_email)
+                    }
                 }
                 // ajax closing tag
             })

@@ -284,11 +284,15 @@ $(document).ready(function(){
                 dataType: "JSON",
             
                 success: function(data){
-                    console.log(data.attendance[0])
-                    employee_data = data.attendance[0]
-                    employee_email = employee_data.employees.users.email
                     $("#attendance_datatable").DataTable().destroy()
-                    filter_loadtable(data, $('#date_filter_from').val(), $('#date_filter_to').val(), employee_email)
+                    if(data.attendance.length == 0){
+                        filter_loadtable(data, $('#date_filter_from').val(), $('#date_filter_to').val(), "")
+                    }
+                    else{
+                        employee_data = data.attendance[0]
+                        employee_email = employee_data.employees.users.email
+                        filter_loadtable(data, $('#date_filter_from').val(), $('#date_filter_to').val(), employee_email)
+                    }
                 }
                 // ajax closing tag
             })
