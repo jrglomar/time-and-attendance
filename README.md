@@ -1,6 +1,6 @@
 <div align="center">
 
-# Time and Attendance (Module of Hospital Management System)
+# Time and Attendance
 The Time and Attendance System is a system that will assist the Human Resource
 Office of a hospital by making shift and scheduling, time and attendance, and leave
 application more convenient and simpler for both human resource personnel and
